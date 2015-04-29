@@ -1,4 +1,4 @@
-# Note: this project is not actively being worked on or supported.  Please feel free to Fork and continue development.
+# This is a fork of an existing project to create an IntelliJ plugin for Salesforce, started because development on the original has stopped
 
 ### Develop Apex with Pleasure!
 #### An IntelliJ IDEA Plugin for Salesforce Development
