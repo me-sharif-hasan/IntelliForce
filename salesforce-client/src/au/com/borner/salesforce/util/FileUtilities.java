@@ -46,13 +46,21 @@ public abstract class FileUtilities {
             crcResult = FileUtils.checksumCRC32(localFile);
         } catch (IOException e) {
             logger.error("Error creating file " + localFile.getPath());
+<<<<<<< HEAD
             logger.error(e.getMessage());
+=======
+>>>>>>> fc26c681ea54c81641f4fc858843ddf48db88e63
             return false;
         }
         if (sObject.getBodyCRC() != null && !sObject.getBodyCRC().equals(crcResult)) {
             logger.error("Body CRC does not match for class " + localFile.getPath());
+<<<<<<< HEAD
             //localFile.delete();
             //return false;
+=======
+            localFile.delete();
+            return false;
+>>>>>>> fc26c681ea54c81641f4fc858843ddf48db88e63
         }
 
         try {

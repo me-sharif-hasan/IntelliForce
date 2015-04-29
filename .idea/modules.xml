@@ -2,9 +2,19 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+<<<<<<< HEAD
       <module fileurl="file://$PROJECT_DIR$/intelliforce/intelliforce.iml" filepath="$PROJECT_DIR$/intelliforce/intelliforce.iml" />
       <module fileurl="file://$PROJECT_DIR$/salesforce-client/salesforce-client.iml" filepath="$PROJECT_DIR$/salesforce-client/salesforce-client.iml" />
       <module fileurl="file://$PROJECT_DIR$/salesforce-jps-plugin/salesforce-jps-plugin.iml" filepath="$PROJECT_DIR$/salesforce-jps-plugin/salesforce-jps-plugin.iml" />
     </modules>
   </component>
 </project>
+=======
+      <module fileurl="file://$PROJECT_DIR$/salesforce-client/salesforce-client.iml" filepath="$PROJECT_DIR$/salesforce-client/salesforce-client.iml" />
+      <module fileurl="file://$PROJECT_DIR$/salesforce-jps-plugin/salesforce-jps-plugin.iml" filepath="$PROJECT_DIR$/salesforce-jps-plugin/salesforce-jps-plugin.iml" />
+      <module fileurl="file://$PROJECT_DIR$/salesforce-plugin/salesforce-plugin.iml" filepath="$PROJECT_DIR$/salesforce-plugin/salesforce-plugin.iml" />
+    </modules>
+  </component>
+</project>
+
+>>>>>>> fc26c681ea54c81641f4fc858843ddf48db88e63

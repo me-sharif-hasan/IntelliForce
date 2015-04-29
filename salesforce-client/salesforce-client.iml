@@ -7,8 +7,19 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
+<<<<<<< HEAD
     <orderEntry type="library" name="lib" level="project" />
     <orderEntry type="library" name="lib1" level="project" />
     <orderEntry type="library" name="JFlex" level="project" />
   </component>
 </module>
+=======
+    <orderEntry type="library" name="commons-codec-1.9" level="project" />
+    <orderEntry type="library" name="httpclient-4.3.2" level="project" />
+    <orderEntry type="library" name="json-20140107" level="project" />
+    <orderEntry type="library" name="salesforce-wsc" level="project" />
+    <orderEntry type="library" name="commons-io-2.4" level="project" />
+  </component>
+</module>
+
+>>>>>>> fc26c681ea54c81641f4fc858843ddf48db88e63
