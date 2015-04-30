@@ -40,14 +40,17 @@ public class SalesForceModuleBuilder extends JavaModuleBuilder {
         // Add root folder
         ContentEntry contentEntry = doAddContentEntry(modifiableRootModel);
 
-        // The classes, trigger, pages, and components folder were created by one of the Wizard steps
+       /* // The classes, trigger, pages, and components folder were created by one of the Wizard steps
         // Now, we need to add them as source folders under the root folder
         if (contentEntry != null) {
             for (SalesForceWizardStateBean.FOLDER_NAMES folderName : SalesForceWizardStateBean.FOLDER_NAMES.values()) {
                 String path = getContentEntryPath() + File.separator + folderName.name().toLowerCase();
                 addSourceFolder(contentEntry, path);
             }
-        }
+        }*/
+
+        SalesForceSynchroniseStep virtualStep = new SalesForceSynchroniseStep(this.getStateBean(), this);
+        virtualStep._init();
 
         ProjectSettingsPersistentStateComponent projectSettings = ServiceManager.getService(modifiableRootModel.getProject(), ProjectSettingsPersistentStateComponent.class);
         projectSettings.instanceName = stateBean.getSelectedInstance();

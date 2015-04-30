@@ -63,7 +63,7 @@ public class SalesForceModuleType extends ModuleType<SalesForceModuleBuilder> {
         ArrayList<ModuleWizardStep> steps = new ArrayList<ModuleWizardStep>();
         steps.add(new SalesForceInstanceSelectionStep(wizardContext.getProject(), moduleBuilder.getStateBean()));
         steps.add(new SalesForceSynchroniseOptionsStep(moduleBuilder.getStateBean()));
-        steps.add(new SalesForceSynchroniseStep(moduleBuilder.getStateBean(), moduleBuilder));
+        //steps.add(new SalesForceSynchroniseStep(moduleBuilder.getStateBean(), moduleBuilder));
         return steps.toArray(new ModuleWizardStep[steps.size()]);
     }
 

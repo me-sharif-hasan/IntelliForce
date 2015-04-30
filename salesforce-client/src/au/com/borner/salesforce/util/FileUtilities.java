@@ -18,6 +18,7 @@ package au.com.borner.salesforce.util;
 
 import au.com.borner.salesforce.client.rest.domain.AbstractSourceCode;
 import au.com.borner.salesforce.client.rest.domain.SourceFileMetaData;
+import com.intellij.openapi.components.StoragePathMacros;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.util.Pair;
 import com.intellij.openapi.vfs.VfsUtilCore;
@@ -38,7 +39,6 @@ public abstract class FileUtilities {
 
     public static boolean createLocalFile(String path, AbstractSourceCode sObject) {
         String fileNameWithExtension = sObject.getFullyQualifiedFileName(sObject.getName());
-
         File localFile = new File(path + File.separator +  fileNameWithExtension);
         double crcResult;
         try {
