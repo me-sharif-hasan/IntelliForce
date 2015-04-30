@@ -6,18 +6,20 @@ import com.intellij.ide.wizard.CommitStepException;
 import com.intellij.openapi.diagnostic.Logger;
 
 import javax.swing.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.File;
 
 /**
  * @author mark
  */
-public class SalesForceSynchroniseStep extends ModuleWizardStep {
+public class SalesForceSynchroniseStep {
 
     private final Logger logger = Logger.getInstance(getClass());
     private final SalesForceModuleBuilder moduleBuilder;
     private final SalesForceWizardStateBean stateBean;
 
-    private JButton cancelButton;
+    private JButton closeButton;
     private JTextArea statusArea;
     private JPanel synchronizingPanel;
 
@@ -27,20 +29,23 @@ public class SalesForceSynchroniseStep extends ModuleWizardStep {
     public SalesForceSynchroniseStep(SalesForceWizardStateBean stateBean, SalesForceModuleBuilder moduleBuilder) {
         this.stateBean = stateBean;
         this.moduleBuilder = moduleBuilder;
+
     }
 
-    @Override
-    public JComponent getComponent() {
-        return synchronizingPanel;
-    }
-
-    @Override
-    public void updateDataModel() {
-        // nothing to do here
-    }
-
-    @Override
     public void _init() {
+        JFrame frame = new JFrame("Synchronizing Metadata");
+        frame.setContentPane(this.synchronizingPanel);
+        frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+        frame.pack();
+        frame.setVisible(true);
+
+        closeButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                frame.dispose();
+            }
+        });
+
         if (synchronizeFinished) {
             // this gets called when we enter AND exits the step (?!?!), so ignore the second call on exit
             return;
@@ -52,6 +57,7 @@ public class SalesForceSynchroniseStep extends ModuleWizardStep {
             public void done() {
                 synchronizing = false;
                 synchronizeFinished = true;
+                closeButton.setEnabled(true);
             }
         });
         swingWorker.execute();
@@ -70,7 +76,6 @@ public class SalesForceSynchroniseStep extends ModuleWizardStep {
 
     }
 
-    @Override
     public void _commit(boolean finishChosen) throws CommitStepException {
         if (synchronizing) {
             throw new CommitStepException("Please wait for synchronization to complete.");
