@@ -1,0 +1,16 @@
+// license.txt
+package com.iishanto.apex.psi;
+
+import java.util.List;
+import org.jetbrains.annotations.*;
+import com.intellij.psi.PsiElement;
+
+public interface ApexExpressionListExpression extends ApexExpression {
+
+  @NotNull
+  ApexExpression getExpression();
+
+  @Nullable
+  ApexExpressionList getExpressionList();
+
+}

@@ -1,0 +1,28 @@
+<!-- Plugin Configuration File. Read more: https://plugins.jetbrains.com/docs/intellij/plugin-configuration-file.html -->
+<idea-plugin>
+    <id>com.iishanto</id>
+    <name>SF_Apex_Plugin_for_Intelij</name>
+    <vendor>JetBrains</vendor>
+
+    <depends>com.intellij.modules.platform</depends>
+
+    <!--    <resource-bundle>messages.MyBundle</resource-bundle>-->
+
+    <extensions defaultExtensionNs="com.intellij">
+        <fileType
+                name="Apex Class"
+                implementationClass="com.iishanto.apex.filetypes.ApexClassFileType"
+                fieldName="INSTANCE"
+                language="Apex"
+                extensions="cls"/>
+        <lang.parserDefinition
+                language="Apex"
+                implementationClass="com.iishanto.parser.ApexClassParserDefinition"/>
+        <lang.syntaxHighlighterFactory
+                language="Apex"
+                implementationClass="com.iishanto.apex.filetypes.ApexSyntaxHighlighterFactory"/>
+    </extensions>
+    <!--    <applicationListeners>-->
+    <!--        <listener class="org.jetbrains.plugins.template.listeners.MyApplicationActivationListener" topic="com.intellij.openapi.application.ApplicationActivationListener"/>-->
+    <!--    </applicationListeners>-->
+</idea-plugin>

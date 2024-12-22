@@ -1,0 +1,59 @@
+plugins {
+    id 'java'
+    id 'org.jetbrains.intellij' version '1.17.0'
+    id 'org.jetbrains.changelog' version '2.1.2'
+    id 'org.jetbrains.kotlin.jvm' version '1.9.0'
+}
+
+group = 'com.iishanto'
+version = '1.0.0'
+sourceSets.main.java.srcDirs 'src/main/gen'
+
+repositories {
+    mavenCentral()
+    maven { url 'https://www.jetbrains.com/intellij-repository/releases' }
+    maven { url 'https://www.jetbrains.com/intellij-repository/snapshots' }
+}
+
+intellij {
+    version = '2023.2'
+    type = 'IC' // IntelliJ Community Edition
+    plugins = ['Kotlin']
+}
+
+dependencies {
+    testImplementation 'org.jetbrains.kotlin:kotlin-test'
+}
+dependencies {
+    implementation 'org.antlr:antlr4-runtime:4.13.1'  // Add ANTLR runtime dependency
+}
+dependencies {
+    implementation "org.antlr:antlr4-intellij-adaptor:0.1"
+}
+
+tasks {
+    patchPluginXml {
+        sinceBuild = '231'
+        untilBuild = '232.*'
+        pluginDescription = providers.fileContents(layout.projectDirectory.file('README.md')).asText.map { text ->
+            def start = '<!-- Plugin description -->'
+            def end = '<!-- Plugin description end -->'
+            def lines = text.readLines()
+            def startIndex = lines.indexOf(start) + 1
+            def endIndex = lines.indexOf(end)
+            def description = lines.subList(startIndex, endIndex).join('\n')
+            markdownToHTML(description)
+        }
+
+        changeNotes = providers.fileContents(layout.projectDirectory.file('CHANGELOG.md')).asText.map { text ->
+            project.changelog.renderItem(
+                    project.changelog.getOrNull(version) ?: project.changelog.getUnreleased(),
+                    Changelog.OutputType.HTML
+            )
+        }
+    }
+
+    runIde {
+        jvmArgs = ['-Xmx2g', '-XX:+UseG1GC']
+    }
+}
