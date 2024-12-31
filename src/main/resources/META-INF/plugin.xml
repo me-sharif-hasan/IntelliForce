@@ -21,6 +21,7 @@
         <lang.syntaxHighlighterFactory
                 language="Apex"
                 implementationClass="com.iishanto.apex.filetypes.ApexSyntaxHighlighterFactory"/>
+        <annotator language="Apex" implementationClass="com.iishanto.apex.annotator.ApexTypeMismatchAnnotator"/>
     </extensions>
     <!--    <applicationListeners>-->
     <!--        <listener class="org.jetbrains.plugins.template.listeners.MyApplicationActivationListener" topic="com.intellij.openapi.application.ApplicationActivationListener"/>-->
