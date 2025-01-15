@@ -1,53 +1,67 @@
-<!--&lt;!&ndash; Plugin Configuration File. Read more: https://plugins.jetbrains.com/docs/intellij/plugin-configuration-file.html &ndash;&gt;-->
+
 <!--<idea-plugin>-->
 <!--    <id>com.iishanto</id>-->
-<!--    <name>Apex Jetforce</name>-->
-<!--    <vendor>JetBrains</vendor>-->
+<!--    <name>ApexJetforce</name>-->
+<!--    <vendor>IISHANTO</vendor>-->
+<!--    <description>Apex Jetforce Plugin to support apex class in the dev</description>-->
 
+<!--    &lt;!&ndash; Product and plugin compatibility requirements &ndash;&gt;-->
+<!--    &lt;!&ndash; https://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/plugin_compatibility.html &ndash;&gt;-->
 <!--    <depends>com.intellij.modules.platform</depends>-->
 
-<!--    &lt;!&ndash;    <resource-bundle>messages.MyBundle</resource-bundle>&ndash;&gt;-->
-
 <!--    <extensions defaultExtensionNs="com.intellij">-->
-<!--        <fileType-->
-<!--                name="Apex Class"-->
-<!--                implementationClass="com.iishanto.language.ApexClassFileTypeProvider"-->
-<!--                fieldName="INSTANCE"-->
-<!--                language="Apex"-->
-<!--                extensions="cls"/>-->
-<!--        <preloadingActivity implementation="com.iishanto.language.BallerinaPreloadingActivity"-->
-<!--                            id="com.iishanto.language.BallerinaPreloadingActivity" />-->
-<!--        <lang.syntaxHighlighterFactory-->
-<!--                language="Apex"-->
-<!--                implementationClass="com.iishanto.apex.filetypes.ApexSyntaxHighlighterFactory"/>-->
+<!--            <fileType-->
+<!--                    name="Apex Class"-->
+<!--                    implementationClass="com.iishanto.language.ApexClassFileTypeProvider"-->
+<!--                    fieldName="INSTANCE"-->
+<!--                    language="Apex"-->
+<!--                    extensions="cls"/>-->
+<!--            <lang.parserDefinition-->
+<!--                    language="Apex"-->
+<!--                    implementationClass="com.iishanto.parser.ApexClassParserDefinition"/>-->
+<!--            <lang.syntaxHighlighterFactory-->
+<!--                    language="Apex"-->
+<!--                    implementationClass="com.iishanto.apex.filetypes.ApexSyntaxHighlighterFactory"/>-->
+<!--            <annotator-->
+<!--                    language="Apex"-->
+<!--                    implementationClass="com.iishanto.server.language.ide.ApexLanguageAnnotator"/>-->
+
+
+
+<!--        -->
+
 <!--    </extensions>-->
 <!--</idea-plugin>-->
-
-
 
 
 <!--
 an example how you can configure an plugin xml with you plugin
 see also jetbrains documentation: https://plugins.jetbrains.com/docs/intellij/plugin-configuration-file.html -->
 <idea-plugin>
-    <id>your.plugin.namespace</id>
+    <id>com.iishanto</id>
     <name>ApexJetforce</name>
-    <vendor>com.iishanto</vendor>
-    <description>Apex Jetforce Plugin to support apex class in the dev</description>
+    <vendor>iishanto</vendor>
+    <description>Apex jetbrains plugin for intelisense</description>
 
     <!-- Product and plugin compatibility requirements -->
     <!-- https://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/plugin_compatibility.html -->
     <depends>com.intellij.modules.platform</depends>
 
     <extensions defaultExtensionNs="com.intellij">
-                <fileType
-                        name="Apex Class"
-                        implementationClass="com.iishanto.language.ApexClassFileTypeProvider"
-                        fieldName="INSTANCE"
-                        language="Apex"
-                        extensions="cls"/>
+                    <fileType
+                            name="Apex Class"
+                            implementationClass="com.iishanto.language.ApexClassFileTypeProvider"
+                            fieldName="INSTANCE"
+                            language="Apex"
+                            extensions="cls"/>
+                    <lang.parserDefinition
+                            language="Apex"
+                            implementationClass="com.iishanto.parser.ApexClassParserDefinition"/>
+                    <lang.syntaxHighlighterFactory
+                            language="Apex"
+                            implementationClass="com.iishanto.apex.filetypes.ApexSyntaxHighlighterFactory"/>
         <!-- register a preloading activity. You need to init IntellijLanguageClient with your config, see readme -->
-        <preloadingActivity implementation="com.iishanto.language.BallerinaPreloadingActivity" id="om.iishanto.language.BallerinaPreloadingActivity"/>
+        <preloadingActivity implementation="com.iishanto.language.BallerinaPreloadingActivity" id="com.iishanto.language.BallerinaPreloadingActivity"/>
 
         <!-- register intellijLanguageClient as a Service OR as a plugin component (see readme)... -->
         <applicationService serviceImplementation="org.wso2.lsp4intellij.IntellijLanguageClient"/>
