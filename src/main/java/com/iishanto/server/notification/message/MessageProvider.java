@@ -1,6 +1,7 @@
 package com.iishanto.server.notification.message;
 
 public class MessageProvider {
+    private static Integer version=0;
     private String initRequest = """
             {
                 "jsonrpc": "2.0",
@@ -19,12 +20,18 @@ public class MessageProvider {
                                 "didSave": true
                             },
                             "completion": {
-                                          "dynamicRegistration": true,
-                                          "completionItem": {
-                                            "snippetSupport": true,
-                                            "commitCharactersSupport": true
-                                          }
-                                        }
+                                "dynamicRegistration": true,
+                                "completionItem": {
+                                    "snippetSupport": true,
+                                    "commitCharactersSupport": true
+                                }
+                            },
+                            "hover": {
+                                "dynamicRegistration": true
+                            },
+                            "diagnostic": {
+                                "dynamicRegistration": true
+                            }
                         },
                         "workspace": {
                             "applyEdit": true,
@@ -34,10 +41,29 @@ public class MessageProvider {
                         }
                     }
                 }
-            }
-            """;
+            }""";
 
-    public String getInitRequest(String root,String uri) {
-        return initRequest.formatted(uri,root);
+    private String didOpenMessage = """
+            {
+                "jsonrpc": "2.0",
+                "method": "textDocument/didOpen",
+                "params": {
+                    "textDocument": {
+                        "uri": "file:///%s",
+                        "languageId": "apex",
+                        "version": %d,
+                        "text": "%s"
+                    }
+                }
+            }""";
+
+    public String getInitRequest(String root, String uri) {
+        return initRequest.formatted(uri, root);
     }
+
+    public String getDidOpenRequest(String file, String content) {
+        return didOpenMessage.formatted(file, version++,content);
+    }
+
+//    public String setInitRequest(String root,String uri) {}
 }

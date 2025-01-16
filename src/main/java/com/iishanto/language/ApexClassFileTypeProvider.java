@@ -13,9 +13,6 @@ public class ApexClassFileTypeProvider extends ApexClassFileType {
     public ApexClassFileTypeProvider(){
         try{
 //            NotificationHub.getInstance().initialize();
-            AbstractProgressIndicatorBase apib=new AbstractProgressIndicatorBase();
-            apib.start();
-            new BallerinaPreloadingActivity().preload(apib);
         }catch (Exception e){
             System.out.println("error - iishanto"+e.getLocalizedMessage());
         }

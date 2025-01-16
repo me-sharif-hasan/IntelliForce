@@ -16,6 +16,7 @@ public class LogHandler {
                     String line;
                     while (true){
                         String output = reader.readLine();
+                        if(output==null) continue;
                         System.out.printf("Apex - Log %s\n", output);
                     }
                 } catch (IOException e) {
