@@ -26,6 +26,7 @@
                     language="Apex"
                     implementationClass="com.iishanto.server.language.ide.ApexLanguageAnnotator"/>
             <postStartupActivity implementation="com.iishanto.project.SalesforceProjectStartupActivity"/>
+            <completion.contributor language="Apex" implementationClass="com.iishanto.server.language.ide.ApexLanguageAutoCompletionContributor"/>
     </extensions>
 </idea-plugin>
 

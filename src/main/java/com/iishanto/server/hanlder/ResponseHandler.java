@@ -2,13 +2,9 @@ package com.iishanto.server.hanlder;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import com.google.gson.stream.JsonReader;
 
 import java.io.*;
-import java.util.LinkedList;
 import java.util.Map;
-import java.util.Queue;
-import java.util.Scanner;
 
 public class ResponseHandler {
     InputStream inputStream;
@@ -17,44 +13,62 @@ public class ResponseHandler {
         this.inputStream=inputStream;
         this.outputStream=outputStream;
     }
-    public void initiate(Map<String,LspResponseListener> listenerRegistry) {
-        Thread thread=new Thread(new Runnable() {
-            @Override
-            public void run() {
-                BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
-                while (true){
-                    try{
-                        outputStream.flush();
-                        outputStream.flush();
-                        outputStream.flush();
-                        String output=bufferedReader.readLine();
-                        if(output==null) continue;
-                        System.out.printf("--Apex - Response %s--\n", output.split("\r\n\r\n")[0]);
-                        try{
-                            String json="";
-                            int lastIdx=output.length()-1;
-                            while (lastIdx>-1&&output.charAt(lastIdx)!='}') {
-                                lastIdx--;
+    public void initiate(Map<String,LspResponseListener> listenerRegistry){
+        new Thread(() -> {
+            try{
+                int c;
+                byte []headerMatcher=new byte[15];
+                while ((c=inputStream.read())!=-1){
+                    for(int i=1;i<headerMatcher.length;i++){
+                        headerMatcher[i-1]=headerMatcher[i];
+                    }
+                    headerMatcher[14]= (byte) c;
+                    String header=new String(headerMatcher);
+                    System.out.println(header);
+                    if(header.toLowerCase().trim().equals("content-length:")){
+                        //read next number
+                        int numchar;
+                        StringBuilder lenSegment= new StringBuilder();
+                        while ((numchar=inputStream.read())!=-1){
+                            if(numchar=='\r'){
+                                break;
+                            }else{
+                                lenSegment.append((char) numchar);
                             }
-                            if(lastIdx==-1) continue;
-                            json=output.substring(0,lastIdx+1);
-                            System.out.println(json);
-                            JsonObject jsonObject=JsonParser.parseString(json).getAsJsonObject();
-                            String method=jsonObject.get("method").getAsString();
-                            if(listenerRegistry.containsKey(method)){
-                                listenerRegistry.get(method).listen(jsonObject);
-                                System.out.println("Response "+method+" sent");
-                            }
-                            System.out.println(jsonObject.toString());
-                        }catch (Exception e){
-                            e.printStackTrace();
                         }
-                    }catch (Exception e){
-                        e.printStackTrace();
+                        int contentLength=Integer.parseInt(lenSegment.toString().trim());
+                        byte []json=new byte[contentLength];
+                        inputStream.skipNBytes(3);
+                        numchar = inputStream.read(json,0,contentLength);
+                        if(numchar!=-1){
+                            String jsonStr=new String(json);
+                            System.out.println("parsed -- iishanto -- "+jsonStr);
+                            JsonObject jsonObject=JsonParser.parseString(jsonStr).getAsJsonObject();
+                            String method=null;
+                            try{
+                                method=jsonObject.get("method").getAsString();
+                            }catch (Exception ignored){}
+                            if(method!=null&&listenerRegistry.containsKey(method)){
+                                listenerRegistry.get(method).listen(jsonObject);
+                            }else{
+                                try{
+                                    for (String key:listenerRegistry.keySet()){
+                                        LspResponseListener lspResponseListener=listenerRegistry.get(key);
+                                        if(lspResponseListener.isMatching(jsonObject)){
+                                            lspResponseListener.listen(jsonObject);
+                                            break;
+                                        }
+                                    }
+                                }catch (Exception e){
+                                    System.err.println("error: "+e.getLocalizedMessage());
+                                }
+                            }
+                        }
                     }
                 }
+            }catch (Exception e){
+                System.err.println(e.getLocalizedMessage());
             }
-        });
-        thread.start();
+        }).start();
     }
 }

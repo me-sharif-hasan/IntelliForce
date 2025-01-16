@@ -33,6 +33,14 @@ public class ApexLanguageServerDefinition{
 
     public void start(Map<String, LspResponseListener> listenerRegistry) throws IOException {
         process = apexLspProcess.start();
+
+        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+            if (process != null && process.isAlive()) {
+                process.destroy();
+                System.out.println("Server process terminated.");
+            }
+        }));
+
         LogHandler logHandler=new LogHandler(process.getErrorStream());
         ResponseHandler responseHandler=new ResponseHandler(process.getInputStream(),process.getOutputStream());
         serverOutputStream=process.getOutputStream();
