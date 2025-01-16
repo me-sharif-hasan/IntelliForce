@@ -45,39 +45,43 @@ public class ApexLanguageAnnotator implements Annotator {
 
             @Override
             public void listen(JsonObject jsonObject) {
-                System.out.println("'annot-iishant': "+jsonObject);
-                Type diagnosticsResultListType = new TypeToken<List<DiagnosticsResult>>(){}.getType();
+                try{
+                    System.out.println("'annot-iishant': "+jsonObject);
+                    Type diagnosticsResultListType = new TypeToken<List<DiagnosticsResult>>(){}.getType();
 
-                List<DiagnosticsResult> diagnosticsResults = new Gson().fromJson(jsonObject.get("params").getAsJsonObject().get("diagnostics"), diagnosticsResultListType);
-                String []lines = psiClass.getText().split("\n");
-                for (DiagnosticsResult diagnosticsResult : diagnosticsResults) {
-                    System.out.println(diagnosticsResult.getMessage());
+                    List<DiagnosticsResult> diagnosticsResults = new Gson().fromJson(jsonObject.get("params").getAsJsonObject().get("diagnostics"), diagnosticsResultListType);
+                    String []lines = new String(psiClass.getContainingFile().getVirtualFile().getInputStream().readAllBytes()).split("\n");
+                    for (DiagnosticsResult diagnosticsResult : diagnosticsResults) {
+                        System.out.println(diagnosticsResult.getMessage());
 
-                    int begin=0;
-                    int end=0;
-                    System.out.println("OKK "+diagnosticsResult.getRange().getStart().getLine()+" "+diagnosticsResult.getRange().getEnd().getLine());
-                    for(int i=0;i<lines.length;i++){
-                        System.out.println("iiline: "+lines[i].length());
-                        if(diagnosticsResult.getRange().getStart().getLine()>i){
-                            begin+=lines[i].length()+1;
-                        }else if(diagnosticsResult.getRange().getStart().getLine()==i){
-                            begin+=diagnosticsResult.getRange().getStart().getCharacter();
-                            System.out.println(begin+";"+diagnosticsResult.getRange().getEnd().getCharacter());
+                        int begin=0;
+                        int end=0;
+                        System.out.println("OKK "+diagnosticsResult.getRange().getStart().getLine()+" "+diagnosticsResult.getRange().getEnd().getLine());
+                        for(int i=0;i<lines.length;i++){
+                            System.out.println("iiline: "+lines[i].length());
+                            if(diagnosticsResult.getRange().getStart().getLine()>i){
+                                begin+=lines[i].length()+1;
+                            }else if(diagnosticsResult.getRange().getStart().getLine()==i){
+                                begin+=diagnosticsResult.getRange().getStart().getCharacter();
+                                System.out.println(begin+";"+diagnosticsResult.getRange().getEnd().getCharacter());
+                            }
+
+                            if(diagnosticsResult.getRange().getEnd().getLine()>i){
+                                end+=lines[i].length()+1;
+                            }else if(diagnosticsResult.getRange().getEnd().getLine()==i){
+                                end+=diagnosticsResult.getRange().getEnd().getCharacter();
+                            }
                         }
-
-                        if(diagnosticsResult.getRange().getEnd().getLine()>i){
-                            end+=lines[i].length()+1;
-                        }else if(diagnosticsResult.getRange().getEnd().getLine()==i){
-                            end+=diagnosticsResult.getRange().getEnd().getCharacter();
-                        }
-                    }
                         System.out.println("Begin: "+begin+" End: "+end);
-                    if(begin<=end&&end<=psiClass.getText().length()){
-                        TextRange textRange=new TextRange(begin,end);;
-                        annotationHolder.newAnnotation(HighlightSeverity.ERROR,diagnosticsResult.getMessage())
-                                .range(textRange)
-                                .create();
+                        if(begin<=end&&end<=psiClass.getText().length()){
+                            TextRange textRange=new TextRange(begin,end);;
+                            annotationHolder.newAnnotation(HighlightSeverity.ERROR,diagnosticsResult.getMessage())
+                                    .range(textRange)
+                                    .create();
+                        }
                     }
+                }catch (Exception e){
+                    e.printStackTrace();
                 }
             }
 
