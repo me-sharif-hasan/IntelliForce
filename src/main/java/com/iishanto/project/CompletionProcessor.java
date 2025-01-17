@@ -5,10 +5,15 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.iishanto.server.hanlder.LspResponseListener;
 import com.iishanto.server.hanlder.wrappers.CompletionWrapper;
+import com.intellij.codeInsight.AutoPopupController;
 import com.intellij.codeInsight.completion.*;
 import com.intellij.codeInsight.lookup.LookupElementBuilder;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.application.ModalityState;
+import com.intellij.openapi.editor.CaretModel;
+import com.intellij.openapi.editor.Document;
+import com.intellij.openapi.editor.Editor;
+import com.intellij.openapi.fileEditor.FileEditorManager;
 import com.intellij.patterns.PlatformPatterns;
 import com.intellij.psi.PsiElement;
 import com.intellij.util.ProcessingContext;
@@ -40,27 +45,35 @@ public class CompletionProcessor implements LspResponseListener {
     @Override
     synchronized public void listen(JsonObject jsonObject) {
 
-        ApplicationManager.getApplication().invokeAndWait(()->{
-            System.out.printf("Completion processed: %d\n", id);
-//            System.out.println(jsonObject);
-            System.out.println("\n\n---------------------"+jsonObject.get("result").getAsJsonObject().get("items").getAsJsonArray().isEmpty()+" "+(id)+"--------------------\n\n");
-            if(!jsonObject.get("result").getAsJsonObject().get("items").getAsJsonArray().isEmpty()){
-                JsonArray items = jsonObject.get("result").getAsJsonObject().get("items").getAsJsonArray();
-                completionContributor.extend(CompletionType.BASIC, PlatformPatterns.psiElement(), new CompletionProvider<>() {
-                    @Override
-                    protected void addCompletions(@NotNull CompletionParameters completionParameters, @NotNull ProcessingContext processingContext, @NotNull CompletionResultSet completionResultSet) {
-                        System.out.println("Doing completion "+(id++));
-                        for(JsonElement item : items){
-                            String label = item.getAsJsonObject().get("label").getAsString();
-                            String detail= item.getAsJsonObject().get("detail").getAsString();
+
+
+//        System.out.printf("Completion processed: %d\n", id);
+//        System.out.println(jsonObject);
+//        System.out.println("\n\n---------------------"+jsonObject.get("result").getAsJsonObject().get("items").getAsJsonArray().isEmpty()+" "+(id)+"--------------------\n\n");
+//        if(!jsonObject.get("result").getAsJsonObject().get("items").getAsJsonArray().isEmpty()){
+//            JsonArray items = jsonObject.get("result").getAsJsonObject().get("items").getAsJsonArray();
+//            System.out.println("Success doing completion ->>>>>>>");
+//
+//            completionContributor.extend(CompletionType.SMART, PlatformPatterns.psiElement(), new CompletionProvider<>() {
+//                @Override
+//                protected void addCompletions(@NotNull CompletionParameters completionParameters, @NotNull ProcessingContext processingContext, @NotNull CompletionResultSet completionResultSet) {
+//                    System.out.println("Doing completion "+(id++));
+//                    for(JsonElement item : items){
+//                        String label = item.getAsJsonObject().get("label").getAsString();
+//                        String detail= item.getAsJsonObject().get("detail").getAsString();
 //                        System.out.println("label: "+id+" " + label+" detail: " + detail);
-                            completionResultSet.addElement(LookupElementBuilder.create(label));
-                        }
-                    }
-                });
-            }
-        });
-        id++;
+//                        completionResultSet.addElement(LookupElementBuilder.create(label));
+//                    }
+//                }
+//            });
+//
+//            ApplicationManager.getApplication().invokeLater(() -> {
+//                AutoPopupController.getInstance(completionParameters.getEditor().getProject())
+//                        .scheduleAutoPopup(completionParameters.getEditor());
+//            });
+//        }
+//
+//        id++;
 
 //        CompletionWrapper completionWrapper = CompletionWrapper.getFromJsonObject(jsonObject);
 //        if (!completionWrapper.getResult().getItems().isEmpty()) {

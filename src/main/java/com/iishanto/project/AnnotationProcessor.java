@@ -9,6 +9,8 @@ import com.intellij.codeInsight.AutoPopupController;
 import com.intellij.lang.annotation.AnnotationHolder;
 import com.intellij.lang.annotation.HighlightSeverity;
 import com.intellij.openapi.application.ApplicationManager;
+import com.intellij.openapi.editor.CaretModel;
+import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.fileEditor.FileEditorManager;
 import com.intellij.openapi.util.TextRange;
@@ -38,12 +40,35 @@ public class AnnotationProcessor implements LspResponseListener {
     }
 
     private void invokeAutoComplete(){
-        ApplicationManager.getApplication().invokeLater(()->{
-            ApplicationManager.getApplication().runReadAction(()->{
-                System.out.println("invoking auto complete");
-                AutoPopupController.getInstance(SalesforceProjectStartupActivity.project).scheduleAutoPopup(editor);
-            });
-        });
+        System.out.println("trying completion");
+        Editor editor = FileEditorManager.getInstance(SalesforceProjectStartupActivity.project).getSelectedTextEditor();
+        if (editor == null) {
+            System.out.println("No active editor found.");
+            return;
+        }
+
+        // Get the document and caret model
+        Document document = editor.getDocument();
+        CaretModel caretModel = editor.getCaretModel();
+
+        // Get the offset of the caret
+        int offset = caretModel.getOffset();
+
+        // Convert offset to line and column
+        int line = document.getLineNumber(offset);
+        int lineStartOffset = document.getLineStartOffset(line);
+        int character = offset - lineStartOffset;
+
+        // Output the cursor position
+        System.out.println("Current line: " + (line + 1)); // Line numbers are 0-based
+        System.out.println("Current character: " + (character + 1)); // Column numbers are 0-based
+
+//        ApplicationManager.getApplication().invokeLater(()->{
+//            ApplicationManager.getApplication().runReadAction(()->{
+//                System.out.println("invoking auto complete");
+//                AutoPopupController.getInstance(SalesforceProjectStartupActivity.project).scheduleAutoPopup(editor);
+//            });
+//        });
     }
 
     @Override
