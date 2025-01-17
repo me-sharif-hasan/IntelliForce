@@ -26,18 +26,21 @@ public class ApexLanguageAutoCompletionContributor extends CompletionContributor
                 int columnNumber = offset - lineStartOffset;
                 String path = completionParameters.getOriginalFile().getVirtualFile().getPath();
                 System.out.println("Auto completion working: " + lineNumber + "; " + columnNumber + " " + path);
-                new CompletionProcessor(completionResultSet, completionParameters, processingContext).complete();
-//                new Thread(()->{
-//                    try {
-//                        NotificationHub.getInstance().completion(
-//                                path,lineNumber,
-//                                columnNumber,
-//                                new CompletionProcessor(completionResultSet,completionParameters,processingContext)
-//                        );
-//                    } catch (IOException e) {
-//                        System.err.println(e.getLocalizedMessage());
-//                    }
-//                }).start();
+                try {
+                    NotificationHub.getInstance().completion(
+                            path,
+                            lineNumber,
+                            columnNumber,
+                            new CompletionProcessor(
+                                    ApexLanguageAutoCompletionContributor.this,
+//                                    completionResultSet,
+                                    completionParameters,
+                                    processingContext
+                            )
+                    );
+                } catch (IOException e) {
+                    System.err.println(e.getLocalizedMessage());
+                }
             }
         });
     }

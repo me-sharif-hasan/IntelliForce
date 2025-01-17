@@ -24,7 +24,6 @@ public class ResponseHandler {
                     }
                     headerMatcher[14]= (byte) c;
                     String header=new String(headerMatcher);
-                    System.out.println(header);
                     if(header.toLowerCase().trim().equals("content-length:")){
                         //read next number
                         int numchar;
@@ -42,7 +41,7 @@ public class ResponseHandler {
                         numchar = inputStream.read(json,0,contentLength);
                         if(numchar!=-1){
                             String jsonStr=new String(json);
-                            System.out.println("parsed -- iishanto -- "+jsonStr);
+//                            System.out.println("parsed -- iishanto -- "+jsonStr);
                             JsonObject jsonObject=JsonParser.parseString(jsonStr).getAsJsonObject();
                             String method=null;
                             try{
@@ -55,6 +54,7 @@ public class ResponseHandler {
                                     for (String key:listenerRegistry.keySet()){
                                         LspResponseListener lspResponseListener=listenerRegistry.get(key);
                                         if(lspResponseListener.isMatching(jsonObject)){
+                                            System.out.println("semantic delivery");
                                             lspResponseListener.listen(jsonObject);
                                             break;
                                         }

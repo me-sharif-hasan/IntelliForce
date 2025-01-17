@@ -1,50 +1,83 @@
 package com.iishanto.project;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.iishanto.server.hanlder.LspResponseListener;
 import com.iishanto.server.hanlder.wrappers.CompletionWrapper;
-import com.intellij.codeInsight.completion.CompletionParameters;
-import com.intellij.codeInsight.completion.CompletionResultSet;
+import com.intellij.codeInsight.completion.*;
 import com.intellij.codeInsight.lookup.LookupElementBuilder;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.application.ModalityState;
+import com.intellij.patterns.PlatformPatterns;
 import com.intellij.psi.PsiElement;
 import com.intellij.util.ProcessingContext;
+import org.jetbrains.annotations.NotNull;
 
+import java.util.Comparator;
 import java.util.List;
 
 public class CompletionProcessor implements LspResponseListener {
-    private CompletionResultSet completionResultSet;
+    //    private final CompletionResultSet completionResultSet;
     private CompletionParameters completionParameters;
     private ProcessingContext processingContext;
-    public CompletionProcessor(CompletionResultSet completionResultSet, CompletionParameters completionParameters, ProcessingContext processingContext){
-        this.completionResultSet=completionResultSet;
-        this.completionParameters=completionParameters;
-        this.processingContext=processingContext;
+    private final CompletionContributor completionContributor;
+
+    public CompletionProcessor(
+            CompletionContributor completionContributor,
+//            CompletionResultSet completionResultSet,
+            CompletionParameters completionParameters,
+            ProcessingContext processingContext
+    ) {
+        this.completionContributor = completionContributor;
+//        this.completionResultSet=completionResultSet;
+        this.completionParameters = completionParameters;
+        this.processingContext = processingContext;
     }
 
-    public void complete(){
-        new Thread(()->{
-            completionResultSet.addElement(LookupElementBuilder.create("Sample completion item"));
+    static int id=0;
 
-        }).start();
-    }
     @Override
-    public void listen(JsonObject jsonObject) {
-        System.out.println("Completion processed: ");
-        System.out.println(jsonObject);
-        CompletionWrapper completionWrapper=CompletionWrapper.getFromJsonObject(jsonObject);
-        if(!completionWrapper.getResult().getItems().isEmpty()){
-            System.out.println("Completion Available");
-            List< CompletionWrapper.CompletionItem> items=completionWrapper.getResult().getItems();
-            for(CompletionWrapper.CompletionItem completionItem:items){
-                System.out.println("Writing completion "+completionItem.getLabel());
-                String label=completionItem.getLabel();
-                System.out.println("Pushing the log");
-                completionResultSet.addElement(LookupElementBuilder.create("Sample completion item"));
-                System.out.println("Finished the log");
+    synchronized public void listen(JsonObject jsonObject) {
+
+        ApplicationManager.getApplication().invokeAndWait(()->{
+            System.out.printf("Completion processed: %d\n", id);
+//            System.out.println(jsonObject);
+            System.out.println("\n\n---------------------"+jsonObject.get("result").getAsJsonObject().get("items").getAsJsonArray().isEmpty()+" "+(id)+"--------------------\n\n");
+            if(!jsonObject.get("result").getAsJsonObject().get("items").getAsJsonArray().isEmpty()){
+                JsonArray items = jsonObject.get("result").getAsJsonObject().get("items").getAsJsonArray();
+                completionContributor.extend(CompletionType.BASIC, PlatformPatterns.psiElement(), new CompletionProvider<>() {
+                    @Override
+                    protected void addCompletions(@NotNull CompletionParameters completionParameters, @NotNull ProcessingContext processingContext, @NotNull CompletionResultSet completionResultSet) {
+                        System.out.println("Doing completion "+(id++));
+                        for(JsonElement item : items){
+                            String label = item.getAsJsonObject().get("label").getAsString();
+                            String detail= item.getAsJsonObject().get("detail").getAsString();
+//                        System.out.println("label: "+id+" " + label+" detail: " + detail);
+                            completionResultSet.addElement(LookupElementBuilder.create(label));
+                        }
+                    }
+                });
             }
-        }
+        });
+        id++;
+
+//        CompletionWrapper completionWrapper = CompletionWrapper.getFromJsonObject(jsonObject);
+//        if (!completionWrapper.getResult().getItems().isEmpty()) {
+//            System.out.println("Completion Available");
+//            List<CompletionWrapper.CompletionItem> items = completionWrapper.getResult().getItems();
+//            items.sort(Comparator.comparing(CompletionWrapper.CompletionItem::getSortText));
+//            completionContributor.extend(CompletionType.BASIC, PlatformPatterns.psiElement(), new CompletionProvider<>() {
+//                @Override
+//                protected void addCompletions(@NotNull CompletionParameters completionParameters, @NotNull ProcessingContext processingContext, @NotNull CompletionResultSet completionResultSet) {
+//                    for (CompletionWrapper.CompletionItem completionItem : items) {
+//                        System.out.println("Adding: "+completionItem.getDetail());
+//                        String label = completionItem.getLabel();
+//                        completionResultSet.addElement(LookupElementBuilder.create(label));
+//                    }
+//                }
+//            });
+//        }
 
     }
 
@@ -55,31 +88,10 @@ public class CompletionProcessor implements LspResponseListener {
 
     @Override
     public boolean isMatching(JsonObject jsonObject) {
-        try{
-            return jsonObject.get("result").getAsJsonObject().get("isIncomplete").getAsString()!=null;
-        }catch (Exception e){
+        try {
+            return jsonObject.get("result").getAsJsonObject().get("isIncomplete").getAsString() != null;
+        } catch (Exception e) {
             return false;
         }
     }
 }
-
-/*
-{
-                    "jsonrpc": "2.0",
-                    "id": 1,
-                    "method": "textDocument/completion",
-                    "params": {
-                        "textDocument": {
-                             "uri": "%s"
-                        },
-                        "position": {
-                            "line": %d,
-                            "character": %d
-                        },
-                        "context": {
-                            "triggerKind": 1,
-                            "triggerCharacter": "."
-                        }
-                    }
-                }
- */
