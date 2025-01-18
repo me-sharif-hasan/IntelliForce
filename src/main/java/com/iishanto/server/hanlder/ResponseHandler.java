@@ -53,13 +53,19 @@ public class ResponseHandler {
                                 try{
                                     for (String key:listenerRegistry.keySet()){
                                         LspResponseListener lspResponseListener=listenerRegistry.get(key);
-                                        if(lspResponseListener.isMatching(jsonObject)){
+                                        boolean isMatching=false;
+                                        try{
+                                            isMatching=lspResponseListener.isMatching(jsonObject);
+                                        }catch (Throwable ignored){
+                                        }
+                                        if(isMatching){
                                             System.out.println("semantic delivery");
                                             lspResponseListener.listen(jsonObject);
                                             break;
                                         }
                                     }
                                 }catch (Exception e){
+                                    e.printStackTrace();
                                     System.err.println("error: "+e.getLocalizedMessage());
                                 }
                             }

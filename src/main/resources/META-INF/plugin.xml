@@ -24,9 +24,10 @@
                     implementationClass="com.iishanto.apex.filetypes.ApexSyntaxHighlighterFactory"/>
             <annotator
                     language="Apex"
-                    implementationClass="com.iishanto.server.language.ide.ApexLanguageAnnotator"/>
+                    implementationClass="com.iishanto.ide.ApexLanguageAnnotator"/>
             <postStartupActivity implementation="com.iishanto.project.SalesforceProjectStartupActivity"/>
-            <completion.contributor language="Apex" implementationClass="com.iishanto.server.language.ide.ApexLanguageAutoCompletionContributor"/>
+            <highlightErrorFilter implementation="com.iishanto.ide.ErrorFilter"/>
+            <completion.contributor language="Apex" implementationClass="com.iishanto.ide.ApexLanguageAutoCompletionContributor"/>
     </extensions>
 </idea-plugin>
 
