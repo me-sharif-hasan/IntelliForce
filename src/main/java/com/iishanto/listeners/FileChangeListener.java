@@ -1,4 +1,4 @@
-package com.iishanto.project;
+package com.iishanto.listeners;
 
 import com.intellij.openapi.vfs.VirtualFileEvent;
 import com.intellij.openapi.vfs.VirtualFileListener;

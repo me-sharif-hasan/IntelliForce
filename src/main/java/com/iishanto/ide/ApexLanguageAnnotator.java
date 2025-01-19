@@ -1,6 +1,6 @@
 package com.iishanto.ide;
 
-import com.iishanto.project.AnnotationProcessor;
+import com.iishanto.listeners.ApexDiagnosticCallbackListener;
 import com.iishanto.server.notification.NotificationHub;
 import com.intellij.lang.annotation.AnnotationHolder;
 import com.intellij.lang.annotation.Annotator;
@@ -31,7 +31,7 @@ public class ApexLanguageAnnotator implements Annotator {
         NotificationHub.getInstance().didOpen(
                 filePath,
                 content,
-                new AnnotationProcessor(filePath,content)
+                new ApexDiagnosticCallbackListener(filePath,content)
                         .setAnnotationHolder(annotationHolder)
         );
     }

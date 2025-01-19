@@ -15,19 +15,21 @@ public class ServerExecutableManager {
             assert in != null;
             Files.copy(in, executableFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
         }
-        executableFile.setExecutable(true);
-        System.out.println(executableFile.getAbsolutePath());
-
-        String []command=new String[]{
-                "java",
-                "-Xms512m",
-                "-Xmx1024m",
-                "-jar",
-                "-Ddebug.internal.errors=true",
-                "-Ddebug.semantic.errors=true",
-                "-Ddebug.completion.statistics=true",
-                executableFile.getAbsolutePath(),
-        };
-        return new ProcessBuilder(command);
+        if(executableFile.setExecutable(true)){
+            System.out.println(executableFile.getAbsolutePath());
+            String []command=new String[]{
+                    "java",
+                    "-Xms512m",
+                    "-Xmx1024m",
+                    "-jar",
+                    "-Ddebug.internal.errors=true",
+                    "-Ddebug.semantic.errors=true",
+                    "-Ddebug.completion.statistics=true",
+                    executableFile.getAbsolutePath(),
+            };
+            return new ProcessBuilder(command);
+        }else{
+            return null;
+        }
     }
 }

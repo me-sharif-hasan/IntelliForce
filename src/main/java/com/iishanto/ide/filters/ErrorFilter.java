@@ -1,4 +1,4 @@
-package com.iishanto.ide;
+package com.iishanto.ide.filters;
 
 import com.intellij.codeInsight.highlighting.HighlightErrorFilter;
 import com.intellij.psi.PsiErrorElement;

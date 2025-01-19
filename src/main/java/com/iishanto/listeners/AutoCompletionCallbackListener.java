@@ -1,8 +1,9 @@
-package com.iishanto.project;
+package com.iishanto.listeners;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.iishanto.common.Logger;
 import com.iishanto.server.hanlder.AsynchronousSessionedTask;
 import com.iishanto.server.hanlder.LspResponseListener;
 import com.iishanto.server.notification.NotificationHub;
@@ -12,23 +13,16 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class AutoCompletionSuggestionCollector implements LspResponseListener {
+public class AutoCompletionCallbackListener implements LspResponseListener {
     public static List<LookupElementBuilder> suggestionElement=new ArrayList<>();
     public List<LookupElementBuilder> suggestions=new ArrayList<>();
     public boolean isDone=false;
     public int sessionId=0;
     AsynchronousSessionedTask sessionTask;
-    public AutoCompletionSuggestionCollector(int sessionId, AsynchronousSessionedTask asyncTask) {
-        this.sessionId=sessionId;
-        this.sessionTask=asyncTask;
-    }
-    private AutoCompletionSuggestionCollector(){}
+    private AutoCompletionCallbackListener(){}
     @Override
     synchronized public void listen(JsonObject jsonObject) {
         try{
-//            System.out.printf("Completion processed:\n");
-//        System.out.println(jsonObject);
-            System.out.println("\n\n---------------------"+jsonObject.get("result").getAsJsonObject().get("items").getAsJsonArray().isEmpty()+"--------------------\n\n");
             if(!jsonObject.get("result").getAsJsonObject().get("items").getAsJsonArray().isEmpty()){
                 JsonArray items = jsonObject.get("result").getAsJsonObject().get("items").getAsJsonArray();
                 if(!items.isEmpty()){
@@ -44,14 +38,10 @@ public class AutoCompletionSuggestionCollector implements LspResponseListener {
                         localLookupElementBuilders.add(lookupElementBuilder);
                         suggestions.add(lookupElementBuilder);
                     }catch (Throwable e){
-                        System.out.println(item);
-                        e.printStackTrace();
+                        Logger.log(e);
                     }
                     if(sessionTask!=null) sessionTask.completeTask(sessionId, localLookupElementBuilders);
                 }
-//            ApplicationManager.getApplication().invokeLater(()->{
-//                AutoPopupController.getInstance(SalesforceProjectStartupActivity.project).scheduleAutoPopup(editor);
-//            });
             }
         }finally {
             isDone=true;
@@ -59,14 +49,14 @@ public class AutoCompletionSuggestionCollector implements LspResponseListener {
     }
 
     public static List<LookupElementBuilder> getAutoCompleteSuggestions(int lineNumber,int columnNumber,String filePath) throws IOException {
-        AutoCompletionSuggestionCollector autoCompletionSuggestionCollector=new AutoCompletionSuggestionCollector();
+        AutoCompletionCallbackListener autoCompletionCallbackListener =new AutoCompletionCallbackListener();
         NotificationHub.getInstance()
-                .completion(filePath,lineNumber,columnNumber,autoCompletionSuggestionCollector);
-        while (!autoCompletionSuggestionCollector.isDone){
+                .completion(filePath,lineNumber,columnNumber, autoCompletionCallbackListener);
+        while (!autoCompletionCallbackListener.isDone){
             System.out.print("*");
             //waiting
         }
-        return autoCompletionSuggestionCollector.suggestions;
+        return autoCompletionCallbackListener.suggestions;
     }
 
     @Override

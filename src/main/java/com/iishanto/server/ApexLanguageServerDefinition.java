@@ -23,12 +23,15 @@ import java.util.Map;
 public class ApexLanguageServerDefinition{
     private OutputStream serverOutputStream;
     private String[] command;
-    private ProcessBuilder apexLspProcess;
+    private final ProcessBuilder apexLspProcess;
 
     private Process process;
 
     private ApexLanguageServerDefinition() throws IOException {
         apexLspProcess=ServerExecutableManager.runServer();
+        if(apexLspProcess==null){
+            throw new IOException("Failed to start server");
+        }
     }
 
     public void start(Map<String, LspResponseListener> listenerRegistry) throws IOException {

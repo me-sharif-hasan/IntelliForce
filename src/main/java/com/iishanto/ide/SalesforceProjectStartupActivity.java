@@ -1,6 +1,9 @@
-package com.iishanto.project;
+package com.iishanto.ide;
 
 import com.iishanto.common.Configs;
+import com.iishanto.common.Logger;
+import com.iishanto.listeners.FileChangeListener;
+import com.iishanto.server.ApexLanguageServerDefinition;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.startup.ProjectActivity;
 import kotlin.Unit;
@@ -14,14 +17,15 @@ public class SalesforceProjectStartupActivity implements ProjectActivity {
     @Override
     public Object execute(@NotNull Project project, @NotNull Continuation<? super Unit> continuation) {
         SalesforceProjectStartupActivity.project=project;
-        String projectPath = project.getBasePath(); // Get the project root path
+        String projectPath = project.getBasePath(); // Get the listeners root path
         try{
             if (projectPath != null) {
                 FileChangeListener.registerListener();
                 Configs.getInstance().setProjectRoot(projectPath);
-                System.out.println("Project Root on Startup: " + projectPath);
+                ApexLanguageServerDefinition.getInstance();
+                Logger.log("Project Root on Startup: " + projectPath);
             } else {
-                System.out.println("Failed to retrieve the project root on startup.");
+                Logger.log("Failed to retrieve the listeners root on startup.");
             }
         }catch (Exception e){
             System.err.println(e.getLocalizedMessage());

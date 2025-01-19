@@ -25,10 +25,20 @@
             <annotator
                     language="Apex"
                     implementationClass="com.iishanto.ide.ApexLanguageAnnotator"/>
-            <postStartupActivity implementation="com.iishanto.project.SalesforceProjectStartupActivity"/>
-            <highlightErrorFilter implementation="com.iishanto.ide.ErrorFilter"/>
+            <postStartupActivity implementation="com.iishanto.ide.SalesforceProjectStartupActivity"/>
+            <highlightErrorFilter implementation="com.iishanto.ide.filters.ErrorFilter"/>
             <completion.contributor language="Apex" implementationClass="com.iishanto.ide.ApexLanguageAutoCompletionContributor"/>
     </extensions>
+    <actions>
+        <action
+                id="com.example.plugin.CreateApexClassAction"
+                class="com.iishanto.ide.action.CreateNewApexClassAction"
+                text="Apex Class"
+                description="Create a new Apex class">
+            <add-to-group group-id="NewGroup" anchor="last"/>
+        </action>
+    </actions>
+
 </idea-plugin>
 
 
@@ -117,6 +127,6 @@ see also jetbrains documentation: https://plugins.jetbrains.com/docs/intellij/pl
 <!--        <listener class="org.wso2.lsp4intellij.listeners.VFSListener"-->
 <!--                  topic="com.intellij.openapi.vfs.VirtualFileListener"/>-->
 <!--        <listener class="org.wso2.lsp4intellij.listeners.LSPProjectManagerListener"-->
-<!--                  topic="com.intellij.openapi.project.ProjectManagerListener"/>-->
+<!--                  topic="com.intellij.openapi.listeners.ProjectManagerListener"/>-->
 <!--    </applicationListeners>-->
 <!--</idea-plugin>-->

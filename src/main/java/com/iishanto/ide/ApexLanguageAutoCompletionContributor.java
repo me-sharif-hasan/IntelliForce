@@ -1,7 +1,7 @@
 package com.iishanto.ide;
 
-import com.iishanto.project.AnnotationProcessor;
-import com.iishanto.project.AutoCompletionSuggestionCollector;
+import com.iishanto.listeners.ApexDiagnosticCallbackListener;
+import com.iishanto.listeners.AutoCompletionCallbackListener;
 import com.iishanto.server.notification.NotificationHub;
 import com.intellij.codeInsight.completion.*;
 import com.intellij.codeInsight.lookup.LookupElementBuilder;
@@ -54,13 +54,13 @@ public class ApexLanguageAutoCompletionContributor extends CompletionContributor
             NotificationHub.getInstance().didOpen(
                     editor.getVirtualFile().getPath(),
                     editor.getDocument().getText(),
-                    new AnnotationProcessor(
+                    new ApexDiagnosticCallbackListener(
                             editor.getVirtualFile().getPath(),
                             editor.getDocument().getText()
                     )
                             .shouldAnnotate(false)
             );
-            List<LookupElementBuilder> lookupElementBuilderList = AutoCompletionSuggestionCollector.getAutoCompleteSuggestions(serverPos.getLine(), serverPos.getCharacter(), editor.getVirtualFile().getPath());
+            List<LookupElementBuilder> lookupElementBuilderList = AutoCompletionCallbackListener.getAutoCompleteSuggestions(serverPos.getLine(), serverPos.getCharacter(), editor.getVirtualFile().getPath());
             for (LookupElementBuilder lookupElementBuilder : lookupElementBuilderList) {
                 System.out.println("Adding lookup element: " + lookupElementBuilder.getLookupString());
             }
