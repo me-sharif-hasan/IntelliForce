@@ -13,7 +13,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class AutoCompletionCallbackListener implements LspResponseListener {
+public class AutoCompletionCallbackListener extends LspResponseListener {
     public static List<LookupElementBuilder> suggestionElement=new ArrayList<>();
     public List<LookupElementBuilder> suggestions=new ArrayList<>();
     public boolean isDone=false;
@@ -32,7 +32,6 @@ public class AutoCompletionCallbackListener implements LspResponseListener {
                     List<LookupElementBuilder> localLookupElementBuilders=new ArrayList<>();
                     try{
                         String label = item.getAsJsonObject().get("label").getAsString();
-                        System.out.println("Suggestion "+label);
                         LookupElementBuilder lookupElementBuilder= LookupElementBuilder.create(label);
                         suggestionElement.add(lookupElementBuilder);
                         localLookupElementBuilders.add(lookupElementBuilder);

@@ -1,7 +1,6 @@
 package com.iishanto.ide.action;
 
 import com.iishanto.ide.ui.ApexClassCreationDialog;
-import com.intellij.codeInsight.intention.impl.CreateClassDialog;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.project.Project;

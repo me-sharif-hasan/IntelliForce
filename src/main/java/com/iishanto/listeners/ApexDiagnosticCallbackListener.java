@@ -18,7 +18,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class ApexDiagnosticCallbackListener implements LspResponseListener {
+public class ApexDiagnosticCallbackListener extends LspResponseListener {
     private final String fileUrl;
     private final String content;
     private AnnotationHolder annotationHolder;

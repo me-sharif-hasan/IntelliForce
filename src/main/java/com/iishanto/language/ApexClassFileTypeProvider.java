@@ -1,6 +1,7 @@
 package com.iishanto.language;
 
-import com.iishanto.apex.filetypes.ApexClassFileType;
+import com.iishanto.language.sf.apex.filetypes.ApexClassFileType;
+
 public class ApexClassFileTypeProvider extends ApexClassFileType {
     public static ApexClassFileType INSTANCE = new ApexClassFileTypeProvider();
 

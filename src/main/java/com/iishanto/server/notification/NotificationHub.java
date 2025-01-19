@@ -9,8 +9,9 @@ import com.iishanto.server.notification.message.MessageProvider;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.CompletableFuture;
 
-public class NotificationHub implements LspResponseListener{
+public class NotificationHub extends LspResponseListener{
     private final ApexLanguageServerDefinition apexLanguageServerDefinition;
     private final MessageProvider messageProvider;
     private static NotificationHub instance;
@@ -44,6 +45,25 @@ public class NotificationHub implements LspResponseListener{
         listenerRegistry.put(lspResponseListener.getTargetMethod(),lspResponseListener);
         apexLanguageServerDefinition.submitNotification(
                 messageProvider.getCompletionMessage(path,line,character)
+        );
+    }
+
+
+    public void definition(String path,int line,int character,LspResponseListener lspResponseListener) throws IOException {
+        if(Configs.getInstance().getProjectRoot()==null||isLocked) return;
+        if(lspResponseListener!=null){
+            listenerRegistry.put("definition",lspResponseListener);
+        }
+        apexLanguageServerDefinition.submitNotification(
+                messageProvider.getDefinitionMessage(path,line,character)
+        );
+    }
+
+    public void typeDefinition(String path,int line,int character,LspResponseListener lspResponseListener) throws IOException {
+        if(Configs.getInstance().getProjectRoot()==null||isLocked) return;
+        listenerRegistry.put(lspResponseListener.getTargetMethod(),lspResponseListener);
+        apexLanguageServerDefinition.submitNotification(
+                messageProvider.getTypeDefinitionMessage(path,line,character)
         );
     }
 

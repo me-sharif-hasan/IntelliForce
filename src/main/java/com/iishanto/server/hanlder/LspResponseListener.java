@@ -2,10 +2,17 @@ package com.iishanto.server.hanlder;
 
 import com.google.gson.JsonObject;
 
-public interface LspResponseListener {
-    void listen(JsonObject jsonObject);
-    String getTargetMethod();
-    default boolean isMatching(JsonObject jsonObject){
+import java.util.concurrent.CompletableFuture;
+
+public abstract class LspResponseListener extends CompletableFuture<JsonObject> {
+    public void listen(JsonObject jsonObject){}
+    public String getTargetMethod(){
+        return null;
+    }
+    public boolean isMatching(JsonObject jsonObject){
+        return false;
+    }
+    public boolean isCompletableFuture(){
         return false;
     }
 }

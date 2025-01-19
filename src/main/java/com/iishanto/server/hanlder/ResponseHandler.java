@@ -48,7 +48,8 @@ public class ResponseHandler {
                                 method=jsonObject.get("method").getAsString();
                             }catch (Exception ignored){}
                             if(method!=null&&listenerRegistry.containsKey(method)){
-                                listenerRegistry.get(method).listen(jsonObject);
+//                                listenerRegistry.get(method).listen(jsonObject);
+                                callLspListenerOrCompletableFuture(listenerRegistry.get(method),jsonObject);
                             }else{
                                 try{
                                     for (String key:listenerRegistry.keySet()){
@@ -60,7 +61,8 @@ public class ResponseHandler {
                                         }
                                         if(isMatching){
                                             System.out.println("semantic delivery");
-                                            lspResponseListener.listen(jsonObject);
+//                                            lspResponseListener.listen(jsonObject);
+                                            callLspListenerOrCompletableFuture(lspResponseListener,jsonObject);
                                             break;
                                         }
                                     }
@@ -76,5 +78,13 @@ public class ResponseHandler {
                 System.err.println(e.getLocalizedMessage());
             }
         }).start();
+    }
+
+    private void callLspListenerOrCompletableFuture(LspResponseListener listener,JsonObject response){
+        if(listener.isCompletableFuture()){
+            listener.complete(response);
+        }else{
+            listener.listen(response);
+        }
     }
 }

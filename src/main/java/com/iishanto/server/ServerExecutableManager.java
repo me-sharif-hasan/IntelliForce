@@ -10,7 +10,7 @@ import java.nio.file.StandardCopyOption;
 
 public class ServerExecutableManager {
     public static ProcessBuilder runServer() throws IOException {
-        File executableFile = FileUtil.createTempFile("apex-jorje-lsp", ".jar");
+        File executableFile = FileUtil.createTempFile("sf-jorje-lsp", ".jar");
         try (InputStream in = ServerExecutableManager.class.getResourceAsStream("/bin/apex-jorje-lsp.jar")) {
             assert in != null;
             Files.copy(in, executableFile.toPath(), StandardCopyOption.REPLACE_EXISTING);

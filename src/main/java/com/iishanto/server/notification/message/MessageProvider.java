@@ -1,5 +1,8 @@
 package com.iishanto.server.notification.message;
 
+import com.iishanto.common.Constants;
+import com.iishanto.common.MessageType;
+
 public class MessageProvider {
     private static Integer version=0;
 
@@ -35,6 +38,8 @@ public class MessageProvider {
                                     "dynamicRegistration": true
                                 }
                             },
+                            "referencesProvider": true,
+                            "implementationProvider": true,
                             "workspace": {
                                 "applyEdit": true,
                                 "workspaceEdit": {
@@ -85,5 +90,41 @@ public class MessageProvider {
                         }
                     }
                 }""".formatted(version++,file,line,character);
+    }
+
+    public String getDefinitionMessage(String file,int line,int character){
+        return """
+                {
+                    "jsonrpc": "2.0",
+                    "id": %s,
+                    "method": "textDocument/definition",
+                    "params": {
+                        "textDocument": {
+                             "uri": "file:///%s"
+                        },
+                        "position": {
+                            "line": %d,
+                            "character": %d
+                        }
+                    }
+                }""".formatted(MessageType.APEX_DEFINITION_MESSAGE,file,line,character);
+    }
+
+    public String getTypeDefinitionMessage(String file,int line,int character){
+        return """
+                {
+                    "jsonrpc": "2.0",
+                    "id": %s,
+                    "method": "textDocument/typeDefinition",
+                    "params": {
+                        "textDocument": {
+                             "uri": "file:///%s"
+                        },
+                        "position": {
+                            "line": %d,
+                            "character": %d
+                        }
+                    }
+                }""".formatted(MessageType.APEX_TYPE_DEFINITION,file,line,character);
     }
 }

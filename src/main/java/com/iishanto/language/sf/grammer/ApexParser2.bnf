@@ -1,0 +1,223 @@
+{
+  parserClass="com.iishanto.parser.ApexParser"
+
+  extends="com.intellij.extapi.psi.ASTWrapperPsiElement"
+
+  psiClassPrefix="Apex"
+  psiImplClassSuffix="Impl"
+  psiPackage="com.iishanto.psi"
+  psiImplPackage="com.iishanto.psi.impl"
+
+  elementTypeHolderClass="com.iishanto.psi.ApexTypes"
+  elementTypeClass="com.iishanto.apex.psi.ApexElementType"
+  tokenTypeClass="com.iishanto.apex.psi.ApexTokenType"
+}
+
+apexBegin ::= apexFile
+apexFile ::= (classDeclaration | triggerUnit | triggerUnit2 | compilationUnit)*
+triggerUnit ::= 'trigger' id 'on' id '(' triggerCase (',' triggerCase)* ')' block EOF
+triggerUnit2 ::= 'trigger' id 'on' id '(' triggerCase (',' triggerCase)* ')' triggerBlock EOF
+
+triggerCase ::= ('before'|'after') ('insert'|'update'|'delete'|'undelete')
+triggerBlock ::= '{' triggerBlockMember* '}'
+triggerBlockMember ::= modifier* triggerMemberDeclaration | statement
+
+compilationUnit ::= typeDeclaration EOF
+typeDeclaration ::= modifier* classDeclaration | modifier* enumDeclaration | modifier* interfaceDeclaration
+
+classDeclaration ::= 'class' id ('extends' typeRef)? ('implements' typeList)? classBody
+enumDeclaration ::= 'enum' id '{' enumConstants? '}'
+enumConstants ::= id (',' id)*
+interfaceDeclaration ::= 'interface' id ('extends' typeList)? interfaceBody
+
+typeList ::= typeRef (',' typeRef)*
+classBody ::= '{' classBodyDeclaration* '}'
+
+interfaceBody ::= '{' interfaceMethodDeclaration* '}'
+classBodyDeclaration ::= ';' | 'static'? block | modifier* memberDeclaration
+
+modifier ::= annotation | 'global' | 'public' | 'protected' | 'private' | 'transient' | 'static' | 'abstract' | 'final' | 'webservice' | 'override' | 'virtual' | 'testmethod' | 'with' 'sharing' | 'without' 'sharing' | 'inherited' 'sharing'
+memberDeclaration ::= methodDeclaration | fieldDeclaration | constructorDeclaration | interfaceDeclaration | classDeclaration | enumDeclaration | propertyDeclaration
+triggerMemberDeclaration ::= methodDeclaration | fieldDeclaration | interfaceDeclaration | classDeclaration | enumDeclaration | propertyDeclaration
+
+methodDeclaration ::= (typeRef|'void') id formalParameters (block | ';')
+constructorDeclaration ::= qualifiedName formalParameters block
+fieldDeclaration ::= typeRef variableDeclarators ';'
+propertyDeclaration ::= typeRef id '{' propertyBlock* '}'
+interfaceMethodDeclaration ::= modifier* (typeRef|'void') id formalParameters ';'
+
+variableDeclarators ::= variableDeclarator (',' variableDeclarator)*
+variableDeclarator ::= id ('=' expression)?
+arrayInitializer ::= '{' (expression (',' expression)* (',')? )? '}'
+typeRef ::= typeName ('.' typeName)* arraySubscripts
+arraySubscripts ::= ('[' ']')*
+typeName ::= 'list' typeArguments? | 'set' typeArguments? | 'map' typeArguments? | id typeArguments?
+
+typeArguments ::= '<' typeList '>'
+formalParameters ::= '(' formalParameterList? ')'
+formalParameterList ::= formalParameter (',' formalParameter)*
+formalParameter ::= modifier* typeRef id
+
+qualifiedName ::= id ('.' id)*
+literal ::= IntegerLiteral | LongLiteral | NumberLiteral | StringLiteral | BooleanLiteral | 'null'
+
+
+annotation ::= '@' qualifiedName ('(' (elementValuePairs | elementValue)? ')')?
+elementValuePairs ::= elementValuePair (','? elementValuePair)*
+elementValuePair ::= id '=' elementValue
+
+elementValue ::= expression | annotation | elementValueArrayInitializer
+elementValueArrayInitializer ::= '{' (elementValue (',' elementValue)*)? (',')? '}'
+
+block ::= '{' statement* '}'
+localVariableDeclarationStatement ::= localVariableDeclaration ';'
+localVariableDeclaration ::= modifier* typeRef variableDeclarators
+statement ::= block | ifStatement | switchStatement | forStatement | whileStatement | doWhileStatement | tryStatement | returnStatement | throwStatement | breakStatement | continueStatement | insertStatement | updateStatement | deleteStatement | undeleteStatement | upsertStatement | mergeStatement | runAsStatement | localVariableDeclarationStatement | expressionStatement
+
+ifStatement ::= 'if' parExpression statement ('else' statement)?
+switchStatement ::= 'switch' 'on' expression '{' whenControl+ '}'
+whenControl ::= 'when' whenValue block
+whenValue ::= 'else' | whenLiteral (',' whenLiteral)* | id id
+
+whenLiteral ::= ('-')? IntegerLiteral | LongLiteral | StringLiteral | 'null' | id | '(' whenLiteral ')'
+
+forStatement ::= 'for' '(' forControl ')' (statement | ';')
+whileStatement ::= 'while' parExpression (statement | ';')
+doWhileStatement ::= 'do' statement 'while' parExpression ';'
+tryStatement ::= 'try' block (catchClause+ finallyBlock? | finallyBlock)
+returnStatement ::= 'return' expression? ';'
+throwStatement ::= 'throw' expression ';'
+breakStatement ::= 'break' ';'
+continueStatement ::= 'continue' ';'
+accessLevel ::= 'as' ('system' | 'user')
+insertStatement ::= 'insert' accessLevel? expression ';'
+updateStatement ::= 'update' accessLevel? expression ';'
+deleteStatement ::= 'delete' accessLevel? expression ';'
+undeleteStatement ::= 'undelete' accessLevel? expression ';'
+upsertStatement ::= 'upsert' accessLevel? expression qualifiedName? ';'
+mergeStatement ::= 'merge' accessLevel? expression expression ';'
+runAsStatement ::= 'systemrunas' '(' expressionList? ')' block
+expressionStatement ::= expression ';'
+propertyBlock ::= modifier* (getter | setter)
+getter ::= 'get' (';' | block)
+setter ::= 'set' (';' | block)
+catchClause ::= 'catch' '(' modifier* qualifiedName id ')' block
+finallyBlock ::= 'finally' block
+forControl ::= enhancedForControl | forInit? ';' expression? ';' forUpdate?
+forInit ::= localVariableDeclaration | expressionList
+enhancedForControl ::= typeRef id ':' expression
+forUpdate ::= expressionList
+
+parExpression ::= '(' expression ')'
+expressionList ::= expression (',' expression)*
+
+//expression ::= primary | expression ('.' | '?.' ) (dotMethodCall | anyId) | expression '[' expression ']' | methodCall | 'new' creator | '(' typeRef ')' expression | '(' expression ')' | expression ('++' | '--') | ('+' | '-' | '++' | '--') expression | ('~' | '!') expression | expression ('*' | '/') expression | expression ('+' | '-') expression | expression ('<<' | '>>>' | '>>') expression | expression ('>' | '<') ('=')? expression | expression 'instanceof' typeRef | expression ('===' | '!==' | '==' | '!=') expression | expression '&' expression | expression '^' expression | expression '|' expression | expression '&&' expression | expression '||' expression | expression '?' expression ':' expression | expression ('=' | '+=' | '-=' | '*=' | '/=' | '&=' | '|=' | '^=' | '>>=' | '>>>=' | '<<=') expression
+expression ::= primary2 expressionRest
+
+expressionRest ::= ('.' | '?.') (dotMethodCall | anyId) expressionRest
+               | '[' expression ']' expressionRest
+               | ('++' | '--') expressionRest
+               | ('*' | '/' | '+' | '-' | '<<' | '>>>' | '>>') expression expressionRest
+               | ('>' | '<') ('=')? expression expressionRest
+               | 'instanceof' typeRef expressionRest
+               | ('===' | '!==' | '==' | '!=') expression expressionRest
+               | '&' expression expressionRest
+               | '^' expression expressionRest
+               | '|' expression expressionRest
+               | '&&' expression expressionRest
+               | '||' expression expressionRest
+               | '?' expression ':' expression expressionRest
+               | ('=' | '+=' | '-=' | '*=' | '/=' | '&=' | '|=' | '^=' | '>>=' | '>>>=' | '<<=') expression expressionRest
+               | epsilon
+
+primary2 ::= methodCall
+         | 'new' creator
+         | '(' typeRef ')' expression
+         | '(' expression ')'
+         | ('+' | '-' | '++' | '--') expression
+         | ('~' | '!') expression
+         | primary
+
+
+primary ::= 'this' | 'super' | literal | typeRef '.' 'class' | 'void' '.' 'class' | id | soqlLiteral | soslLiteral
+methodCall ::= id '(' expressionList? ')' | 'this' '(' expressionList? ')' | 'super' '(' expressionList? ')'
+dotMethodCall ::= anyId '(' expressionList? ')'
+
+creator ::= createdName (noRest | classCreatorRest | arrayCreatorRest | mapCreatorRest | setCreatorRest)
+createdName ::= idCreatedNamePair ('.' idCreatedNamePair)*
+idCreatedNamePair ::= anyId ('<' typeList '>')?
+noRest ::= '{' '}'
+classCreatorRest ::= arguments
+arrayCreatorRest ::= '[' expression ']' |'[' ']' arrayInitializer?
+mapCreatorRest ::= '{' mapCreatorRestPair (',' mapCreatorRestPair )* '}'
+mapCreatorRestPair ::= expression '=>' expression
+setCreatorRest ::= '{' expression (',' ( expression ))* '}'
+arguments ::= '(' expressionList? ')'
+
+soqlLiteral ::= '[' query ']'
+query ::= 'select' selectList 'from' fromNameList usingScope? whereClause? withClause? groupByClause? orderByClause? limitClause? offsetClause? allRowsClause? forClauses ( 'update' updateList )?
+subQuery ::= 'select' subFieldList 'from' fromNameList whereClause? orderByClause? limitClause? forClauses ( 'update' updateList )?
+selectList ::= selectEntry (',' selectEntry)*
+selectEntry ::= fieldName soqlId? | soqlFunction soqlId? | '(' subQuery ')' soqlId? | typeOf
+fieldName ::= soqlId ('.' soqlId)*
+fromNameList ::= fieldName soqlId? (',' fieldName soqlId?)*
+subFieldList ::= subFieldEntry (',' subFieldEntry)*
+subFieldEntry ::= fieldName soqlId? | soqlFunction soqlId? | typeOf
+soqlFieldsParameter ::= 'all' | 'custom' | 'standard'
+soqlFunction ::= 'avg' '(' fieldName ')' | 'count' '(' ')' | 'count' '(' fieldName ')' | 'count_distinct' '(' fieldName ')' | 'min' '(' fieldName ')' | 'max' '(' fieldName ')' | 'sum' '(' fieldName ')' | 'tolabel' '(' fieldName ')' | 'format' '(' fieldName ')' | 'calendar_month' '(' dateFieldName ')' | 'calendar_quarter' '(' dateFieldName ')' | 'calendar_year' '(' dateFieldName ')' | 'day_in_month' '(' dateFieldName ')' | 'day_in_week' '(' dateFieldName ')' | 'day_in_year' '(' dateFieldName ')' | 'day_only' '(' dateFieldName ')' | 'fiscal_month' '(' dateFieldName ')' | 'fiscal_quarter' '(' dateFieldName ')' | 'fiscal_year' '(' dateFieldName ')' | 'hour_in_day' '(' dateFieldName ')' | 'week_in_month' '(' dateFieldName ')' | 'week_in_year' '(' dateFieldName ')' | 'fields' '(' soqlFieldsParameter ')' | 'distance' '(' locationValue ',' locationValue ',' StringLiteral ')'
+dateFieldName ::= 'convert_timezone' '(' fieldName ')' | fieldName
+locationValue ::= fieldName | boundExpression | 'geolocation' '(' coordinateValue ',' coordinateValue ')'
+coordinateValue ::= signedNumber | boundExpression
+typeOf ::= 'typeof' fieldName whenClause+ elseClause?
+whenClause ::= 'when' fieldName 'then' fieldNameList
+elseClause ::= 'else' fieldNameList
+fieldNameList ::= fieldName (',' fieldName)*
+usingScope ::= 'using' 'scope' soqlId
+whereClause ::= 'where' logicalExpression
+logicalExpression ::= conditionalExpression ( 'and' conditionalExpression )* | conditionalExpression ( 'or' conditionalExpression )* | 'not' conditionalExpression
+conditionalExpression ::= '(' logicalExpression ')' | fieldExpression
+fieldExpression ::= fieldName comparisonOperator value | soqlFunction comparisonOperator value
+comparisonOperator ::= '=' | '!=' | '<' | '>' | '<=' | '>=' | '<>' | 'like' | 'in' | 'not' 'in' | 'includes' | 'excludes'
+value ::= 'null' | BooleanLiteral | signedNumber | StringLiteral | DateLiteral | DateTimeLiteral | dateFormula | IntegralCurrencyLiteral ('.' IntegerLiteral?)? | '(' subQuery ')' | valueList | boundExpression
+valueList ::= '(' value (',' value)* ')'
+signedNumber ::= ('+' | '-')? (IntegerLiteral | NumberLiteral)
+withClause ::= 'with' 'data' 'category' filteringExpression | 'with' 'security_enforced' | 'with' 'system_mode' | 'with' 'user_mode' | 'with' logicalExpression
+filteringExpression ::= dataCategorySelection ('and' dataCategorySelection)*
+dataCategorySelection ::= soqlId filteringSelector dataCategoryName
+dataCategoryName ::= soqlId | '(' soqlId (',' soqlId)* '('
+filteringSelector ::= 'at' | 'above' | 'below' | 'above_or_below'
+groupByClause ::= 'group' 'by' selectList ('having' logicalExpression)? | 'group' 'by' 'rollup' '(' fieldName (',' fieldName)* ')' | 'group' 'by' 'cube' '(' fieldName (',' fieldName)* ')'
+orderByClause ::= 'order' 'by' fieldOrderList
+fieldOrderList ::= fieldOrder (',' fieldOrder)*
+fieldOrder ::= fieldName ('asc' | 'desc')? ('nulls' ('first'|'last'))? | soqlFunction ('asc' | 'desc')? ('nulls' ('first'|'last'))?
+limitClause ::= 'limit' IntegerLiteral | 'limit' boundExpression
+offsetClause ::= 'offset' IntegerLiteral | 'offset' boundExpression
+allRowsClause ::= 'all' 'rows'
+forClauses ::= ('for' ('view' | 'update' | 'reference'))*
+boundExpression ::= ':' expression
+dateFormula ::= 'yesterday' | 'today' | 'tomorrow' | 'last_week' | 'this_week' | 'next_week' | 'last_month' | 'this_month' | 'next_month' | 'last_90_days' | 'next_90_days' | 'last_n_days_n' ':' signedInteger | 'next_n_days_n' ':' signedInteger | 'n_days_ago_n' ':' signedInteger | 'next_n_weeks_n' ':' signedInteger | 'last_n_weeks_n' ':' signedInteger | 'n_weeks_ago_n' ':' signedInteger | 'next_n_months_n' ':' signedInteger | 'last_n_months_n' ':' signedInteger | 'n_months_ago_n' ':' signedInteger | 'this_quarter' | 'last_quarter' | 'next_quarter' | 'next_n_quarters_n' ':' signedInteger | 'last_n_quarters_n' ':' signedInteger | 'n_quarters_ago_n' ':' signedInteger | 'this_year' | 'last_year' | 'next_year' | 'next_n_years_n' ':' signedInteger | 'last_n_years_n' ':' signedInteger | 'n_years_ago_n' ':' signedInteger | 'this_fiscal_quarter' | 'last_fiscal_quarter' | 'next_fiscal_quarter' | 'next_n_fiscal_quarters_n' ':' signedInteger | 'last_n_fiscal_quarters_n' ':' signedInteger | 'n_fiscal_quarters_ago_n' ':' signedInteger | 'this_fiscal_year' | 'last_fiscal_year' | 'next_fiscal_year' | 'next_n_fiscal_years_n' ':' signedInteger | 'last_n_fiscal_years_n' ':' signedInteger | 'n_fiscal_years_ago_n' ':' signedInteger
+signedInteger ::= ('+' | '-')? IntegerLiteral
+soqlId ::= id
+
+soslLiteral ::= FindLiteral soslClauses ']' | '[' FindLiteralAlt soslClauses ']'
+
+soslClauses ::= (IN searchGroup)? (RETURNING fieldSpecList)? (WITH DIVISION '=' StringLiteral)? (WITH DATA CATEGORY filteringExpression)? (WITH SNIPPET '(' TARGET_LENGTH '=' IntegerLiteral ')')? (WITH NETWORK 'in' '(' networkList ')')? (WITH NETWORK '=' StringLiteral)? (WITH PRICEBOOKID '=' StringLiteral)? (WITH METADATA '=' StringLiteral)? limitClause? (UPDATE updateList)?
+searchGroup ::= ('all'|'email'|'name'|'phone'|'sidebar') 'fields'
+
+fieldSpecList ::= fieldSpec (',' fieldSpec)*
+fieldSpec ::= soslId '(' fieldList (WHERE logicalExpression)? (USING LISTVIEW '=' soslId)? (ORDER BY fieldOrderList)? limitClause? offsetClause? ')'
+fieldList ::= soslId (',' fieldList)*
+updateList ::= updateType (',' updateList)?
+updateType ::= 'tracking' | 'viewstat'
+networkList ::= StringLiteral (',' networkList)?
+
+soslId ::= id ('.' soslId)*
+
+id ::= Identifier | 'after' | 'before' | 'get' | 'inherited' | 'instanceof' | 'set' | 'sharing' | 'switch' | 'transistant' | 'trigger' | 'when' | 'with' | 'without' | 'user' | 'system' | IntegralCurrencyLiteral | 'select' | 'count' | 'from' | 'as' | 'using' | 'scope' | 'where' | 'order' | 'by' | 'limit' | 'and' | 'or' | 'not' | 'avg' | 'count_distinct' | 'min' | 'max' | 'sum' | 'typeof' | 'end' | 'then' | 'like' | 'in' | 'includes' | 'excludes' | 'asc' | 'desc' | 'nulls' | 'first' | 'last' | 'group' | 'all' | 'rows' | 'view' | 'having' | 'rollup' | 'tolabel' | 'offset' | 'data' | 'category' | 'at' | 'above' | 'below' | 'above_or_below' | 'security_enforced' | 'user_mode' | 'system_mode' | 'reference' | 'cube' | 'format' | 'tracking' | 'viewstat' | 'standard' | 'custom' | 'distance' | 'geolocation' | 'calendar_month' | 'calendar_quarter' | 'calendar_year' | 'day_in_month' | 'day_in_week' | 'day_in_year' | 'day_only' | 'fiscal_month' | 'fiscal_quarter' | 'fiscal_year' | 'hour_in_day' | 'week_in_month' | 'week_in_year' | 'convert_timezone' | 'yesterday' | 'today' | 'tomorrow' | 'last_week' | 'this_week' | 'next_week' | 'last_month' | 'this_month' | 'next_month' | 'last_90_days' | 'next_90_days' | 'last_n_days_n' | 'next_n_days_n' | 'n_days_ago_n' | 'next_n_weeks_n' | 'last_n_weeks_n' | 'n_weeks_ago_n' | 'next_n_months_n' | 'last_n_months_n' | 'n_months_ago_n' | 'this_quarter' | 'last_quarter' | 'next_quarter' | 'next_n_quarters_n' | 'last_n_quarters_n' | 'n_quarters_ago_n' | 'this_year' | 'last_year' | 'next_year' | 'next_n_years_n' | 'last_n_years_n' | 'n_years_ago_n' | 'this_fiscal_quarter' | 'last_fiscal_quarter' | 'next_fiscal_quarter' | 'next_n_fiscal_quarters_n' | 'last_n_fiscal_quarters_n' | 'n_fiscal_quarters_ago_n' | 'this_fiscal_year' | 'last_fiscal_year' | 'next_fiscal_year' | 'next_n_fiscal_years_n' | 'last_n_fiscal_years_n' | 'n_fiscal_years_ago_n' | 'find' | 'email' | 'name' | 'phone' | 'sidebar' | 'fields' | 'metadata' | 'pricebookid' | 'network' | 'snippet' | 'target_length' | 'division' | 'returning' | 'listview'
+
+anyId ::= Identifier | 'abstract' | 'after' | 'before' | 'break' | 'catch' | 'class' | 'continue' | 'delete' | 'do' | 'else' | 'enum' | 'extends' | 'final' | 'finally' | 'for' | 'get' | 'global' | 'if' | 'implements' | 'inherited' | 'insert' | 'instanceof' | 'interface' | 'list' | 'map' | 'merge' | 'new' | 'null' | 'on' | 'override' | 'private' | 'protected' | 'public' | 'return' | 'set' | 'sharing' | 'static' | 'super' | 'switch' | 'testmethod' | 'this' | 'throw' | 'transient' | 'trigger' | 'try' | 'undelete' | 'update' | 'upsert' | 'virtual' | 'webservice' | 'when' | 'while' | 'with' | 'without' | 'user' | 'system' | IntegralCurrencyLiteral | 'select' | 'count' | 'from' | 'as' | 'using' | 'scope' | 'where' | 'order' | 'by' | 'limit' | 'and' | 'or' | 'not' | 'avg' | 'count_distinct' | 'min' | 'max' | 'sum' | 'typeof' | 'end' | 'then' | 'like' | 'in' | 'includes' | 'excludes' | 'asc' | 'desc' | 'nulls' | 'first' | 'last' | 'group' | 'all' | 'rows' | 'view' | 'having' | 'rollup' | 'tolabel' | 'offset' | 'data' | 'category' | 'at' | 'above' | 'below' | 'above_or_below' | 'security_enforced' | 'user_mode' | 'system_mode' | 'reference' | 'cube' | 'format' | 'tracking' | 'viewstat' | 'standard' | 'custom' | 'distance' | 'geolocation' | 'calendar_month' | 'calendar_quarter' | 'calendar_year' | 'day_in_month' | 'day_in_week' | 'day_in_year' | 'day_only' | 'fiscal_month' | 'fiscal_quarter' | 'fiscal_year' | 'hour_in_day' | 'week_in_month' | 'week_in_year' | 'convert_timezone' | 'yesterday' | 'today' | 'tomorrow' | 'last_week' | 'this_week' | 'next_week' | 'last_month' | 'this_month' | 'next_month' | 'last_90_days' | 'next_90_days' | 'last_n_days_n' | 'next_n_days_n' | 'n_days_ago_n' | 'next_n_weeks_n' | 'last_n_weeks_n' | 'n_weeks_ago_n' | 'next_n_months_n' | 'last_n_months_n' | 'n_months_ago_n' | 'this_quarter' | 'last_quarter' | 'next_quarter' | 'next_n_quarters_n' | 'last_n_quarters_n' | 'n_quarters_ago_n' | 'this_year' | 'last_year' | 'next_year' | 'next_n_years_n' | 'last_n_years_n' | 'n_years_ago_n' | 'this_fiscal_quarter' | 'last_fiscal_quarter' | 'next_fiscal_quarter' | 'next_n_fiscal_quarters_n' | 'last_n_fiscal_quarters_n' | 'n_fiscal_quarters_ago_n' | 'this_fiscal_year' | 'last_fiscal_year' | 'next_fiscal_year' | 'next_n_fiscal_years_n' | 'last_n_fiscal_years_n' | 'n_fiscal_years_ago_n' | 'find' | 'email' | 'name' | 'phone' | 'sidebar' | 'fields' | 'metadata' | 'pricebookid' | 'network' | 'snippet' | 'target_length' | 'division' | 'returning' | 'listview'
+
+
+
+
+

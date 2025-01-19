@@ -33,7 +33,7 @@ dependencies {
 }
 dependencies {
     implementation files("libs/SF_Apex_Plugin_for_Intelij-1.0.0.jar")
-    implementation files("libs/apex-jorje-lsp.jar")
+    implementation files("libs/sf-jorje-lsp.jar")
 }
 dependencies {
     implementation('com.fasterxml.jackson.core:jackson-databind:2.17.0')
@@ -46,15 +46,15 @@ tasks {
     patchPluginXml {
         sinceBuild = '231'
         untilBuild = '232.*'
-        pluginDescription = providers.fileContents(layout.projectDirectory.file('README.md')).asText.map { text ->
-            def start = '<!-- Plugin description -->'
-            def end = '<!-- Plugin description end -->'
-            def lines = text.readLines()
-            def startIndex = lines.indexOf(start) + 1
-            def endIndex = lines.indexOf(end)
-            def description = lines.subList(startIndex, endIndex).join('\n')
-            markdownToHTML(description)
-        }
+//        pluginDescription = providers.fileContents(layout.projectDirectory.file('README.md')).asText.map { text ->
+//            def start = '<!-- Plugin description -->'
+//            def end = '<!-- Plugin description end -->'
+//            def lines = text.readLines()
+//            def startIndex = lines.indexOf(start) + 1
+//            def endIndex = lines.indexOf(end)
+//            def description = lines.subList(startIndex, endIndex).join('\n')
+//            markdownToHTML(description)
+//        }
 
         changeNotes = providers.fileContents(layout.projectDirectory.file('CHANGELOG.md')).asText.map { text ->
             project.changelog.renderItem(
