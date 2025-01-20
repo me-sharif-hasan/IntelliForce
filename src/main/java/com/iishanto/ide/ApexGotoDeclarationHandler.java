@@ -94,8 +94,6 @@ public class ApexGotoDeclarationHandler implements GotoDeclarationHandler {
 }
 
 class GotoDefinitionListener extends LspResponseListener {
-    @Override
-    public void listen(JsonObject jsonObject) {}
 
     @Override
     public String getTargetMethod() {
