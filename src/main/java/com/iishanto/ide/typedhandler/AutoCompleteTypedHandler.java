@@ -1,4 +1,4 @@
-package com.iishanto.ide;
+package com.iishanto.ide.typedhandler;
 
 import com.intellij.codeInsight.editorActions.TypedHandlerDelegate;
 import com.intellij.openapi.editor.Editor;
@@ -17,23 +17,22 @@ public class AutoCompleteTypedHandler extends TypedHandlerDelegate {
             '"', '"'
     );
 
+
     @Override
     public @NotNull Result charTyped(char c, @NotNull Project project, @NotNull Editor editor, @NotNull PsiFile file) {
         int offset = editor.getCaretModel().getOffset();
         CharSequence documentChars = editor.getDocument().getCharsSequence();
         char nextChar = offset < documentChars.length() ? documentChars.charAt(offset) : '$';
-
+        System.out.println("got char ii: "+(int)c);
         if (map.containsKey(c)) {
             if (nextChar == map.get(c)) {
                 editor.getCaretModel().moveToOffset(offset + 1);
-                return Result.STOP;
             } else {
                 editor.getDocument().insertString(offset, map.get(c).toString());
-                return Result.STOP;
             }
+            return Result.STOP;
         } else if (map.containsValue(c)) {
             if (nextChar == c) {
-                System.out.println("Moving forward");
                 editor.getCaretModel().moveToOffset(offset + 1);
                 editor.getDocument().deleteString(editor.getCaretModel().getOffset()-1,editor.getCaretModel().getOffset());
                 return Result.STOP;

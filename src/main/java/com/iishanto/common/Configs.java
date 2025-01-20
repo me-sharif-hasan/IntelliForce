@@ -22,6 +22,7 @@ public class Configs {
         NotificationHub.getInstance().initialize();
     }
 
+
     public String getProjectRoot() {
         return projectRoot;
     }

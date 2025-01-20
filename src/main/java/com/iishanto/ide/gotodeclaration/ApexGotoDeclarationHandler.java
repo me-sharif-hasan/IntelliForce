@@ -1,4 +1,4 @@
-package com.iishanto.ide;
+package com.iishanto.ide.gotodeclaration;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;

@@ -1,20 +1,16 @@
-package com.iishanto.ide.module;
+package com.iishanto.ide.modulebuilder;
 
-import com.iishanto.language.sf.ApexIcons;
+import com.iishanto.common.Constants;
 import com.intellij.openapi.module.ModuleType;
 import com.intellij.openapi.module.ModuleTypeManager;
-import com.intellij.openapi.util.IconLoader;
 import org.jetbrains.annotations.Nls;
-import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
-import com.intellij.openapi.util.IconLoader;
 
 import javax.swing.*;
-import java.util.Objects;
 
 public class SalesforceProjectModuleType extends ModuleType<SalesforceProjectBuilder> {
     public SalesforceProjectModuleType() {
-        super("SFDX_MODULE");
+        super(Constants.MODULE_ID);
     }
 
     @Override
@@ -24,21 +20,21 @@ public class SalesforceProjectModuleType extends ModuleType<SalesforceProjectBui
 
     @Override
     public @NotNull @Nls(capitalization = Nls.Capitalization.Title) String getName() {
-        return "Salesforce Project";
+        return Constants.MODULE_NAME;
     }
 
     @Override
     public @NotNull @Nls(capitalization = Nls.Capitalization.Sentence) String getDescription() {
-        return "Create a new Salesforce project";
+        return Constants.CREATE_NEW_SALESFORCE_PROJECT_TEXT;
     }
 
     @Override
     public @NotNull Icon getNodeIcon(boolean b) {
-        return IconLoader.getIcon("/icons/salesforce.svg", SalesforceProjectModuleType.class);
+        return Constants.APEX_ICON;
 
     }
 
     public static SalesforceProjectModuleType getInstance() {
-        return (SalesforceProjectModuleType) ModuleTypeManager.getInstance().findByID("SFDX_MODULE");
+        return (SalesforceProjectModuleType) ModuleTypeManager.getInstance().findByID(Constants.MODULE_ID);
     }
 }

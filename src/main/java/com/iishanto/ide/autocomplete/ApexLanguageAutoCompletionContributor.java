@@ -1,4 +1,4 @@
-package com.iishanto.ide;
+package com.iishanto.ide.autocomplete;
 
 import com.iishanto.common.Logger;
 import com.iishanto.listeners.ApexDiagnosticCallbackListener;

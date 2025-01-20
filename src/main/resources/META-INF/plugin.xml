@@ -21,15 +21,14 @@
                     implementationClass="com.iishanto.language.sf.apex.filetypes.ApexSyntaxHighlighterFactory"/>
             <annotator
                     language="Apex"
-                    implementationClass="com.iishanto.ide.ApexLanguageAnnotator"/>
+                    implementationClass="com.iishanto.ide.annotator.ApexLanguageAnnotator"/>
             <postStartupActivity implementation="com.iishanto.ide.SalesforceProjectStartupActivity"/>
             <highlightErrorFilter implementation="com.iishanto.ide.filters.ErrorFilter"/>
-            <completion.contributor language="Apex" implementationClass="com.iishanto.ide.ApexLanguageAutoCompletionContributor"/>
-            <gotoDeclarationHandler implementation="com.iishanto.ide.ApexGotoDeclarationHandler"/>
-            <typedHandler implementation="com.iishanto.ide.AutoCompleteTypedHandler"/>
-            <moduleType
-                    id="SFDX_MODULE"
-                    implementationClass="com.iishanto.ide.module.SalesforceProjectModuleType"/>
+            <completion.contributor language="Apex" implementationClass="com.iishanto.ide.autocomplete.ApexLanguageAutoCompletionContributor"/>
+            <gotoDeclarationHandler implementation="com.iishanto.ide.gotodeclaration.ApexGotoDeclarationHandler"/>
+            <typedHandler implementation="com.iishanto.ide.typedhandler.AutoCompleteTypedHandler"/>
+            <moduleType id="SFDX_MODULE" implementationClass="com.iishanto.ide.modulebuilder.SalesforceProjectModuleType"/>
+            <moduleBuilder implementation="com.iishanto.ide.modulebuilder.SalesforceProjectBuilder"/>
     </extensions>
     <actions>
         <action

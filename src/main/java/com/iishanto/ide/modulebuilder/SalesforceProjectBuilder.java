@@ -1,8 +1,11 @@
-package com.iishanto.ide.module;
+package com.iishanto.ide.modulebuilder;
 
+import com.iishanto.common.Constants;
+import com.iishanto.ide.modulebuilder.step.SalesforceProjectWizardStep;
 import com.intellij.ide.util.projectWizard.ModuleBuilder;
 import com.intellij.ide.util.projectWizard.ModuleWizardStep;
 import com.intellij.ide.util.projectWizard.WizardContext;
+import com.intellij.openapi.Disposable;
 import com.intellij.openapi.module.ModifiableModuleModel;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleType;
@@ -20,7 +23,7 @@ public class SalesforceProjectBuilder extends ModuleBuilder {
 
     @Override
     public Icon getNodeIcon() {
-        return IconLoader.getIcon("/icons/salesforce.svg", SalesforceProjectModuleType.class);
+        return Constants.APEX_ICON;
     }
 
     @Override
@@ -34,18 +37,23 @@ public class SalesforceProjectBuilder extends ModuleBuilder {
     }
 
     @Override
-    public void setName(String s) {
+    public @Nullable ModuleWizardStep getCustomOptionsStep(WizardContext context, Disposable parentDisposable) {
+        return new SalesforceProjectWizardStep();
+    }
 
+    @Override
+    public void setName(String s) {
+        ModuleConfig.projectName=s;
     }
 
     @Override
     public void setModuleFilePath(@NonNls String s) {
-
+        ModuleConfig.moduleFilePath=s;
     }
 
     @Override
     public void setContentEntryPath(String s) {
-
+        ModuleConfig.contentEntryPath=s;
     }
 
     @Override
@@ -55,6 +63,8 @@ public class SalesforceProjectBuilder extends ModuleBuilder {
 
     @Override
     public @Nullable List<Module> commit(@NotNull Project project, @Nullable ModifiableModuleModel modifiableModuleModel, ModulesProvider modulesProvider) {
+        System.out.println("Creating project with infos: ");
+        ModuleConfig.printDetails();
         return List.of();
     }
 }
