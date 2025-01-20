@@ -30,8 +30,10 @@ public class ApexLanguageAutoCompletionContributor extends CompletionContributor
                     )
                             .shouldAnnotate(false)
             );
-            List<LookupElementBuilder> lookupElementBuilderList = AutoCompletionCallbackListener.getAutoCompleteSuggestions(serverPos.getLine(), serverPos.getCharacter(), editor.getVirtualFile().getPath());
-            result.addAllElements(lookupElementBuilderList);
+            if(serverPos!=null){
+                List<LookupElementBuilder> lookupElementBuilderList = AutoCompletionCallbackListener.getAutoCompleteSuggestions(serverPos.getLine(), serverPos.getCharacter(), editor.getVirtualFile().getPath());
+                result.addAllElements(lookupElementBuilderList);
+            }
         } catch (ProcessCanceledException e) {
             Logger.log("Process canceled: " + e.getMessage());
         } catch (Exception e) {

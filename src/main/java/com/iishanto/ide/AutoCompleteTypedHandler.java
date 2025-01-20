@@ -9,38 +9,35 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Map;
 
 public class AutoCompleteTypedHandler extends TypedHandlerDelegate {
-    Map<Character,Character> map= Map.of(
-            '(',')',
-            '{','}',
-            '[',']',
-            '\'','\'',
-            '"','"'
+    private final Map<Character, Character> map = Map.of(
+            '(', ')',
+            '{', '}',
+            '[', ']',
+            '\'', '\'',
+            '"', '"'
     );
+
     @Override
-    public Result charTyped(char c, @NotNull Project project, @NotNull Editor editor, @NotNull PsiFile file) {
-        char nextChar= editor.getDocument().getCharsSequence().length()>editor.getCaretModel().getOffset()?editor.getDocument().getCharsSequence().charAt(editor.getCaretModel().getOffset()):'$';
-        if(c=='('||c=='['||c=='{'){
+    public @NotNull Result charTyped(char c, @NotNull Project project, @NotNull Editor editor, @NotNull PsiFile file) {
+        int offset = editor.getCaretModel().getOffset();
+        CharSequence documentChars = editor.getDocument().getCharsSequence();
+        char nextChar = offset < documentChars.length() ? documentChars.charAt(offset) : '$';
+
+        if (map.containsKey(c)) {
+            if (nextChar == map.get(c)) {
+                editor.getCaretModel().moveToOffset(offset + 1);
+                return Result.STOP;
+            } else {
+                editor.getDocument().insertString(offset, map.get(c).toString());
+                return Result.STOP;
+            }
+        } else if (map.containsValue(c)) {
             if (nextChar == c) {
-                editor.getCaretModel().moveToOffset(editor.getCaretModel().getOffset() + 1);
+                System.out.println("Moving forward");
+                editor.getCaretModel().moveToOffset(offset + 1);
+                editor.getDocument().deleteString(editor.getCaretModel().getOffset()-1,editor.getCaretModel().getOffset());
                 return Result.STOP;
             }
-        }else if(c==')'||c==']'||c=='}'){
-            if(nextChar==c){
-                editor.getCaretModel().moveToOffset(editor.getCaretModel().getOffset()+1);
-                return Result.STOP;
-            }
-            return Result.CONTINUE;
-        }
-        if (c == '('&&nextChar!=')') {
-            editor.getDocument().insertString(editor.getCaretModel().getOffset(), ")");
-        } else if (c == '['&&nextChar!=']') {
-            editor.getDocument().insertString(editor.getCaretModel().getOffset(), "]");
-        } else if (c == '{'&&nextChar!='}') {
-            editor.getDocument().insertString(editor.getCaretModel().getOffset(), "}");
-        } else if (c == '\'') {
-            editor.getDocument().insertString(editor.getCaretModel().getOffset(), "'");
-        } else if (c == '"') {
-            editor.getDocument().insertString(editor.getCaretModel().getOffset(), "\"");
         }
         return Result.CONTINUE;
     }

@@ -12,7 +12,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class ApexLanguageAnnotator implements Annotator {
-    private final Map<String,AnnotationHolder> fileAnnotators=new HashMap<>();
     @Override
     public void annotate(@NotNull PsiElement psiElement, @NotNull AnnotationHolder annotationHolder) {
         if (psiElement.getClass().getName().contains("ApexClassFile")) {
@@ -26,7 +25,6 @@ public class ApexLanguageAnnotator implements Annotator {
 
     synchronized public void handleClassAnnotation(@NotNull PsiElement psiClass, @NotNull AnnotationHolder annotationHolder) throws IOException {
         String filePath = psiClass.getContainingFile().getVirtualFile().getPath();
-        fileAnnotators.put(filePath,annotationHolder);
         String content= psiClass.getText();
         NotificationHub.getInstance().didOpen(
                 filePath,

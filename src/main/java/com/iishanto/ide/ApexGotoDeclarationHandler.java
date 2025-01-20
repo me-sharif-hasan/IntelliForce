@@ -32,7 +32,6 @@ public class ApexGotoDeclarationHandler implements GotoDeclarationHandler {
         }
 
         try {
-            int startOffset = sourceElement.getTextRange().getStartOffset();
             String text = sourceElement.getText();
             Logger.log("User requested goto declaration for: " + text + " at offset: " + offset);
 
