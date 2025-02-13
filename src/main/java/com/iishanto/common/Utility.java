@@ -34,7 +34,7 @@ public final class Utility {
             if(!containingFolder.endsWith(String.valueOf(splitChars))){
                 containingFolder+=splitChars;
             }
-            containingFolder+="sf";
+            containingFolder+="sf.cmd";
             return containingFolder;
         }else{
             return null;

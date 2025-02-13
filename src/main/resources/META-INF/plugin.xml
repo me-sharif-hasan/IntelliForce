@@ -5,7 +5,7 @@
     <vendor>IISHANTO</vendor>
     <description>Apex Jetforce Plugin to support apex class in the dev</description>
     <depends>com.intellij.modules.platform</depends>
-
+    <depends>com.intellij.modules.java</depends>
     <extensions defaultExtensionNs="com.intellij">
             <fileType
                     name="Apex Class"
@@ -28,7 +28,7 @@
             <gotoDeclarationHandler implementation="com.iishanto.ide.gotodeclaration.ApexGotoDeclarationHandler"/>
             <typedHandler implementation="com.iishanto.ide.typedhandler.AutoCompleteTypedHandler"/>
             <moduleType id="SFDX_MODULE" implementationClass="com.iishanto.ide.modulebuilder.SalesforceProjectModuleType"/>
-            <moduleBuilder implementation="com.iishanto.ide.modulebuilder.SalesforceProjectBuilder"/>
+            <moduleBuilder builderClass="com.iishanto.ide.modulebuilder.SalesforceProjectBuilder"/>
     </extensions>
     <actions>
         <action

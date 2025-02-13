@@ -19,7 +19,7 @@ repositories {
 intellij {
     version = '2023.2'
     type = 'IC' // IntelliJ Community Edition
-    plugins = ['Kotlin']
+    plugins = ['Kotlin','java']
 }
 
 dependencies {

@@ -30,37 +30,27 @@ import org.jetbrains.annotations.NotNull;
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.iishanto.language.sf.apex.psi.ApexTypes.*;
+import static com.intellij.psi.JavaTokenType.*;
 
-/**
- * An Apex Syntax Highlighter for highlighting keywords and literals
- *
- * Created by mark
- */
 public class ApexSyntaxHighlighter extends SyntaxHighlighterBase {
 
     private static final Map<IElementType, TextAttributesKey> textAttributeMap;
 
     static {
-        textAttributeMap = new HashMap<IElementType, TextAttributesKey>();
-
+        textAttributeMap = new HashMap<>();
         fillMap(textAttributeMap, getKeywordTokens(), DefaultLanguageHighlighterColors.KEYWORD);
-        fillMap(textAttributeMap, getPrimitives(), DefaultLanguageHighlighterColors.KEYWORD);
-
         textAttributeMap.put(COMMA, DefaultLanguageHighlighterColors.COMMA);
-        textAttributeMap.put(SEMI, DefaultLanguageHighlighterColors.SEMICOLON);
+        textAttributeMap.put(SEMICOLON, DefaultLanguageHighlighterColors.SEMICOLON);
         textAttributeMap.put(DOT, DefaultLanguageHighlighterColors.DOT);
-
+        textAttributeMap.put(CHARACTER_LITERAL, DefaultLanguageHighlighterColors.STRING);
         fillMap(textAttributeMap, TokenSet.create(LBRACE, RBRACE), DefaultLanguageHighlighterColors.BRACES);
-        fillMap(textAttributeMap, TokenSet.create(LBRACK, RBRACK), DefaultLanguageHighlighterColors.BRACKETS);
-        fillMap(textAttributeMap, TokenSet.create(INTEGER_LITERAL, LONG_LITERAL, DECIMAL_LITERAL), DefaultLanguageHighlighterColors.NUMBER);
+        fillMap(textAttributeMap, TokenSet.create(LPARENTH, RPARENTH), DefaultLanguageHighlighterColors.PARENTHESES);
+        fillMap(textAttributeMap, TokenSet.create(LBRACKET, RBRACKET), DefaultLanguageHighlighterColors.BRACKETS);
+        fillMap(textAttributeMap, TokenSet.create(INTEGER_LITERAL, LONG_LITERAL), DefaultLanguageHighlighterColors.NUMBER);
         textAttributeMap.put(STRING_LITERAL, DefaultLanguageHighlighterColors.STRING);
-
         textAttributeMap.put(IDENTIFIER, DefaultLanguageHighlighterColors.IDENTIFIER);
-
-        textAttributeMap.put(COMMENT, DefaultLanguageHighlighterColors.BLOCK_COMMENT);
-        textAttributeMap.put(LINE_COMMENT, DefaultLanguageHighlighterColors.LINE_COMMENT);
-
+        textAttributeMap.put(C_STYLE_COMMENT, DefaultLanguageHighlighterColors.BLOCK_COMMENT);
+        textAttributeMap.put(END_OF_LINE_COMMENT, DefaultLanguageHighlighterColors.LINE_COMMENT);
         textAttributeMap.put(TokenType.BAD_CHARACTER, HighlighterColors.BAD_CHARACTER);
     }
 
@@ -73,21 +63,15 @@ public class ApexSyntaxHighlighter extends SyntaxHighlighterBase {
     @NotNull
     @Override
     public TextAttributesKey @NotNull [] getTokenHighlights(IElementType tokenType) {
-        System.out.println("tokenType: " + tokenType);
         return pack(textAttributeMap.get(tokenType));
     }
 
     private static TokenSet getKeywordTokens() {
-        return TokenSet.create(CLASS_KEYWORD, TRUE, FALSE, PRIVATE, PUBLIC, GLOBAL,
-                VIRTUAL, ABSTRACT, WITH, SHARING, WITHOUT, EXTENDS, IMPLEMENTS, INTERFACE, TRIGGER,
-                ON, BEFORE, INSERT, UPDATE, DELETE, AFTER, UNDELETE, VOID, STATIC, RETURN, THROW,
-                BREAK, CONTINUE, IF, ELSE, FOR, WHILE, TRY, CATCH, FINALLY, FINAL, SUPER, THIS,
-                TRANSIENT, ENUM);
+        return TokenSet.create(CLASS_KEYWORD, TRUE_KEYWORD, FALSE_KEYWORD, PRIVATE_KEYWORD, PUBLIC_KEYWORD,
+                ABSTRACT_KEYWORD, WITH_KEYWORD, WITH_KEYWORD, EXTENDS_KEYWORD, IMPLEMENTS_KEYWORD, INTERFACE_KEYWORD,
+                VOID_KEYWORD, STATIC_KEYWORD, RETURN_KEYWORD, THROW_KEYWORD,
+                BREAK_KEYWORD, CONTINUE_KEYWORD, IF_KEYWORD, ELSE_KEYWORD, FOR_KEYWORD, WHILE_KEYWORD, TRY_KEYWORD,
+                CATCH_KEYWORD, FINALLY_KEYWORD, FINAL_KEYWORD, SUPER_KEYWORD, THIS_KEYWORD,
+                TRANSIENT_KEYWORD, ENUM_KEYWORD, NEW_KEYWORD);
     }
-
-    private static TokenSet getPrimitives() {
-        return TokenSet.create(BLOB, BOOLEAN, DATE, DATETIME, DECIMAL, DOUBLE, ID, INTEGER, LONG, STRING,
-                TIME, MAP, LIST, SET);
-    }
-
 }

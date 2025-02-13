@@ -13,16 +13,62 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package com.iishanto.language.sf.lexer;
 
-import com.intellij.lexer.FlexAdapter;
+import com.intellij.lang.java.lexer.JavaLexer;
+import com.intellij.lexer.DelegateLexer;
+import com.intellij.lexer.LayeredLexer;
+import com.intellij.pom.java.LanguageLevel;
+import com.intellij.psi.JavaTokenType;
+import com.intellij.psi.tree.IElementType;
 
-/**
- * Created by mark
- */
-public class ApexLexer extends FlexAdapter {
+import java.util.Arrays;
+
+public class ApexLexer extends LayeredLexer {
     public ApexLexer() {
-        super(new _ApexLexer());
+        super(new ApexKeywordReplacingLexer(new JavaLexer(LanguageLevel.HIGHEST)));
+    }
+
+    private static class ApexKeywordReplacingLexer extends DelegateLexer {
+        public ApexKeywordReplacingLexer(JavaLexer baseLexer) {
+            super(baseLexer);
+        }
+        @Override
+        public IElementType getTokenType() {
+            String[] unavailableKeywordsInApex = new String[]{
+                    "global",
+                    "virtual",
+                    "with",
+                    "sharing",
+                    "without",
+                    "trigger",
+                    "on",
+                    "before",
+                    "insert",
+                    "update",
+                    "delete",
+                    "after",
+                    "undelete",
+                    "select",
+                    "from",
+                    "where",
+                    "limit",
+                    "security_enforced",
+                    "by",
+                    "asc",
+                    "desc",
+                    "group",
+                    "by",
+                    "having",
+                    "offset",
+                    "nulls",
+                    "first",
+                    "last"
+            };
+            if (Arrays.stream(unavailableKeywordsInApex).anyMatch(keyword -> keyword.equals(super.getTokenText().toLowerCase()))) {
+                return JavaTokenType.PUBLIC_KEYWORD;
+            }
+            return super.getTokenType();
+        }
     }
 }
