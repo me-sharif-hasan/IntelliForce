@@ -35,7 +35,9 @@ public class MessageProvider {
                                     "dynamicRegistration": true
                                 },
                                 "diagnostic": {
-                                    "dynamicRegistration": true
+                                    "dynamicRegistration": true,
+                                    "interFileDependencies": true,
+                                    "workspaceDiagnostics": true
                                 }
                             },
                             "referencesProvider": true,
@@ -126,5 +128,71 @@ public class MessageProvider {
                         }
                     }
                 }""".formatted(MessageType.APEX_TYPE_DEFINITION,file,line,character);
+    }
+
+    public String getDidChangeRequest(String file, String content,int lastLine,int lastCharacter) {
+        String didOpenMessage = """
+                {
+                    "jsonrpc": "2.0",
+                    "method": "textDocument/didChange",
+                    "params": {
+                        "textDocument": {
+                            "uri": "file:///%s",
+                            "version": %d
+                        },
+                        "contentChanges": [
+                            {
+                                "text": "%s",
+                                "range": {
+                                      "start": { "line": 0, "character": 0 },
+                                      "end": { "line": %d, "character": %d }
+                                }
+                            }
+                        ]
+                    }
+                }""";
+
+        return didOpenMessage.formatted(file, version++,content,lastLine,lastCharacter);
+    }
+
+    public String getDidCloseRequest(String file) {
+        return """
+                {
+                    "jsonrpc": "2.0",
+                    "method": "textDocument/didClose",
+                    "params": {
+                        "textDocument": {
+                            "uri": "file:///%s"
+                        }
+                    }
+                }""".formatted(file);
+    }
+
+    public String getPullDiagnosticsRequest(String file) {
+        return """
+                {
+                  "jsonrpc": "2.0",
+                  "method": "textDocument/diagnostic",
+                  "params": {
+                    "textDocument": {
+                      "uri": "file:///%s"
+                    },
+                    "identifier": "%s"
+                  }
+                }""".formatted(file,'$'+Math.random());
+    }
+
+    public String getDidSaveRequest(String file, String content) {
+        return """
+                {
+                    "jsonrpc": "2.0",
+                    "method": "textDocument/didSave",
+                    "params": {
+                        "textDocument": {
+                            "uri": "file:///%s",
+                            "version": %d
+                        }
+                    }
+                }""".formatted(file, version++);
     }
 }

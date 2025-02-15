@@ -3,6 +3,7 @@ package com.iishanto.ide;
 import com.iishanto.common.Configs;
 import com.iishanto.common.Logger;
 import com.iishanto.listeners.FileChangeListener;
+import com.iishanto.listeners.FileNavigationListener;
 import com.iishanto.server.ApexLanguageServerDefinition;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.startup.ProjectActivity;
@@ -21,6 +22,7 @@ public class SalesforceProjectStartupActivity implements ProjectActivity {
         try{
             if (projectPath != null) {
                 FileChangeListener.registerListener();
+                FileNavigationListener.registerListener();
                 Configs.getInstance().setProjectRoot(projectPath);
                 ApexLanguageServerDefinition.getInstance();
                 Logger.log("Project Root on Startup: " + projectPath);

@@ -42,6 +42,39 @@ public class NotificationHub extends LspResponseListener {
         apexLanguageServerDefinition.submitNotification(didOpenMessage);
     }
 
+    public void didChange(String file,String content, LspResponseListener lspResponseListener) throws IOException {
+        if (Configs.getInstance().getProjectRoot() == null || isLocked) return;
+        int lastLine = content.split("\n").length;
+        int lastCharacter = content.split("\n")[lastLine-1].length();
+        content = content.replace("\\", "\\\\").replace("\"", "\\\"");
+        String didChangeMessage = messageProvider.getDidChangeRequest(file, content,lastLine,lastCharacter);
+        listenerRegistry.put(lspResponseListener.getTargetMethod(), lspResponseListener);
+        apexLanguageServerDefinition.submitNotification(didChangeMessage);
+    }
+
+    public void didClose(String file) throws IOException {
+        if (Configs.getInstance().getProjectRoot() == null || isLocked) return;
+        apexLanguageServerDefinition.submitNotification(
+                messageProvider.getDidCloseRequest(file)
+        );
+    }
+
+    public void didSave(String file,String content,LspResponseListener lspResponseListener) throws IOException {
+        if (Configs.getInstance().getProjectRoot() == null || isLocked) return;
+        content = content.replace("\\", "\\\\").replace("\"", "\\\"");
+        String didSaveMessage = messageProvider.getDidSaveRequest(file, content);
+        listenerRegistry.put(lspResponseListener.getTargetMethod(), lspResponseListener);
+        apexLanguageServerDefinition.submitNotification(didSaveMessage);
+    }
+
+    public void pullDiagnostics(String file, LspResponseListener lspResponseListener) throws IOException {
+        if (Configs.getInstance().getProjectRoot() == null || isLocked) return;
+        listenerRegistry.put(lspResponseListener.getTargetMethod(), lspResponseListener);
+        apexLanguageServerDefinition.submitNotification(
+                messageProvider.getPullDiagnosticsRequest(file)
+        );
+    }
+
     public void completion(String path, int line, int character, LspResponseListener lspResponseListener) throws IOException {
         if (Configs.getInstance().getProjectRoot() == null || isLocked) return;
         listenerRegistry.put(lspResponseListener.getTargetMethod(), lspResponseListener);

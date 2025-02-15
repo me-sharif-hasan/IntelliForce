@@ -9,10 +9,16 @@
     <extensions defaultExtensionNs="com.intellij">
             <fileType
                     name="Apex Class"
-                    implementationClass="com.iishanto.language.ApexClassFileTypeProvider"
+                    implementationClass="com.iishanto.language.sf.apex.filetypes.ApexClassFileType"
                     fieldName="INSTANCE"
                     language="Apex"
                     extensions="cls"/>
+            <fileType
+                    name="Apex Trigger"
+                    implementationClass="com.iishanto.language.sf.apex.filetypes.ApexTriggerFileType"
+                    fieldName="INSTANCE"
+                    language="Apex"
+                    extensions="trigger"/>
             <lang.parserDefinition
                     language="Apex"
                     implementationClass="com.iishanto.language.sf.parser.ApexClassParserDefinition"/>

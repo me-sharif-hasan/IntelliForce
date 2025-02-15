@@ -19,6 +19,7 @@ package com.iishanto.language.sf.apex.filetypes;
 import com.iishanto.language.sf.ApexIcons;
 import com.iishanto.language.sf.ApexLanguage;
 import com.intellij.openapi.fileTypes.LanguageFileType;
+import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -58,7 +59,11 @@ public class ApexClassFileType extends LanguageFileType {
     @Nullable
     @Override
     public Icon getIcon() {
-        return ApexIcons.FileType.CLASS;
+        return ApexIcons.CLASS;
     }
 
+    @Override
+    public @Nls @NotNull String getDisplayName() {
+        return "Apex Class";
+    }
 }

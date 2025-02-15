@@ -1,5 +1,6 @@
 package com.iishanto.ide.annotator;
 
+import com.iishanto.common.GlobalState;
 import com.iishanto.listeners.ApexDiagnosticCallbackListener;
 import com.iishanto.server.notification.NotificationHub;
 import com.intellij.lang.annotation.AnnotationHolder;
@@ -23,12 +24,21 @@ public class ApexLanguageAnnotator implements Annotator {
 
     synchronized public void handleClassAnnotation(@NotNull PsiElement psiClass, @NotNull AnnotationHolder annotationHolder) throws IOException {
         String filePath = psiClass.getContainingFile().getVirtualFile().getPath();
-        String content= psiClass.getText();
-        NotificationHub.getInstance().didOpen(
-                filePath,
-                content,
-                new ApexDiagnosticCallbackListener(filePath,content)
-                        .setAnnotationHolder(annotationHolder)
-        );
+        String content = psiClass.getText();
+        if (!GlobalState.getInstance().getOpenState()) {
+            NotificationHub.getInstance().didChange(
+                    filePath,
+                    content+"/*"+Math.random()+"*/",
+                    new ApexDiagnosticCallbackListener(filePath, content)
+                            .setAnnotationHolder(annotationHolder)
+            );
+        } else {
+            NotificationHub.getInstance().didOpen(
+                    filePath,
+                    content+"/*"+Math.random()+"*/",
+                    new ApexDiagnosticCallbackListener(filePath, content)
+                            .setAnnotationHolder(annotationHolder)
+            );
+        }
     }
 }
