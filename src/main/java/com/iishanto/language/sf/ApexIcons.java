@@ -29,16 +29,11 @@ public interface ApexIcons {
 
     Icon CLASS = PlatformIcons.CLASS_ICON;
     Icon INTERFACE = PlatformIcons.INTERFACE_ICON;
-    Icon TRIGGER = PlatformIcons.LIBRARY_ICON;
+    Icon TRIGGER = PlatformIcons.FUNCTION_ICON;
     Icon PUBLIC = PlatformIcons.PUBLIC_ICON;
     Icon PROTECTED = PlatformIcons.PROTECTED_ICON;
     Icon PRIVATE = PlatformIcons.PRIVATE_ICON;
     Icon GLOBAL = PlatformIcons.WEB_ICON;
     Icon EXCEPTION = AllIcons.Nodes.ExceptionClass;
     Icon ENUM = AllIcons.Nodes.Enum;
-
-    public interface FileType {
-        Icon CLASS = IconLoader.getIcon("/icons/salesforce.svg", ApexIcons.class);
-        Icon TRIGGER = AllIcons.Nodes.Function;
-    }
 }

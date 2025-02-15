@@ -59,7 +59,7 @@ public class ApexTriggerFileType extends LanguageFileType {
     @Nullable
     @Override
     public Icon getIcon() {
-        return ApexIcons.FileType.TRIGGER;
+        return ApexIcons.TRIGGER;
     }
 
     @Override

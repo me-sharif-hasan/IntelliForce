@@ -53,6 +53,6 @@ public class ApexTriggerFile extends PsiFileBase {
     @Nullable
     @Override
     public Icon getIcon(int flags) {
-        return ApexIcons.FileType.TRIGGER;
+        return ApexIcons.TRIGGER;
     }
 }
