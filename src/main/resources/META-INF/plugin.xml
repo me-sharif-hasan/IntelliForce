@@ -25,9 +25,9 @@
             <lang.syntaxHighlighterFactory
                     language="Apex"
                     implementationClass="com.iishanto.language.sf.apex.filetypes.ApexSyntaxHighlighterFactory"/>
-            <annotator
+            <externalAnnotator
                     language="Apex"
-                    implementationClass="com.iishanto.ide.annotator.ApexLanguageAnnotator"/>
+                    implementationClass="com.iishanto.ide.annotator.ApexLanguageExternalAnnotator"/>
             <postStartupActivity implementation="com.iishanto.ide.SalesforceProjectStartupActivity"/>
             <highlightErrorFilter implementation="com.iishanto.ide.filters.ErrorFilter"/>
             <completion.contributor language="Apex" implementationClass="com.iishanto.ide.autocomplete.ApexLanguageAutoCompletionContributor"/>
@@ -35,6 +35,7 @@
             <typedHandler implementation="com.iishanto.ide.typedhandler.AutoCompleteTypedHandler"/>
             <moduleType id="SFDX_MODULE" implementationClass="com.iishanto.ide.modulebuilder.SalesforceProjectModuleType"/>
             <moduleBuilder builderClass="com.iishanto.ide.modulebuilder.SalesforceProjectBuilder"/>
+            <lang.formatter language="Apex" implementationClass="com.iishanto.ide.codeformatter.ApexLanguageFormattingModelBuilder"/>
     </extensions>
     <actions>
         <action

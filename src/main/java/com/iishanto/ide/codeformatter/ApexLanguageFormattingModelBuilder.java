@@ -11,7 +11,7 @@ public class ApexLanguageFormattingModelBuilder implements FormattingModelBuilde
     public @NotNull FormattingModel createModel(@NotNull FormattingContext formattingContext) {
         ASTNode rootNode = formattingContext.getNode();
         CodeStyleSettings settings = formattingContext.getCodeStyleSettings();
-
+        System.out.println("got settings: "+settings.getIndentOptions().INDENT_SIZE);
         // Create the root block for formatting
         ApexLanguageBlock rootBlock = new ApexLanguageBlock(rootNode, null, Indent.getNoneIndent(), settings);
         return FormattingModelProvider.createFormattingModelForPsiFile(

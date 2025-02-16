@@ -10,9 +10,6 @@ import java.util.Map;
 
 public class AutoCompleteTypedHandler extends TypedHandlerDelegate {
     private final Map<Character, Character> map = Map.of(
-            '(', ')',
-            '{', '}',
-            '[', ']',
             '\'', '\'',
             '"', '"'
     );

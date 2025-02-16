@@ -1,8 +1,8 @@
 package com.iishanto.ide.autocomplete;
 
 import com.iishanto.common.Logger;
-import com.iishanto.listeners.ApexDiagnosticCallbackListener;
-import com.iishanto.listeners.AutoCompletionCallbackListener;
+import com.iishanto.listeners.ApexDocumentDiagnosticReportCallbackListener;
+import com.iishanto.listeners.AutoCompletionSuggestionCallback;
 import com.iishanto.server.notification.NotificationHub;
 import com.intellij.codeInsight.completion.*;
 import com.intellij.codeInsight.lookup.LookupElementBuilder;
@@ -24,14 +24,17 @@ public class ApexLanguageAutoCompletionContributor extends CompletionContributor
             NotificationHub.getInstance().didOpen(
                     editor.getVirtualFile().getPath(),
                     editor.getDocument().getText(),
-                    new ApexDiagnosticCallbackListener(
-                            editor.getVirtualFile().getPath(),
-                            editor.getDocument().getText()
-                    )
-                            .shouldAnnotate(false)
+                    new ApexDocumentDiagnosticReportCallbackListener()
             );
-            if(serverPos!=null){
-                List<LookupElementBuilder> lookupElementBuilderList = AutoCompletionCallbackListener.getAutoCompleteSuggestions(serverPos.getLine(), serverPos.getCharacter(), editor.getVirtualFile().getPath());
+            if (serverPos != null) {
+                AutoCompletionSuggestionCallback autoCompletionSuggestionCallback = new AutoCompletionSuggestionCallback();
+                NotificationHub.getInstance().completion(
+                        editor.getVirtualFile().getPath(),
+                        serverPos.getLine(),
+                        serverPos.getCharacter(),
+                        autoCompletionSuggestionCallback
+                );
+                List<LookupElementBuilder> lookupElementBuilderList = autoCompletionSuggestionCallback.getSuggestions();
                 result.addAllElements(lookupElementBuilderList);
             }
         } catch (ProcessCanceledException e) {
