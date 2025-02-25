@@ -1,5 +1,6 @@
 package com.iishanto.ide.typedhandler;
 
+import com.intellij.codeInsight.editorActions.JavaTypedHandler;
 import com.intellij.codeInsight.editorActions.TypedHandlerDelegate;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
@@ -13,7 +14,7 @@ public class AutoCompleteTypedHandler extends TypedHandlerDelegate {
             '\'', '\'',
             '"', '"'
     );
-
+    private final JavaTypedHandler javaTypedHandler=new JavaTypedHandler();
 
     @Override
     public @NotNull Result charTyped(char c, @NotNull Project project, @NotNull Editor editor, @NotNull PsiFile file) {
@@ -28,13 +29,8 @@ public class AutoCompleteTypedHandler extends TypedHandlerDelegate {
                 editor.getDocument().insertString(offset, map.get(c).toString());
             }
             return Result.STOP;
-        } else if (map.containsValue(c)) {
-            if (nextChar == c) {
-                editor.getCaretModel().moveToOffset(offset + 1);
-                editor.getDocument().deleteString(editor.getCaretModel().getOffset()-1,editor.getCaretModel().getOffset());
-                return Result.STOP;
-            }
+        }else{
+            return javaTypedHandler.charTyped(c,project,editor,file);
         }
-        return Result.CONTINUE;
     }
 }
