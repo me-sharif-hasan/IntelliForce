@@ -36,6 +36,15 @@
             <moduleType id="SFDX_MODULE" implementationClass="com.iishanto.ide.modulebuilder.SalesforceProjectModuleType"/>
             <moduleBuilder builderClass="com.iishanto.ide.modulebuilder.SalesforceProjectBuilder"/>
             <lang.formatter language="Apex" implementationClass="com.iishanto.ide.codeformatter.ApexLanguageFormattingModelBuilder"/>
+            <toolWindow id="Salesforce Output" anchor="bottom" icon="AllIcons.Toolwindows.ToolWindowMessages"
+                        factoryClass="com.iishanto.ide.modulebuilder.SalesforceToolWindowFactory"/>
+            <toolWindow id="Salesforce" anchor="right"
+                        icon="/icons/salesforce.svg"
+                        factoryClass="com.iishanto.ide.tabs.SalesforceToolUtility"/>
+            <projectService serviceImplementation="com.iishanto.ide.config.SalesforceProjectConfig"/>
+        <notificationGroup id="SalesforceToolUtility"
+                           displayType="BALLOON"
+                           toolWindowId="Event Log"/>
     </extensions>
     <actions>
         <action

@@ -36,4 +36,5 @@ public interface ApexIcons {
     Icon GLOBAL = PlatformIcons.WEB_ICON;
     Icon EXCEPTION = AllIcons.Nodes.ExceptionClass;
     Icon ENUM = AllIcons.Nodes.Enum;
+    Icon APEX_ICON = IconLoader.getIcon("/icons/salesforce.svg", ApexIcons.class);
 }

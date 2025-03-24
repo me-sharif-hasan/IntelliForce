@@ -1,6 +1,6 @@
 package com.iishanto.ide.codeformatter;
 
-import com.intellij.formatting.*;
+import  com.intellij.formatting.*;
 import com.intellij.lang.ASTNode;
 
 import com.intellij.psi.codeStyle.CodeStyleSettings;
