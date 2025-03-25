@@ -52,6 +52,7 @@ public class NotificationHub extends LspResponseListener {
         apexLanguageServerDefinition.submitNotification(didChangeMessage);
     }
 
+
     public void didClose(String file) throws IOException {
         if (Configs.getInstance().getProjectRoot() == null || isLocked) return;
         apexLanguageServerDefinition.submitNotification(

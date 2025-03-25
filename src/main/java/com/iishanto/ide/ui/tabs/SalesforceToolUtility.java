@@ -1,4 +1,4 @@
-package com.iishanto.ide.tabs;
+package com.iishanto.ide.ui.tabs;
 
 import com.google.common.base.Charsets;
 import com.iishanto.ide.config.SalesforceProjectConfig;

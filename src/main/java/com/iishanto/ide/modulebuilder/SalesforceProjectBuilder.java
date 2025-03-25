@@ -3,6 +3,7 @@ package com.iishanto.ide.modulebuilder;
 import com.google.common.base.Charsets;
 import com.iishanto.common.Constants;
 import com.iishanto.ide.modulebuilder.step.SalesforceProjectWizardStep;
+import com.iishanto.ide.utility.IDEUtility;
 import com.intellij.execution.configurations.GeneralCommandLine;
 import com.intellij.execution.filters.TextConsoleBuilderFactory;
 import com.intellij.execution.process.OSProcessHandler;
@@ -98,20 +99,19 @@ public class SalesforceProjectBuilder extends ModuleBuilder {
                     .withCharset(Charsets.UTF_8);
 
             OSProcessHandler processHandler = new OSProcessHandler(commandLine);
-
-            ConsoleView consoleView = TextConsoleBuilderFactory.getInstance().createBuilder(project).getConsole();
-            consoleView.print("Running Salesforce project generation command...\n", ConsoleViewContentType.NORMAL_OUTPUT);
+            IDEUtility.SalesforceOutputManager outputManager = IDEUtility.getSalesforceOutputManager(project);
+//            ConsoleView consoleView = TextConsoleBuilderFactory.getInstance().createBuilder(project).getConsole();
+            outputManager.log("Running Salesforce project generation command...\n", ConsoleViewContentType.NORMAL_OUTPUT);
 
             processHandler.addProcessListener(new ProcessListener() {
                 @Override
                 public void startNotified(@NotNull ProcessEvent event) {
-                    consoleView.print("Command started.\n", ConsoleViewContentType.SYSTEM_OUTPUT);
+                    outputManager.log("Command started.\n", ConsoleViewContentType.SYSTEM_OUTPUT);
                 }
 
                 @Override
                 public void processTerminated(@NotNull ProcessEvent event) {
 
-                    // Enforce a deep refresh of the project directory
                     LocalFileSystem localFileSystem = LocalFileSystem.getInstance();
                     VirtualFile projectDir = localFileSystem.refreshAndFindFileByPath(Objects.requireNonNull(project.getBasePath()));
                     if (projectDir == null) {
@@ -119,10 +119,9 @@ public class SalesforceProjectBuilder extends ModuleBuilder {
                     }
 
                     ApplicationManager.getApplication().invokeLater(() -> {
-                        projectDir.refresh(true, true, () -> {
+                        IDEUtility.forceRefreshAndExpand(projectDir,project,() -> {
                             System.out.println("Project directory refreshed: " + projectDir.getPath());
 
-                            // Create and configure the IntelliJ module within a write action
                             ApplicationManager.getApplication().runWriteAction((Computable<Module>) () -> {
                                 Module newModule;
                                 if (modifiableModuleModel != null) {
@@ -146,22 +145,10 @@ public class SalesforceProjectBuilder extends ModuleBuilder {
                                 }
                                 return newModule;
                             });
-
-                            // Show the tool window with the console output
-                            ToolWindow toolWindow = ToolWindowManager.getInstance(project).getToolWindow("Salesforce Output");
-                            if (toolWindow != null) {
-                                ContentFactory contentFactory = ContentFactory.getInstance();
-                                Content content = contentFactory.createContent(consoleView.getComponent(), "Salesforce Project Generation", false);
-                                toolWindow.getContentManager().removeAllContents(true);
-                                toolWindow.getContentManager().addContent(content);
-                                toolWindow.show();
-                            } else {
-                                Messages.showErrorDialog(project, "Salesforce Output tool window not found.", "Error");
-                            }
                         });
                     });
 
-                    consoleView.print("Command finished with exit code " + event.getExitCode() + "\n",
+                    outputManager.log("Command finished with exit code " + event.getExitCode() + "\n",
                             event.getExitCode() == 0 ? ConsoleViewContentType.NORMAL_OUTPUT : ConsoleViewContentType.ERROR_OUTPUT);
                 }
 
@@ -170,13 +157,13 @@ public class SalesforceProjectBuilder extends ModuleBuilder {
                     ConsoleViewContentType contentType = outputType == ProcessOutputTypes.STDOUT
                             ? ConsoleViewContentType.NORMAL_OUTPUT
                             : ConsoleViewContentType.ERROR_OUTPUT;
-                    consoleView.print(event.getText(), contentType);
+                    outputManager.log(event.getText(), contentType);
+                    outputManager.attachToProcess(processHandler, "Generating Salesforce Project");
                 }
             });
 
             // Start the process and wait for completion
             processHandler.startNotify();
-            consoleView.attachToProcess(processHandler);
 
 
 

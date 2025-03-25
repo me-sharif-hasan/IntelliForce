@@ -40,7 +40,7 @@
                         factoryClass="com.iishanto.ide.modulebuilder.SalesforceToolWindowFactory"/>
             <toolWindow id="Salesforce" anchor="right"
                         icon="/icons/salesforce.svg"
-                        factoryClass="com.iishanto.ide.tabs.SalesforceToolUtility"/>
+                        factoryClass="com.iishanto.ide.ui.tabs.SalesforceToolUtility"/>
             <projectService serviceImplementation="com.iishanto.ide.config.SalesforceProjectConfig"/>
         <notificationGroup id="SalesforceToolUtility"
                            displayType="BALLOON"
@@ -51,8 +51,9 @@
                 id="com.example.plugin.CreateApexClassAction"
                 class="com.iishanto.ide.action.CreateNewApexClassAction"
                 text="Apex Class"
+                icon="AllIcons.Nodes.Class"
                 description="Create a new Apex class">
-            <add-to-group group-id="NewGroup" anchor="last"/>
+            <add-to-group group-id="NewGroup" anchor="first"/>
         </action>
     </actions>
 
