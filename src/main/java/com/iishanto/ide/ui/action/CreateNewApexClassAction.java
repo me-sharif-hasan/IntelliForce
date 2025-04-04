@@ -1,4 +1,4 @@
-package com.iishanto.ide.action;
+package com.iishanto.ide.ui.action;
 
 import com.iishanto.ide.ui.ApexClassPopupPanel;
 import com.iishanto.ide.utility.IDEUtility;
@@ -68,7 +68,7 @@ public class CreateNewApexClassAction extends AnAction {
         // Create and show the popup
         JBPopup popup = JBPopupFactory.getInstance()
                 .createComponentPopupBuilder(popupPanel, popupPanel.getNameField())
-                .setTitle("New Apex Class")
+                .setTitle("New Apex File")
                 .setMovable(true)
                 .setRequestFocus(true)
                 .setLocateWithinScreenBounds(true)

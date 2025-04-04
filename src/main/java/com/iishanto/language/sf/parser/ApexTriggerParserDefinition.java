@@ -22,10 +22,12 @@ import com.iishanto.language.sf.apex.parser.ApexParser;
 import com.iishanto.language.sf.apex.psi.ApexTriggerFile;
 import com.iishanto.language.sf.apex.psi.ApexTypes;
 import com.iishanto.language.sf.lexer.ApexLexer;
+import com.iishanto.language.sf.lexer.BnfApexLexer;
 import com.intellij.lang.ASTNode;
 import com.intellij.lang.Language;
 import com.intellij.lang.ParserDefinition;
 import com.intellij.lang.PsiParser;
+import com.intellij.lang.java.JShellParserDefinition;
 import com.intellij.lexer.Lexer;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.FileViewProvider;
@@ -62,7 +64,7 @@ public class ApexTriggerParserDefinition implements ParserDefinition {
     @NotNull
     @Override
     public Lexer createLexer(Project project) {
-        return new ApexLexer();
+        return new BnfApexLexer();
     }
 
     @Override

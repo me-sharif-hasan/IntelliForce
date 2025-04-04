@@ -1,9 +1,12 @@
 package com.iishanto.ide.codeformatter;
 
-import  com.intellij.formatting.*;
+import com.intellij.formatting.*;
 import com.intellij.lang.ASTNode;
-
+import com.intellij.openapi.util.TextRange;
+import com.intellij.psi.PsiFile;
 import com.intellij.psi.codeStyle.CodeStyleSettings;
+import com.intellij.psi.formatter.DocumentBasedFormattingModel;
+import com.intellij.psi.formatter.PsiBasedFormattingModel;
 import org.jetbrains.annotations.NotNull;
 
 public class ApexLanguageFormattingModelBuilder implements FormattingModelBuilder {
@@ -11,14 +14,8 @@ public class ApexLanguageFormattingModelBuilder implements FormattingModelBuilde
     public @NotNull FormattingModel createModel(@NotNull FormattingContext formattingContext) {
         ASTNode rootNode = formattingContext.getNode();
         CodeStyleSettings settings = formattingContext.getCodeStyleSettings();
-        System.out.println("got settings: "+settings.getIndentOptions().INDENT_SIZE);
-        // Create the root block for formatting
-        ApexLanguageBlock rootBlock = new ApexLanguageBlock(rootNode, null, Indent.getNoneIndent(), settings);
-        return FormattingModelProvider.createFormattingModelForPsiFile(
-                formattingContext.getContainingFile(),
-                rootBlock,
-                settings
-        );
+        PsiFile file = formattingContext.getContainingFile();
+        ApexBlockFormatter rootBlock = new ApexBlockFormatter(rootNode, Wrap.createWrap(WrapType.NONE, false), null);
+        return FormattingModelProvider.createFormattingModelForPsiFile(file,rootBlock,settings);
     }
-
 }

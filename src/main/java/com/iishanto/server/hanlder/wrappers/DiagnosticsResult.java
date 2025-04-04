@@ -55,5 +55,9 @@ public class DiagnosticsResult {
         public int getCharacter() {
             return character;
         }
+
+        public void setLine(int line) {
+            this.line=line;
+        }
     }
 }

@@ -19,9 +19,21 @@
                     fieldName="INSTANCE"
                     language="Apex"
                     extensions="trigger"/>
+            <fileType
+                    name="Apex Script"
+                    implementationClass="com.iishanto.language.sf.apex.filetypes.ApexScriptFileType"
+                    fieldName="INSTANCE"
+                    language="Apex"
+                    extensions="apex"/>
+<!--        <lang.indentStrategy language="Apex" implementationClass="com.iishanto.language.sf.parser.ApexIntentStrategy"/>-->
+<!--        <lang.indentParser language="Apex" implementationClass="com.iishanto.language.sf.parser.ApexIntendParser"/>-->
             <lang.parserDefinition
                     language="Apex"
                     implementationClass="com.iishanto.language.sf.parser.ApexClassParserDefinition"/>
+        <lang.formatter language="Apex" implementationClass="com.iishanto.ide.codeformatter.ApexLanguageFormattingModelBuilder"/>
+<!--        <lang.parserDefinition-->
+<!--                    language="Apex"-->
+<!--                    implementationClass="com.intellij.openapi.fileTypes.PlainTextParserDefinition"/>-->
             <lang.syntaxHighlighterFactory
                     language="Apex"
                     implementationClass="com.iishanto.language.sf.apex.filetypes.ApexSyntaxHighlighterFactory"/>
@@ -31,12 +43,12 @@
             <postStartupActivity implementation="com.iishanto.ide.SalesforceProjectStartupActivity"/>
             <highlightErrorFilter implementation="com.iishanto.ide.filters.ErrorFilter"/>
             <completion.contributor language="Apex" implementationClass="com.iishanto.ide.autocomplete.ApexLanguageAutoCompletionContributor"/>
+<!--            <completion.contributor language="JAVA" implementationClass="com.iishanto.ide.autocomplete.ApexLanguageAutoCompletionContributor"/>-->
             <gotoDeclarationHandler implementation="com.iishanto.ide.gotodeclaration.ApexGotoDeclarationHandler"/>
             <typedHandler implementation="com.iishanto.ide.typedhandler.AutoCompleteTypedHandler"/>
             <moduleType id="SFDX_MODULE" implementationClass="com.iishanto.ide.modulebuilder.SalesforceProjectModuleType"/>
             <moduleBuilder builderClass="com.iishanto.ide.modulebuilder.SalesforceProjectBuilder"/>
-            <lang.formatter language="Apex" implementationClass="com.iishanto.ide.codeformatter.ApexLanguageFormattingModelBuilder"/>
-            <toolWindow id="Salesforce Output" anchor="bottom" icon="AllIcons.Toolwindows.ToolWindowMessages"
+            <toolWindow canCloseContents="true" id="Salesforce Output" anchor="bottom" icon="/icons/salesforce.svg"
                         factoryClass="com.iishanto.ide.modulebuilder.SalesforceToolWindowFactory"/>
             <toolWindow id="Salesforce" anchor="right"
                         icon="/icons/salesforce.svg"
@@ -45,14 +57,16 @@
         <notificationGroup id="SalesforceToolUtility"
                            displayType="BALLOON"
                            toolWindowId="Event Log"/>
+        <codeInsight.lineMarkerProvider language="Apex" implementationClass="com.iishanto.ide.ui.runlinemarker.ApexScriptRunLineMarkerProvider"/>
+        <codeInsight.lineMarkerProvider language="Apex" implementationClass="com.iishanto.ide.ui.runlinemarker.ApexTestRunLineMarkerProvider"/>
     </extensions>
     <actions>
         <action
-                id="com.example.plugin.CreateApexClassAction"
-                class="com.iishanto.ide.action.CreateNewApexClassAction"
-                text="Apex Class"
-                icon="AllIcons.Nodes.Class"
-                description="Create a new Apex class">
+                id="com.iishanto.apexjetforce.CreateNewApexClassAction"
+                class="com.iishanto.ide.ui.action.CreateNewApexClassAction"
+                text="Apex"
+                icon="/icons/salesforce.svg"
+                description="Create a new Apex Class/Trigger/Script file">
             <add-to-group group-id="NewGroup" anchor="first"/>
         </action>
     </actions>

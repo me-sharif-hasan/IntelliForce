@@ -16,7 +16,7 @@
 {
     classHeader="license.txt"
     parserClass="com.iishanto.language.sf.apex.parser.ApexParser"
-  parserUtilClass="com.intellij.lang.parser.GeneratedParserUtilBase"
+  parserUtilClass="com.iishanto.language.sf.apex.parser.ApexParserUtil"
 
     extends="com.intellij.extapi.psi.ASTWrapperPsiElement"
 

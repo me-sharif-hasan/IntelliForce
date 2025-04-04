@@ -8,6 +8,7 @@ import com.intellij.ide.projectView.ProjectView;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.Messages;
+import com.intellij.openapi.util.IconLoader;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.openapi.wm.ToolWindow;
 import com.intellij.openapi.wm.ToolWindowManager;
@@ -70,6 +71,8 @@ public class IDEUtility {
                 if (toolWindow != null) {
                     ContentFactory contentFactory = ContentFactory.getInstance();
                     Content content = contentFactory.createContent(consoleView.getComponent(), title, false);
+                    content.setCloseable(true);
+                    content.setIcon(IconLoader.getIcon("/icons/salesforce.svg",IDEUtility.class));
                     toolWindow.getContentManager().addContent(content);
                     toolWindow.show();
                 }

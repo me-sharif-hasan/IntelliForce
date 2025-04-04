@@ -57,7 +57,6 @@ public class SalesforceUtility {
                 @Override
                 public void onTextAvailable(@NotNull ProcessEvent event, @NotNull Key outputType) {
                     System.out.println(event.getText());
-                    outputManager.log(event.getText());
                 }
             });
             processHandler.startNotify();

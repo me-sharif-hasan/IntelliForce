@@ -16,7 +16,7 @@ import java.awt.event.KeyEvent;
 public class ApexClassPopupPanel extends JPanel {
     private final CustomTextField nameField;
     private final JBLabel iconLabel;
-    private final JBList<String> kindList = new JBList<>("Class", "Trigger");
+    private final JBList<String> kindList = new JBList<>("Class", "Trigger","Script");
     private final OnCreateApexFile onCreateApexFile;
 
     public ApexClassPopupPanel(Project project,OnCreateApexFile onCreateApexFile) {
@@ -92,8 +92,10 @@ public class ApexClassPopupPanel extends JPanel {
         kindList.addListSelectionListener(e -> {
             if (kindList.getSelectedIndex() == 0) {
                 iconLabel.setIcon(AllIcons.Nodes.Class);
-            } else {
+            } else if(kindList.getSelectedIndex() == 1){
                 iconLabel.setIcon(AllIcons.Nodes.ExceptionClass);
+            }else {
+                iconLabel.setIcon(AllIcons.Nodes.Function);
             }
             nameField.requestFocus();
         });
@@ -134,7 +136,9 @@ public class ApexClassPopupPanel extends JPanel {
         JBLabel label = new JBLabel(value);
         if (value.equals("Class")) {
             label.setIcon(AllIcons.Nodes.Class);
-        } else {
+        } else if(value.equals("Script")){
+            label.setIcon(AllIcons.Nodes.Function);
+        }else {
             label.setIcon(AllIcons.Nodes.ExceptionClass);
         }
         label.setBorder(JBUI.Borders.empty(0, 5));
@@ -162,7 +166,7 @@ public class ApexClassPopupPanel extends JPanel {
         }
     }
 
-    public static interface OnCreateApexFile{
+    public interface OnCreateApexFile{
         void onCreateApexFile(String fileName, String kind);
     }
 }
