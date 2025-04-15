@@ -1,0 +1,663 @@
+{
+  "apex.jorje.semantic.compiler.parser.ParserOutput": {
+    "internalErrors": [],
+    "parseErrors": [],
+    "unit": {
+      "@class": "apex.jorje.data.ast.CompilationUnit$ClassDeclUnit",
+      "body": {
+        "@class": "apex.jorje.data.ast.ClassDecl",
+        "loc": {
+          "@class": "apex.jorje.data.IndexLocation",
+          "startIndex": 7,
+          "endIndex": 217,
+          "line": 1,
+          "column": 8
+        },
+        "modifiers": [
+          {
+            "@class": "apex.jorje.data.ast.Modifier$PublicModifier",
+            "loc": {
+              "@class": "apex.jorje.data.IndexLocation",
+              "startIndex": 0,
+              "endIndex": 6,
+              "line": 1,
+              "column": 1
+            }
+          }
+        ],
+        "name": {
+          "@class": "apex.jorje.data.Identifiers$LocationIdentifier",
+          "loc": {
+            "@class": "apex.jorje.data.IndexLocation",
+            "startIndex": 13,
+            "endIndex": 22,
+            "line": 1,
+            "column": 14
+          },
+          "value": "TestCLass"
+        },
+        "typeArguments": {},
+        "members": [
+          {
+            "@class": "apex.jorje.data.ast.BlockMember$FieldMember",
+            "variableDecls": {
+              "@class": "apex.jorje.data.ast.VariableDecls",
+              "modifiers": [],
+              "type": {
+                "@class": "apex.jorje.data.ast.TypeRefs$ClassTypeRef",
+                "names": [
+                  {
+                    "@class": "apex.jorje.data.Identifiers$LocationIdentifier",
+                    "loc": {
+                      "@class": "apex.jorje.data.IndexLocation",
+                      "startIndex": 23,
+                      "endIndex": 30,
+                      "line": 1,
+                      "column": 24
+                    },
+                    "value": "integer"
+                  }
+                ],
+                "typeArguments": []
+              },
+              "decls": [
+                {
+                  "@class": "apex.jorje.data.ast.VariableDecl",
+                  "name": {
+                    "@class": "apex.jorje.data.Identifiers$LocationIdentifier",
+                    "loc": {
+                      "@class": "apex.jorje.data.IndexLocation",
+                      "startIndex": 31,
+                      "endIndex": 32,
+                      "line": 1,
+                      "column": 32
+                    },
+                    "value": "x"
+                  },
+                  "assignment": {}
+                }
+              ]
+            }
+          },
+          {
+            "@class": "apex.jorje.data.ast.BlockMember$MethodMember",
+            "methodDecl": {
+              "@class": "apex.jorje.data.ast.MethodDecl",
+              "modifiers": [
+                {
+                  "@class": "apex.jorje.data.ast.Modifier$PublicModifier",
+                  "loc": {
+                    "@class": "apex.jorje.data.IndexLocation",
+                    "startIndex": 33,
+                    "endIndex": 39,
+                    "line": 1,
+                    "column": 34
+                  }
+                }
+              ],
+              "type": {
+                "value": {
+                  "@class": "apex.jorje.data.ast.TypeRefs$ClassTypeRef",
+                  "names": [
+                    {
+                      "@class": "apex.jorje.data.Identifiers$LocationIdentifier",
+                      "loc": {
+                        "@class": "apex.jorje.data.IndexLocation",
+                        "startIndex": 40,
+                        "endIndex": 44,
+                        "line": 1,
+                        "column": 41
+                      },
+                      "value": "void"
+                    }
+                  ],
+                  "typeArguments": []
+                }
+              },
+              "name": {
+                "@class": "apex.jorje.data.Identifiers$LocationIdentifier",
+                "loc": {
+                  "@class": "apex.jorje.data.IndexLocation",
+                  "startIndex": 45,
+                  "endIndex": 49,
+                  "line": 1,
+                  "column": 46
+                },
+                "value": "main"
+              },
+              "parameters": [
+                {
+                  "@class": "apex.jorje.data.ast.ParameterRefs$EmptyModifierParameterRef",
+                  "typeRef": {
+                    "@class": "apex.jorje.data.ast.TypeRefs$ClassTypeRef",
+                    "names": [
+                      {
+                        "@class": "apex.jorje.data.Identifiers$LocationIdentifier",
+                        "loc": {
+                          "@class": "apex.jorje.data.IndexLocation",
+                          "startIndex": 50,
+                          "endIndex": 57,
+                          "line": 1,
+                          "column": 51
+                        },
+                        "value": "integer"
+                      }
+                    ],
+                    "typeArguments": []
+                  },
+                  "name": {
+                    "@class": "apex.jorje.data.Identifiers$LocationIdentifier",
+                    "loc": {
+                      "@class": "apex.jorje.data.IndexLocation",
+                      "startIndex": 58,
+                      "endIndex": 59,
+                      "line": 1,
+                      "column": 59
+                    },
+                    "value": "a"
+                  }
+                },
+                {
+                  "@class": "apex.jorje.data.ast.ParameterRefs$EmptyModifierParameterRef",
+                  "typeRef": {
+                    "@class": "apex.jorje.data.ast.TypeRefs$ClassTypeRef",
+                    "names": [
+                      {
+                        "@class": "apex.jorje.data.Identifiers$LocationIdentifier",
+                        "loc": {
+                          "@class": "apex.jorje.data.IndexLocation",
+                          "startIndex": 60,
+                          "endIndex": 67,
+                          "line": 1,
+                          "column": 61
+                        },
+                        "value": "integer"
+                      }
+                    ],
+                    "typeArguments": []
+                  },
+                  "name": {
+                    "@class": "apex.jorje.data.Identifiers$LocationIdentifier",
+                    "loc": {
+                      "@class": "apex.jorje.data.IndexLocation",
+                      "startIndex": 68,
+                      "endIndex": 69,
+                      "line": 1,
+                      "column": 69
+                    },
+                    "value": "b"
+                  }
+                }
+              ],
+              "stmnt": {
+                "value": {
+                  "@class": "apex.jorje.data.ast.Stmnt$BlockStmnt",
+                  "loc": {
+                    "@class": "apex.jorje.data.IndexLocation",
+                    "startIndex": 70,
+                    "endIndex": 216,
+                    "line": 1,
+                    "column": 71
+                  },
+                  "stmnts": [
+                    {
+                      "@class": "apex.jorje.data.ast.Stmnt$IfElseBlock",
+                      "ifBlocks": [
+                        {
+                          "@class": "apex.jorje.data.ast.IfBlock",
+                          "loc": {
+                            "@class": "apex.jorje.data.IndexLocation",
+                            "startIndex": 71,
+                            "endIndex": 73,
+                            "line": 1,
+                            "column": 72
+                          },
+                          "expr": {
+                            "@class": "apex.jorje.data.ast.Expr$BooleanExpr",
+                            "left": {
+                              "@class": "apex.jorje.data.ast.Expr$VariableExpr",
+                              "dottedExpr": {},
+                              "isSafeNav": false,
+                              "names": [
+                                {
+                                  "@class": "apex.jorje.data.Identifiers$LocationIdentifier",
+                                  "loc": {
+                                    "@class": "apex.jorje.data.IndexLocation",
+                                    "startIndex": 74,
+                                    "endIndex": 75,
+                                    "line": 1,
+                                    "column": 75
+                                  },
+                                  "value": "x"
+                                }
+                              ]
+                            },
+                            "op": {
+                              "@class": "apex.jorje.data.ast.BooleanOp",
+                              "$": "DOUBLE_EQUAL"
+                            },
+                            "right": {
+                              "@class": "apex.jorje.data.ast.Expr$LiteralExpr",
+                              "loc": {
+                                "@class": "apex.jorje.data.IndexLocation",
+                                "startIndex": 77,
+                                "endIndex": 78,
+                                "line": 1,
+                                "column": 78
+                              },
+                              "type": {
+                                "@class": "apex.jorje.data.ast.LiteralType",
+                                "$": "INTEGER"
+                              },
+                              "literal": {
+                                "@class": "int",
+                                "$": 2
+                              }
+                            }
+                          },
+                          "stmnt": {
+                            "@class": "apex.jorje.data.ast.Stmnt$BlockStmnt",
+                            "loc": {
+                              "@class": "apex.jorje.data.IndexLocation",
+                              "startIndex": 79,
+                              "endIndex": 101,
+                              "line": 1,
+                              "column": 80
+                            },
+                            "stmnts": [
+                              {
+                                "@class": "apex.jorje.data.ast.Stmnt$ExpressionStmnt",
+                                "loc": {
+                                  "@class": "apex.jorje.data.IndexLocation",
+                                  "startIndex": 87,
+                                  "endIndex": 96,
+                                  "line": 1,
+                                  "column": 88
+                                },
+                                "expr": {
+                                  "@class": "apex.jorje.data.ast.Expr$MethodCallExpr",
+                                  "dottedExpr": {},
+                                  "isSafeNav": false,
+                                  "names": [
+                                    {
+                                      "@class": "apex.jorje.data.Identifiers$LocationIdentifier",
+                                      "loc": {
+                                        "@class": "apex.jorje.data.IndexLocation",
+                                        "startIndex": 80,
+                                        "endIndex": 86,
+                                        "line": 1,
+                                        "column": 81
+                                      },
+                                      "value": "System"
+                                    },
+                                    {
+                                      "@class": "apex.jorje.data.Identifiers$LocationIdentifier",
+                                      "loc": {
+                                        "@class": "apex.jorje.data.IndexLocation",
+                                        "startIndex": 87,
+                                        "endIndex": 92,
+                                        "line": 1,
+                                        "column": 88
+                                      },
+                                      "value": "debug"
+                                    }
+                                  ],
+                                  "inputParameters": [
+                                    {
+                                      "@class": "apex.jorje.data.ast.Expr$VariableExpr",
+                                      "dottedExpr": {},
+                                      "isSafeNav": false,
+                                      "names": [
+                                        {
+                                          "@class": "apex.jorje.data.Identifiers$LocationIdentifier",
+                                          "loc": {
+                                            "@class": "apex.jorje.data.IndexLocation",
+                                            "startIndex": 93,
+                                            "endIndex": 94,
+                                            "line": 1,
+                                            "column": 94
+                                          },
+                                          "value": "x"
+                                        }
+                                      ]
+                                    }
+                                  ]
+                                }
+                              },
+                              {
+                                "@class": "apex.jorje.data.ast.Stmnt$ExpressionStmnt",
+                                "loc": {
+                                  "@class": "apex.jorje.data.IndexLocation",
+                                  "startIndex": 97,
+                                  "endIndex": 100,
+                                  "line": 1,
+                                  "column": 98
+                                },
+                                "expr": {
+                                  "@class": "apex.jorje.data.ast.Expr$PostfixExpr",
+                                  "loc": {
+                                    "@class": "apex.jorje.data.IndexLocation",
+                                    "startIndex": 97,
+                                    "endIndex": 99,
+                                    "line": 1,
+                                    "column": 98
+                                  },
+                                  "expr": {
+                                    "@class": "apex.jorje.data.ast.Expr$VariableExpr",
+                                    "dottedExpr": {},
+                                    "isSafeNav": false,
+                                    "names": [
+                                      {
+                                        "@class": "apex.jorje.data.Identifiers$LocationIdentifier",
+                                        "loc": {
+                                          "@class": "apex.jorje.data.IndexLocation",
+                                          "startIndex": 96,
+                                          "endIndex": 97,
+                                          "line": 1,
+                                          "column": 97
+                                        },
+                                        "value": "x"
+                                      }
+                                    ]
+                                  },
+                                  "op": {
+                                    "@class": "apex.jorje.data.ast.PostfixOp",
+                                    "$": "INC"
+                                  }
+                                }
+                              }
+                            ]
+                          }
+                        }
+                      ],
+                      "elseBlock": {}
+                    },
+                    {
+                      "@class": "apex.jorje.data.ast.Stmnt$VariableDeclStmnt",
+                      "variableDecls": {
+                        "@class": "apex.jorje.data.ast.VariableDecls",
+                        "modifiers": [],
+                        "type": {
+                          "@class": "apex.jorje.data.ast.TypeRefs$ClassTypeRef",
+                          "names": [
+                            {
+                              "@class": "apex.jorje.data.Identifiers$LocationIdentifier",
+                              "loc": {
+                                "@class": "apex.jorje.data.IndexLocation",
+                                "startIndex": 101,
+                                "endIndex": 108,
+                                "line": 1,
+                                "column": 102
+                              },
+                              "value": "integer"
+                            }
+                          ],
+                          "typeArguments": []
+                        },
+                        "decls": [
+                          {
+                            "@class": "apex.jorje.data.ast.VariableDecl",
+                            "name": {
+                              "@class": "apex.jorje.data.Identifiers$LocationIdentifier",
+                              "loc": {
+                                "@class": "apex.jorje.data.IndexLocation",
+                                "startIndex": 109,
+                                "endIndex": 110,
+                                "line": 1,
+                                "column": 110
+                              },
+                              "value": "y"
+                            },
+                            "assignment": {
+                              "value": {
+                                "@class": "apex.jorje.data.ast.Expr$LiteralExpr",
+                                "loc": {
+                                  "@class": "apex.jorje.data.IndexLocation",
+                                  "startIndex": 111,
+                                  "endIndex": 112,
+                                  "line": 1,
+                                  "column": 112
+                                },
+                                "type": {
+                                  "@class": "apex.jorje.data.ast.LiteralType",
+                                  "$": "INTEGER"
+                                },
+                                "literal": {
+                                  "@class": "int",
+                                  "$": 9
+                                }
+                              }
+                            }
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "@class": "apex.jorje.data.ast.Stmnt$TryCatchFinallyBlock",
+                      "loc": {
+                        "@class": "apex.jorje.data.IndexLocation",
+                        "startIndex": 113,
+                        "endIndex": 116,
+                        "line": 1,
+                        "column": 114
+                      },
+                      "tryBlock": {
+                        "@class": "apex.jorje.data.ast.Stmnt$BlockStmnt",
+                        "loc": {
+                          "@class": "apex.jorje.data.IndexLocation",
+                          "startIndex": 116,
+                          "endIndex": 122,
+                          "line": 1,
+                          "column": 117
+                        },
+                        "stmnts": [
+                          {
+                            "@class": "apex.jorje.data.ast.Stmnt$ExpressionStmnt",
+                            "loc": {
+                              "@class": "apex.jorje.data.IndexLocation",
+                              "startIndex": 118,
+                              "endIndex": 121,
+                              "line": 1,
+                              "column": 119
+                            },
+                            "expr": {
+                              "@class": "apex.jorje.data.ast.Expr$PostfixExpr",
+                              "loc": {
+                                "@class": "apex.jorje.data.IndexLocation",
+                                "startIndex": 118,
+                                "endIndex": 120,
+                                "line": 1,
+                                "column": 119
+                              },
+                              "expr": {
+                                "@class": "apex.jorje.data.ast.Expr$VariableExpr",
+                                "dottedExpr": {},
+                                "isSafeNav": false,
+                                "names": [
+                                  {
+                                    "@class": "apex.jorje.data.Identifiers$LocationIdentifier",
+                                    "loc": {
+                                      "@class": "apex.jorje.data.IndexLocation",
+                                      "startIndex": 117,
+                                      "endIndex": 118,
+                                      "line": 1,
+                                      "column": 118
+                                    },
+                                    "value": "y"
+                                  }
+                                ]
+                              },
+                              "op": {
+                                "@class": "apex.jorje.data.ast.PostfixOp",
+                                "$": "DEC"
+                              }
+                            }
+                          }
+                        ]
+                      },
+                      "catchBlocks": [
+                        {
+                          "@class": "apex.jorje.data.ast.CatchBlock",
+                          "loc": {
+                            "@class": "apex.jorje.data.IndexLocation",
+                            "startIndex": 122,
+                            "endIndex": 127,
+                            "line": 1,
+                            "column": 123
+                          },
+                          "parameter": {
+                            "@class": "apex.jorje.data.ast.ParameterRefs$EmptyModifierParameterRef",
+                            "typeRef": {
+                              "@class": "apex.jorje.data.ast.TypeRefs$ClassTypeRef",
+                              "names": [
+                                {
+                                  "@class": "apex.jorje.data.Identifiers$LocationIdentifier",
+                                  "loc": {
+                                    "@class": "apex.jorje.data.IndexLocation",
+                                    "startIndex": 128,
+                                    "endIndex": 140,
+                                    "line": 1,
+                                    "column": 129
+                                  },
+                                  "value": "DmlException"
+                                }
+                              ],
+                              "typeArguments": []
+                            },
+                            "name": {
+                              "@class": "apex.jorje.data.Identifiers$LocationIdentifier",
+                              "loc": {
+                                "@class": "apex.jorje.data.IndexLocation",
+                                "startIndex": 141,
+                                "endIndex": 142,
+                                "line": 1,
+                                "column": 142
+                              },
+                              "value": "e"
+                            }
+                          },
+                          "stmnt": {
+                            "@class": "apex.jorje.data.ast.Stmnt$BlockStmnt",
+                            "loc": {
+                              "@class": "apex.jorje.data.IndexLocation",
+                              "startIndex": 143,
+                              "endIndex": 215,
+                              "line": 1,
+                              "column": 144
+                            },
+                            "stmnts": [
+                              {
+                                "@class": "apex.jorje.data.ast.Stmnt$ExpressionStmnt",
+                                "loc": {
+                                  "@class": "apex.jorje.data.IndexLocation",
+                                  "startIndex": 151,
+                                  "endIndex": 214,
+                                  "line": 1,
+                                  "column": 152
+                                },
+                                "expr": {
+                                  "@class": "apex.jorje.data.ast.Expr$MethodCallExpr",
+                                  "dottedExpr": {},
+                                  "isSafeNav": false,
+                                  "names": [
+                                    {
+                                      "@class": "apex.jorje.data.Identifiers$LocationIdentifier",
+                                      "loc": {
+                                        "@class": "apex.jorje.data.IndexLocation",
+                                        "startIndex": 144,
+                                        "endIndex": 150,
+                                        "line": 1,
+                                        "column": 145
+                                      },
+                                      "value": "System"
+                                    },
+                                    {
+                                      "@class": "apex.jorje.data.Identifiers$LocationIdentifier",
+                                      "loc": {
+                                        "@class": "apex.jorje.data.IndexLocation",
+                                        "startIndex": 151,
+                                        "endIndex": 156,
+                                        "line": 1,
+                                        "column": 152
+                                      },
+                                      "value": "debug"
+                                    }
+                                  ],
+                                  "inputParameters": [
+                                    {
+                                      "@class": "apex.jorje.data.ast.Expr$BinaryExpr",
+                                      "left": {
+                                        "@class": "apex.jorje.data.ast.Expr$LiteralExpr",
+                                        "loc": {
+                                          "@class": "apex.jorje.data.IndexLocation",
+                                          "startIndex": 157,
+                                          "endIndex": 197,
+                                          "line": 1,
+                                          "column": 158
+                                        },
+                                        "type": {
+                                          "@class": "apex.jorje.data.ast.LiteralType",
+                                          "$": "STRING"
+                                        },
+                                        "literal": {
+                                          "@class": "string",
+                                          "$": "The following exception has occurred: "
+                                        }
+                                      },
+                                      "op": {
+                                        "@class": "apex.jorje.data.ast.BinaryOp",
+                                        "$": "ADDITION"
+                                      },
+                                      "right": {
+                                        "@class": "apex.jorje.data.ast.Expr$MethodCallExpr",
+                                        "dottedExpr": {},
+                                        "isSafeNav": false,
+                                        "names": [
+                                          {
+                                            "@class": "apex.jorje.data.Identifiers$LocationIdentifier",
+                                            "loc": {
+                                              "@class": "apex.jorje.data.IndexLocation",
+                                              "startIndex": 198,
+                                              "endIndex": 199,
+                                              "line": 1,
+                                              "column": 199
+                                            },
+                                            "value": "e"
+                                          },
+                                          {
+                                            "@class": "apex.jorje.data.Identifiers$LocationIdentifier",
+                                            "loc": {
+                                              "@class": "apex.jorje.data.IndexLocation",
+                                              "startIndex": 200,
+                                              "endIndex": 210,
+                                              "line": 1,
+                                              "column": 201
+                                            },
+                                            "value": "getMessage"
+                                          }
+                                        ],
+                                        "inputParameters": []
+                                      }
+                                    }
+                                  ]
+                                }
+                              }
+                            ]
+                          }
+                        }
+                      ],
+                      "finallyBlock": {}
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        ],
+        "superClass": {},
+        "interfaces": []
+      }
+    },
+    "hiddenTokenMap": []
+  }
+}

@@ -63,7 +63,6 @@ public class ApexSyntaxHighlighter extends SyntaxHighlighterBase {
     @NotNull
     @Override
     public TextAttributesKey @NotNull [] getTokenHighlights(IElementType tokenType) {
-        System.out.println("Highlighting Token type: " + tokenType);
         return pack(textAttributeMap.get(tokenType));
     }
 

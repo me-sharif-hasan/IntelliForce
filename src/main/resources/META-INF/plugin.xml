@@ -27,9 +27,10 @@
                     extensions="apex"/>
 <!--        <lang.indentStrategy language="Apex" implementationClass="com.iishanto.language.sf.parser.ApexIntentStrategy"/>-->
 <!--        <lang.indentParser language="Apex" implementationClass="com.iishanto.language.sf.parser.ApexIntendParser"/>-->
+
             <lang.parserDefinition
                     language="Apex"
-                    implementationClass="com.iishanto.language.sf.parser.ApexClassParserDefinition"/>
+                    implementationClass="com.iishanto.language.sf.parser.JetforceParserDefinition"/>
         <lang.formatter language="Apex" implementationClass="com.iishanto.ide.codeformatter.ApexLanguageFormattingModelBuilder"/>
 <!--        <lang.parserDefinition-->
 <!--                    language="Apex"-->
@@ -41,7 +42,7 @@
                     language="Apex"
                     implementationClass="com.iishanto.ide.annotator.ApexLanguageExternalAnnotator"/>
             <postStartupActivity implementation="com.iishanto.ide.SalesforceProjectStartupActivity"/>
-            <highlightErrorFilter implementation="com.iishanto.ide.filters.ErrorFilter"/>
+<!--            <highlightErrorFilter implementation="com.iishanto.ide.filters.ErrorFilter"/>-->
             <completion.contributor language="Apex" implementationClass="com.iishanto.ide.autocomplete.ApexLanguageAutoCompletionContributor"/>
 <!--            <completion.contributor language="JAVA" implementationClass="com.iishanto.ide.autocomplete.ApexLanguageAutoCompletionContributor"/>-->
             <gotoDeclarationHandler implementation="com.iishanto.ide.gotodeclaration.ApexGotoDeclarationHandler"/>

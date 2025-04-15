@@ -19,22 +19,35 @@ repositories {
 intellij {
     version = '2024.2'
     type = 'IC' // IntelliJ Community Edition
-    plugins = ['java']
+    plugins = ['java','org.jetbrains.plugins.textmate']
 }
-
 dependencies {
     testImplementation 'org.jetbrains.kotlin:kotlin-test'
+}
+dependencies {
+    implementation 'com.thoughtworks.xstream:xstream:1.4.21'
+}
+dependencies {
+    implementation 'commons-cli:commons-cli:1.9.0'
+}
+dependencies {
+    implementation 'commons-io:commons-io:2.17.0'
+}
+dependencies {
+    implementation files('src/main/resources/bin/apex-jorje-lsp.jar')
+    implementation fileTree(dir: 'src/main/resources/bin/ic2', include: ['*.jar'])
 }
 dependencies {
     implementation 'org.antlr:antlr4-runtime:4.13.1'  // Add ANTLR runtime dependency
 }
 dependencies {
+//    implementation "io.github.apex-dev-tools:apex-parser:4.4.0"
     implementation "org.antlr:antlr4-intellij-adaptor:0.1"
 }
 
 dependencies {
     implementation files("libs/SF_Apex_Plugin_for_Intelij-1.0.0.jar")
-    implementation files("libs/sf-jorje-lsp.jar")
+//    implementation files("libs/sf-jorje-lsp.jar")
 }
 dependencies {
     implementation('com.fasterxml.jackson.core:jackson-databind:2.17.0')
