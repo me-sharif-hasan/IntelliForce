@@ -35,7 +35,6 @@ dependencies {
 }
 dependencies {
     implementation files('src/main/resources/bin/apex-jorje-lsp.jar')
-    implementation fileTree(dir: 'src/main/resources/bin/ic2', include: ['*.jar'])
 }
 dependencies {
     implementation 'org.antlr:antlr4-runtime:4.13.1'  // Add ANTLR runtime dependency

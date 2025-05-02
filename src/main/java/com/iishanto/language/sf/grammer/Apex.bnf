@@ -1,0 +1,120 @@
+{
+  parserClass="com.iishanto.language.sf.grammer.helper.SfApexParser"
+
+  extends="com.intellij.extapi.psi.ASTWrapperPsiElement"
+
+  psiClassPrefix="Simple"
+  psiImplClassSuffix="Impl"
+
+  elementTypeClass="com.iishanto.language.sf.grammer.helper.SfApexElementType"
+  tokenTypeClass="com.iishanto.language.sf.grammer.helper.SfApexTokenType"
+
+   tokens = [
+                  VIRTUAL_KEYWORD = 'virtual'
+                  ABSTRACT_KEYWORD = 'abstract'
+                  WITH_KEYWORD = 'with'
+                  SHARING_KEYWORD = 'sharing'
+                  WITHOUT_KEYWORD = 'without'
+                  INHERITED_KEYWORD = 'inherited'
+                  PUBLIC_KEYWORD = 'public'
+                  PRIVATE_KEYWORD = 'private'
+                  GLOBAL_KEYWORD = 'global'
+                  PROTECTED_KEYWORD = 'protected'
+                  FINAL_KEYWORD = 'final'
+                  STATIC_KEYWORD = 'static'
+                  IMPLEMENTES_KEYWORD = 'implements'
+                  EXTENDS_KEYWORD = 'extends'
+                  GET_METHOD_KEYWORD = 'get'
+                  SET_METHOD_KEYWORD = 'set'
+                  TRUE_LITERAL = 'true'
+                  FALSE_LITERAL = 'false'
+                  NEW_KEYWORD = 'new'
+                  OVERRIDE_KEYWORD = 'override'
+                  WHITE_SPACE = 'regexp:\s+'
+                  LBRACE = '{'
+                  RBRACE = '}'
+                  LPAREN = '('
+                  RPAREN = ')'
+                  SQURE_LEFT = '['
+                    SQURE_RIGHT = ']'
+                  COMMA = ','
+                  DOT = '.'
+                  EQUAL = '='
+                  ANGLE_LEFT = '<'
+                  ANGLE_RIGHT = '>'
+                  SEMICOLON = ';'
+                  AT = '@'
+                  NUMBER = 'regexp:[0-9]+(\.?[0-9])*L?'
+
+                  SOQL = 'regexp:SELECT (.*?)(?=\])'
+                  SOSL = 'regexp:FIND (.*?)(?=\])'
+
+                  IDENTIFIER = 'regexp:[a-zA-Z_][a-zA-Z0-9_$]*'
+                  STRING  = "regexp:'.*?'"
+          ]
+}
+
+
+SfApex ::= ApexClassFile
+ApexClassFile ::= ClassAccessModifier (VIRTUAL_KEYWORD|ABSTRACT_KEYWORD|(WITH_KEYWORD|WITHOUT_KEYWORD|INHERITED_KEYWORD) SHARING_KEYWORD)? class TypeDeclaration (EXTENDS_KEYWORD ImplementsOrExtendClassNameFormat)? ImplementsInterfaceList? ClassBlock
+ClassAccessModifier ::= (PUBLIC_KEYWORD|GLOBAL_KEYWORD)
+ImplementsInterfaceList ::= IMPLEMENTES_KEYWORD ImplementsOrExtendClassNameFormat (COMMA ImplementsOrExtendClassNameFormat)*
+ImplementsOrExtendClassNameFormat ::= IDENTIFIER (DOT IDENTIFIER)?
+
+
+ClassBlock ::= LBRACE MemberDeclaration? RBRACE
+
+/*Field declaration part*/
+MemberDeclaration ::= Annotation? MemberAccessModifier? (FINAL_KEYWORD|OVERRIDE_KEYWORD)? STATIC_KEYWORD? TypeDeclaration IDENTIFIER (FieldExtension|MethodParameterExtension)
+FieldExtension ::= (MoreCommaSeperatedIds? SEMICOLON|LBRACE GetSetGroup? RBRACE);
+MemberAccessModifier ::= (PUBLIC_KEYWORD|PRIVATE_KEYWORD|PROTECTED_KEYWORD|GLOBAL_KEYWORD)
+
+TypeDeclaration ::= IDENTIFIER (DOT IDENTIFIER)? (ANGLE_LEFT TypeDeclaration (COMMA TypeDeclaration)? ANGLE_RIGHT)?
+
+MoreCommaSeperatedIds ::= ((EQUAL RhsExpression)) | (COMMA IDENTIFIER (EQUAL RhsExpression)?)+
+
+GetSetGroup ::= GetMethod SEMICOLON SetMethod SEMICOLON| SetMethod SEMICOLON GetMethod SEMICOLON | GetMethod SEMICOLON |SetMethod SEMICOLON
+GetMethod ::= GET_METHOD_KEYWORD
+SetMethod ::= SET_METHOD_KEYWORD
+
+RhsExpression ::= PrimitiveType | ValueRetrievingExpression | DatabaseExpression
+
+DatabaseExpression ::= SQURE_LEFT (SOQL | SOSL) SQURE_RIGHT
+
+PrimitiveType ::= NUMBER | STRING | TRUE_LITERAL | FALSE_LITERAL
+
+CollectionInitializer ::= LBRACE CollectionInitializerItem RBRACE
+CollectionInitializerItem ::= (RhsExpression (EQUAL ANGLE_RIGHT RhsExpression) ?) (COMMA RhsExpression (EQUAL ANGLE_RIGHT RhsExpression) ?)*
+
+ValueRetrievingExpression ::= MethodCallOrVariable | NewClassExpression
+
+NewClassExpression ::= NEW_KEYWORD TypeDeclaration (ArgumentList|CollectionInitializer);
+
+MethodCallOrVariable ::= IDENTIFIER (DOT IDENTIFIER)? ArgumentList?
+
+ArgumentList ::= LPAREN (CommaSeperatedExpressions)? RPAREN
+CommaSeperatedExpressions ::=(RhsExpression SObjectInitializationUnit? (COMMA RhsExpression SObjectInitializationUnit?)*)
+SObjectInitializationUnit ::= EQUAL RhsExpression
+
+
+/*Method declaration part*/
+/*
+[public | private | protected | global] [override] [static] data_type method_name
+(input parameters)
+{
+// The body of the method
+}
+ */
+
+Annotation ::= AT MethodCallOrVariable
+MethodParameterExtension ::= LPAREN ParameterList RPAREN MethodBlock
+
+ParameterList ::= (ParameterUnit (COMMA ParameterUnit)*)?
+ParameterUnit ::= IDENTIFIER IDENTIFIER
+
+MethodBlock ::= LBRACE MethodContents* RBRACE
+
+MethodContents ::= LocalVariableDeclaration | LocalVariableInitializer;
+
+LocalVariableDeclaration ::= TypeDeclaration IDENTIFIER (MoreCommaSeperatedIds)? SEMICOLON
+LocalVariableInitializer ::= RhsExpression EQUAL RhsExpression+ SEMICOLON
