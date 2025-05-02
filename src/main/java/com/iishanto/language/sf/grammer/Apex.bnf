@@ -29,6 +29,24 @@
                   TRUE_LITERAL = 'true'
                   FALSE_LITERAL = 'false'
                   NEW_KEYWORD = 'new'
+                  IF_KEYWORD = 'if'
+                    ELSE_KEYWORD = 'else'
+                    FOR_KEYWORD = 'for'
+                    WHILE_KEYWORD = 'while'
+                    DO_KEYWORD = 'do'
+                    TRY_KEYWORD = 'try'
+                    CATCH_KEYWORD = 'catch'
+                    FINALLY_KEYWORD = 'finally'
+                    RETURN_KEYWORD = 'return'
+                    SWITCH_KEYWORD = 'switch'
+                    CASE_KEYWORD = 'case'
+                    DEFAULT_KEYWORD = 'default'
+                    BREAK_KEYWORD = 'break'
+                    CONTINUE_KEYWORD = 'continue'
+                    THROW_KEYWORD = 'throw'
+                    THIS_KEYWORD = 'this'
+                    SUPER_KEYWORD = 'super'
+                    
                   OVERRIDE_KEYWORD = 'override'
                   WHITE_SPACE = 'regexp:\s+'
                   LBRACE = '{'
@@ -39,15 +57,16 @@
                     SQURE_RIGHT = ']'
                   COMMA = ','
                   DOT = '.'
-                  EQUAL = '='
+                  EQUAL = '=='
+                  ASSIGNMENT = '='
                   ANGLE_LEFT = '<'
                   ANGLE_RIGHT = '>'
                   SEMICOLON = ';'
                   AT = '@'
                   NUMBER = 'regexp:[0-9]+(\.?[0-9])*L?'
 
-                  SOQL = 'regexp:SELECT (.*?)(?=\])'
-                  SOSL = 'regexp:FIND (.*?)(?=\])'
+                  SOQL = 'regexp:SELECT (.*?)(?=])'
+                  SOSL = 'regexp:FIND (.*?)(?=])'
 
                   IDENTIFIER = 'regexp:[a-zA-Z_][a-zA-Z0-9_$]*'
                   STRING  = "regexp:'.*?'"
@@ -66,25 +85,29 @@ ClassBlock ::= LBRACE MemberDeclaration? RBRACE
 
 /*Field declaration part*/
 MemberDeclaration ::= Annotation? MemberAccessModifier? (FINAL_KEYWORD|OVERRIDE_KEYWORD)? STATIC_KEYWORD? TypeDeclaration IDENTIFIER (FieldExtension|MethodParameterExtension)
-FieldExtension ::= (MoreCommaSeperatedIds? SEMICOLON|LBRACE GetSetGroup? RBRACE);
+
+
+
+FieldExtension ::= (MoreCommaSeperatedIds? SEMICOLON|LBRACE GetSetGroup? RBRACE)
 MemberAccessModifier ::= (PUBLIC_KEYWORD|PRIVATE_KEYWORD|PROTECTED_KEYWORD|GLOBAL_KEYWORD)
 
 TypeDeclaration ::= IDENTIFIER (DOT IDENTIFIER)? (ANGLE_LEFT TypeDeclaration (COMMA TypeDeclaration)? ANGLE_RIGHT)?
 
-MoreCommaSeperatedIds ::= ((EQUAL RhsExpression)) | (COMMA IDENTIFIER (EQUAL RhsExpression)?)+
+MoreCommaSeperatedIds ::= ((ASSIGNMENT RhsExpression)) | (COMMA IDENTIFIER (ASSIGNMENT RhsExpression)?)+
 
 GetSetGroup ::= GetMethod SEMICOLON SetMethod SEMICOLON| SetMethod SEMICOLON GetMethod SEMICOLON | GetMethod SEMICOLON |SetMethod SEMICOLON
 GetMethod ::= GET_METHOD_KEYWORD
 SetMethod ::= SET_METHOD_KEYWORD
 
-RhsExpression ::= PrimitiveType | ValueRetrievingExpression | DatabaseExpression
+RhsExpression ::=  BaseExpression LogicalExpression?
 
+BaseExpression ::= PrimitiveType | ValueRetrievingExpression | DatabaseExpression
 DatabaseExpression ::= SQURE_LEFT (SOQL | SOSL) SQURE_RIGHT
 
 PrimitiveType ::= NUMBER | STRING | TRUE_LITERAL | FALSE_LITERAL
 
 CollectionInitializer ::= LBRACE CollectionInitializerItem RBRACE
-CollectionInitializerItem ::= (RhsExpression (EQUAL ANGLE_RIGHT RhsExpression) ?) (COMMA RhsExpression (EQUAL ANGLE_RIGHT RhsExpression) ?)*
+CollectionInitializerItem ::= (RhsExpression (ASSIGNMENT ANGLE_RIGHT RhsExpression) ?) (COMMA RhsExpression (ASSIGNMENT ANGLE_RIGHT RhsExpression) ?)*
 
 ValueRetrievingExpression ::= MethodCallOrVariable | NewClassExpression
 
@@ -94,17 +117,7 @@ MethodCallOrVariable ::= IDENTIFIER (DOT IDENTIFIER)? ArgumentList?
 
 ArgumentList ::= LPAREN (CommaSeperatedExpressions)? RPAREN
 CommaSeperatedExpressions ::=(RhsExpression SObjectInitializationUnit? (COMMA RhsExpression SObjectInitializationUnit?)*)
-SObjectInitializationUnit ::= EQUAL RhsExpression
-
-
-/*Method declaration part*/
-/*
-[public | private | protected | global] [override] [static] data_type method_name
-(input parameters)
-{
-// The body of the method
-}
- */
+SObjectInitializationUnit ::= ASSIGNMENT RhsExpression
 
 Annotation ::= AT MethodCallOrVariable
 MethodParameterExtension ::= LPAREN ParameterList RPAREN MethodBlock
@@ -112,9 +125,19 @@ MethodParameterExtension ::= LPAREN ParameterList RPAREN MethodBlock
 ParameterList ::= (ParameterUnit (COMMA ParameterUnit)*)?
 ParameterUnit ::= IDENTIFIER IDENTIFIER
 
-MethodBlock ::= LBRACE MethodContents* RBRACE
+MethodBlock ::= LBRACE LocalContents* RBRACE
 
-MethodContents ::= LocalVariableDeclaration | LocalVariableInitializer;
+LocalContents ::= LocalVariableDeclaration | LocalVariableORMethodCall | IfStatement | TryCatchBlock;
 
 LocalVariableDeclaration ::= TypeDeclaration IDENTIFIER (MoreCommaSeperatedIds)? SEMICOLON
-LocalVariableInitializer ::= RhsExpression EQUAL RhsExpression+ SEMICOLON
+LocalVariableORMethodCall ::= RhsExpression (SEMICOLON|LocalVariableRightSide)
+LocalVariableRightSide ::= RhsExpression ASSIGNMENT RhsExpression+ SEMICOLON
+
+IfStatement ::= IF_KEYWORD LPAREN RhsExpression RPAREN LBRACE LocalContents* RBRACE (ELSE_KEYWORD IfStatement)* (ELSE_KEYWORD LBRACE LocalContents* RBRACE)?
+TryCatchBlock ::= TRY_KEYWORD LBRACE LocalContents* RBRACE CatchBlock* FinallyBlock*
+CatchBlock ::= CATCH_KEYWORD LPAREN TypeDeclaration IDENTIFIER RPAREN LBRACE LocalContents* RBRACE
+FinallyBlock ::= FINALLY_KEYWORD LBRACE LocalContents* RBRACE
+
+/* All type of primary expressions */
+//logical
+LogicalExpression ::= EQUAL RhsExpression
