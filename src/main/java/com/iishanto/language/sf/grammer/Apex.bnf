@@ -13,6 +13,8 @@
                   VIRTUAL_KEYWORD = 'virtual'
                   ABSTRACT_KEYWORD = 'abstract'
                   WITH_KEYWORD = 'with'
+                  INTERFACE_KEYWORD = 'interface'
+                  CLASS_KEYWORD = 'class'
                   SHARING_KEYWORD = 'sharing'
                   WITHOUT_KEYWORD = 'without'
                   INHERITED_KEYWORD = 'inherited'
@@ -46,7 +48,8 @@
                     THROW_KEYWORD = 'throw'
                     THIS_KEYWORD = 'this'
                     SUPER_KEYWORD = 'super'
-                    
+                    ON_KEYWORD = 'on'
+
                   OVERRIDE_KEYWORD = 'override'
                   WHITE_SPACE = 'regexp:\s+'
                   LBRACE = '{'
@@ -75,13 +78,24 @@
 
 
 SfApex ::= ApexClassFile
-ApexClassFile ::= ClassAccessModifier (VIRTUAL_KEYWORD|ABSTRACT_KEYWORD|(WITH_KEYWORD|WITHOUT_KEYWORD|INHERITED_KEYWORD) SHARING_KEYWORD)? class TypeDeclaration (EXTENDS_KEYWORD ImplementsOrExtendClassNameFormat)? ImplementsInterfaceList? ClassBlock
+
+ApexClassFile ::= ClassAccessModifier ClassModifiers (ClassDeclaration|InterfaceDeclaration)
+ClassDeclaration ::= CLASS_KEYWORD TypeDeclaration ClassInheritance ClassBlock
+InterfaceDeclaration ::= INTERFACE_KEYWORD TypeDeclaration ClassInheritance InterfaceBlock;
+ClassModifiers ::= ClassModifier*
+ClassModifier ::= VIRTUAL_KEYWORD | ABSTRACT_KEYWORD | SharingModifier
+SharingModifier ::= (WITH_KEYWORD | WITHOUT_KEYWORD | INHERITED_KEYWORD) SHARING_KEYWORD
+ClassInheritance ::= (EXTENDS_KEYWORD ImplementsOrExtendClassNameFormat)? ImplementsInterfaceList?
+
 ClassAccessModifier ::= (PUBLIC_KEYWORD|GLOBAL_KEYWORD)
 ImplementsInterfaceList ::= IMPLEMENTES_KEYWORD ImplementsOrExtendClassNameFormat (COMMA ImplementsOrExtendClassNameFormat)*
 ImplementsOrExtendClassNameFormat ::= IDENTIFIER (DOT IDENTIFIER)?
 
 
-ClassBlock ::= LBRACE MemberDeclaration? RBRACE
+ClassBlock ::= LBRACE (MemberDeclaration|ApexClassFile)* RBRACE
+
+//TODO: add support for interface
+InterfaceBlock ::= LBRACE (MemberDeclaration|ApexClassFile)* RBRACE
 
 /*Field declaration part*/
 MemberDeclaration ::= Annotation? MemberAccessModifier? (FINAL_KEYWORD|OVERRIDE_KEYWORD)? STATIC_KEYWORD? TypeDeclaration IDENTIFIER (FieldExtension|MethodParameterExtension)
@@ -109,7 +123,7 @@ PrimitiveType ::= NUMBER | STRING | TRUE_LITERAL | FALSE_LITERAL
 CollectionInitializer ::= LBRACE CollectionInitializerItem RBRACE
 CollectionInitializerItem ::= (RhsExpression (ASSIGNMENT ANGLE_RIGHT RhsExpression) ?) (COMMA RhsExpression (ASSIGNMENT ANGLE_RIGHT RhsExpression) ?)*
 
-ValueRetrievingExpression ::= MethodCallOrVariable | NewClassExpression
+ValueRetrievingExpression ::= MethodCallOrVariable | NewClassExpression (DOT ValueRetrievingExpression)?
 
 NewClassExpression ::= NEW_KEYWORD TypeDeclaration (ArgumentList|CollectionInitializer);
 
@@ -127,16 +141,28 @@ ParameterUnit ::= IDENTIFIER IDENTIFIER
 
 MethodBlock ::= LBRACE LocalContents* RBRACE
 
-LocalContents ::= LocalVariableDeclaration | LocalVariableORMethodCall | IfStatement | TryCatchBlock;
+LocalContents ::= LocalVariableDeclaration | LocalVariableORMethodCall | IfStatement | TryCatchBlock | SwitchStatement | ReturnStatement;
+ReturnStatement ::= RETURN_KEYWORD RhsExpression SEMICOLON
 
 LocalVariableDeclaration ::= TypeDeclaration IDENTIFIER (MoreCommaSeperatedIds)? SEMICOLON
 LocalVariableORMethodCall ::= RhsExpression (SEMICOLON|LocalVariableRightSide)
-LocalVariableRightSide ::= RhsExpression ASSIGNMENT RhsExpression+ SEMICOLON
+LocalVariableRightSide ::= ASSIGNMENT RhsExpression SEMICOLON
 
 IfStatement ::= IF_KEYWORD LPAREN RhsExpression RPAREN LBRACE LocalContents* RBRACE (ELSE_KEYWORD IfStatement)* (ELSE_KEYWORD LBRACE LocalContents* RBRACE)?
 TryCatchBlock ::= TRY_KEYWORD LBRACE LocalContents* RBRACE CatchBlock* FinallyBlock*
 CatchBlock ::= CATCH_KEYWORD LPAREN TypeDeclaration IDENTIFIER RPAREN LBRACE LocalContents* RBRACE
 FinallyBlock ::= FINALLY_KEYWORD LBRACE LocalContents* RBRACE
+
+
+SwitchStatement ::= SWITCH_KEYWORD ON_KEYWORD SwitchType SwitchBlock
+SwitchBlock ::= LBRACE SwitchBody RBRACE
+SwitchBody ::= (SwitchWhenBlock)*
+
+SwitchWhenBlock ::= when (IDENTIFIER? ValueList | ELSE_KEYWORD) LBRACE LocalContents* RBRACE
+
+ValueList ::= RhsExpression (COMMA RhsExpression)*
+
+SwitchType ::= STRING | NUMBER | IDENTIFIER
 
 /* All type of primary expressions */
 //logical
