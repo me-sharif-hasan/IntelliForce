@@ -1,0 +1,177 @@
+{
+  parserClass="com.iishanto.language.sf.grammar.helper.SfApexParser"
+
+  extends="com.intellij.extapi.psi.ASTWrapperPsiElement"
+
+  psiClassPrefix="Simple"
+  psiImplClassSuffix="Impl"
+
+  elementTypeClass="com.iishanto.language.sf.grammar.helper.SfApexElementType"
+  tokenTypeClass="com.iishanto.language.sf.grammar.helper.SfApexTokenType"
+
+  tokens = [
+    VIRTUAL_KEYWORD = 'virtual'
+    ABSTRACT_KEYWORD = 'abstract'
+    WITH_KEYWORD = 'with'
+    INTERFACE_KEYWORD = 'interface'
+    CLASS_KEYWORD = 'class'
+    SHARING_KEYWORD = 'sharing'
+    WITHOUT_KEYWORD = 'without'
+    INHERITED_KEYWORD = 'inherited'
+    PUBLIC_KEYWORD = 'public'
+    PRIVATE_KEYWORD = 'private'
+    GLOBAL_KEYWORD = 'global'
+    PROTECTED_KEYWORD = 'protected'
+    FINAL_KEYWORD = 'final'
+    STATIC_KEYWORD = 'static'
+    IMPLEMENTS_KEYWORD = 'implements'
+    EXTENDS_KEYWORD = 'extends'
+    GET_KEYWORD = 'get'
+    SET_KEYWORD = 'set'
+    TRUE_LITERAL = 'true'
+    FALSE_LITERAL = 'false'
+    NEW_KEYWORD = 'new'
+    IF_KEYWORD = 'if'
+    ELSE_KEYWORD = 'else'
+    FOR_KEYWORD = 'for'
+    WHILE_KEYWORD = 'while'
+    DO_KEYWORD = 'do'
+    TRY_KEYWORD = 'try'
+    CATCH_KEYWORD = 'catch'
+    FINALLY_KEYWORD = 'finally'
+    RETURN_KEYWORD = 'return'
+    SWITCH_KEYWORD = 'switch'
+    CASE_KEYWORD = 'case'
+    DEFAULT_KEYWORD = 'default'
+    BREAK_KEYWORD = 'break'
+    CONTINUE_KEYWORD = 'continue'
+    THROW_KEYWORD = 'throw'
+    THIS_KEYWORD = 'this'
+    SUPER_KEYWORD = 'super'
+    ON_KEYWORD = 'on'
+    OVERRIDE_KEYWORD = 'override'
+    WHITESPACE = 'regexp:\s+'
+    LBRACE = '{'
+    RBRACE = '}'
+    LPAREN = '('
+    RPAREN = ')'
+    LBRACKET = '['
+    RBRACKET = ']'
+    COMMA = ','
+    DOT = '.'
+    COLON = ':'
+    EQUAL = '=='
+    NOT_EQUAL = '!='
+    GREATER_EQUAL = '>='
+    LESS_EQUAL = '<='
+    INCREMENT = '++'
+    DECREMENT = '--'
+    GREATER = '>'
+    LESS = '<'
+    PLUS = '+'
+    MINUS = '-'
+    MULTIPLY = '*'
+    DIVIDE = '/'
+    AND = '&&'
+    OR = '||'
+    NOT = '!'
+    BITWISE_AND = '&'
+    ASSIGN = '='
+    SEMICOLON = ';'
+    AT = '@'
+    NUMBER = 'regexp:[0-9]+(\.?[0-9])*L?'
+    SOQL = 'regexp:SELECT (.*?)(?=])'
+    SOSL = 'regexp:FIND (.*?)(?=])'
+    IDENTIFIER = 'regexp:[a-zA-Z_][a-zA-Z0-9_$]*'
+    STRING = "regexp:'.*?'"
+    ARRAY_BRACKET = '[]'
+  ]
+}
+
+ApexFile ::= Annotation? ApexClassUnit
+
+ApexClassUnit ::= AccessModifier Modifiers (ClassDefinition | InterfaceDefinition)
+ClassDefinition ::= CLASS_KEYWORD TypeIdentifier Inheritance ClassBody
+InterfaceDefinition ::= INTERFACE_KEYWORD TypeIdentifier Inheritance InterfaceBody
+Modifiers ::= Modifier*
+Modifier ::= VIRTUAL_KEYWORD | ABSTRACT_KEYWORD | SharingClause
+SharingClause ::= (WITH_KEYWORD | WITHOUT_KEYWORD | INHERITED_KEYWORD) SHARING_KEYWORD
+Inheritance ::= (EXTENDS_KEYWORD ParentClass)? ImplementsClause?
+AccessModifier ::= PUBLIC_KEYWORD | GLOBAL_KEYWORD
+ImplementsClause ::= IMPLEMENTS_KEYWORD InterfaceIdentifier (COMMA InterfaceIdentifier)*
+ParentClass ::= QualifiedIdentifier
+InterfaceIdentifier ::= QualifiedIdentifier
+QualifiedIdentifier ::= IDENTIFIER (DOT IDENTIFIER)?
+
+ClassBody ::= LBRACE (ClassMember | ApexClassUnit| ClassBody)* RBRACE
+InterfaceBody ::= LBRACE (InterfaceMember | ApexClassUnit)* RBRACE
+
+/* Member declaration */
+ClassMember ::= MemberSignature (FieldDefinition | MethodDefinition | ConstructorDefinition)
+
+MemberSignature ::= Annotation? MemberAccessModifier? (FINAL_KEYWORD | OVERRIDE_KEYWORD)? STATIC_KEYWORD? (MethodName | ConstructorName)
+MethodName ::= TypeIdentifier IDENTIFIER
+ConstructorName ::= IDENTIFIER
+
+InterfaceMember ::= MemberSignature (FieldDefinition | MethodPrototype) SEMICOLON
+
+ConstructorDefinition ::= ConstructorPrototype MethodBody
+ConstructorPrototype ::= LPAREN Parameters RPAREN
+MethodDefinition ::= MethodPrototype MethodBody
+MethodPrototype ::= LPAREN Parameters RPAREN
+Parameters ::= (Parameter (COMMA Parameter)*)?
+Parameter ::= TypeIdentifier IDENTIFIER
+MethodBody ::= LBRACE CodeBlock* RBRACE
+
+FieldDefinition ::= AdditionalFields? SEMICOLON | LBRACE PropertyAccessors? RBRACE
+MemberAccessModifier ::= PUBLIC_KEYWORD | PRIVATE_KEYWORD | PROTECTED_KEYWORD | GLOBAL_KEYWORD
+TypeIdentifier ::= (PrimitiveType | QualifiedIdentifier) (GenericType | ARRAY_BRACKET)*
+PrimitiveType ::= 'Integer' | 'String' | 'Boolean' | 'Double' | 'Long' | 'Date' | 'Datetime' | 'Id' | 'Object' | 'Blob'
+GenericType ::= LESS TypeIdentifier (COMMA TypeIdentifier)* GREATER
+AdditionalFields ::= (FieldInitializer | (COMMA IDENTIFIER FieldInitializer?)+)
+FieldInitializer ::= ASSIGN ValueExpression
+PropertyAccessors ::= GetAccessor SEMICOLON SetAccessor SEMICOLON | SetAccessor SEMICOLON GetAccessor SEMICOLON | GetAccessor SEMICOLON | SetAccessor SEMICOLON
+GetAccessor ::= GET_KEYWORD
+SetAccessor ::= SET_KEYWORD
+
+ValueExpression ::= PrimaryExpression (LogicalOperator | BinaryOperator)?
+PrimaryExpression ::= LiteralValue | ReferenceExpression | QueryExpression | PrefixIncrement
+QueryExpression ::= LBRACKET (SOQL | SOSL) RBRACKET
+LiteralValue ::= NUMBER | STRING | TRUE_LITERAL | FALSE_LITERAL
+CollectionInitializer ::= LBRACE CollectionElements? RBRACE
+CollectionElements ::= (ValueExpression (ASSIGN GREATER ValueExpression)?) (COMMA ValueExpression (ASSIGN GREATER ValueExpression)?)*
+ReferenceExpression ::= MemberAccess (DOT ReferenceExpression)? | ObjectCreation (DOT ReferenceExpression)?
+ObjectCreation ::= NEW_KEYWORD TypeIdentifier (Arguments | CollectionInitializer)
+MemberAccess ::= IDENTIFIER ArrayAccess? (IncrementOperator | MethodInvocation)?
+
+ArrayAccess ::= LBRACKET ValueExpression RBRACKET
+
+MethodInvocation ::= (DOT (IDENTIFIER|GET_KEYWORD|SET_KEYWORD))? Arguments?
+Arguments ::= LPAREN ArgumentList? RPAREN
+ArgumentList ::= ValueExpression SObjectInitializer? (COMMA ValueExpression SObjectInitializer?)*
+SObjectInitializer ::= ASSIGN ValueExpression
+Annotation ::= AT MemberAccess
+
+CodeBlock ::= VariableDefinition | ExpressionStatement | ReturnStatement | ControlFlow
+ControlFlow ::= TryCatch | SwitchBlock | ForLoop | IfBlock
+ReturnStatement ::= RETURN_KEYWORD ValueExpression SEMICOLON
+VariableDefinition ::= TypeIdentifier IDENTIFIER (AdditionalFields? SEMICOLON | IteratorExpression?)
+ExpressionStatement ::= ValueExpression (SEMICOLON | Assignment)
+Assignment ::= ASSIGN ValueExpression SEMICOLON
+IfBlock ::= IF_KEYWORD LPAREN ValueExpression RPAREN LBRACE CodeBlock* RBRACE (ELSE_KEYWORD IfBlock)* (ELSE_KEYWORD LBRACE CodeBlock* RBRACE)?
+TryCatch ::= TRY_KEYWORD LBRACE CodeBlock* RBRACE CatchClause* FinallyClause*
+CatchClause ::= CATCH_KEYWORD LPAREN TypeIdentifier IDENTIFIER RPAREN LBRACE CodeBlock* RBRACE
+FinallyClause ::= FINALLY_KEYWORD LBRACE CodeBlock* RBRACE
+SwitchBlock ::= SWITCH_KEYWORD ON_KEYWORD SwitchExpression SwitchCases
+SwitchCases ::= LBRACE CaseClause* RBRACE
+CaseClause ::= WHEN (IDENTIFIER? CaseValues | ELSE_KEYWORD) LBRACE CodeBlock* RBRACE
+CaseValues ::= ValueExpression (COMMA ValueExpression)*
+SwitchExpression ::= STRING | NUMBER | IDENTIFIER
+ForLoop ::= FOR_KEYWORD LPAREN LoopCondition RPAREN LBRACE CodeBlock* RBRACE
+LoopCondition ::= IteratorExpression | TraditionalFor
+IteratorExpression ::= VariableDefinition COLON ValueExpression
+TraditionalFor ::= VariableDefinition? SEMICOLON ValueExpression? SEMICOLON ValueExpression?
+LogicalOperator ::= EQUAL ValueExpression | LESS ValueExpression
+IncrementOperator ::= INCREMENT | DECREMENT
+PrefixIncrement ::= (INCREMENT | DECREMENT) ValueExpression
+BinaryOperator ::= (PLUS | MINUS | MULTIPLY | DIVIDE) ValueExpression

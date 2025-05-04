@@ -61,9 +61,22 @@
                   COMMA = ','
                   DOT = '.'
                   EQUAL = '=='
+                    NOT_EQUAL = '!='
+                    GREATER_EQUAL = '>='
+                    LESS_EQUAL = '<='
+                    INCREMENT = '++'
+                    DECREMENT = '--'
+                    GREATER = '>'
+                    LESS = '<'
+                    PLUS = '+'
+                    MINUS = '-'
+                    MULTIPLY = '*'
+                    DIVIDE = '/'
+                    AND = '&&'
+                    OR = '||'
+                    NOT = '!'
+                    BITWISE_AND = '&'
                   ASSIGNMENT = '='
-                  ANGLE_LEFT = '<'
-                  ANGLE_RIGHT = '>'
                   SEMICOLON = ';'
                   AT = '@'
                   NUMBER = 'regexp:[0-9]+(\.?[0-9])*L?'
@@ -77,7 +90,7 @@
 }
 
 
-SfApex ::= ApexClassFile
+SfApex ::= Annotation? ApexClassFile
 
 ApexClassFile ::= ClassAccessModifier ClassModifiers (ClassDeclaration|InterfaceDeclaration)
 ClassDeclaration ::= CLASS_KEYWORD TypeDeclaration ClassInheritance ClassBlock
@@ -92,20 +105,21 @@ ImplementsInterfaceList ::= IMPLEMENTES_KEYWORD ImplementsOrExtendClassNameForma
 ImplementsOrExtendClassNameFormat ::= IDENTIFIER (DOT IDENTIFIER)?
 
 
-ClassBlock ::= LBRACE (MemberDeclaration|ApexClassFile)* RBRACE
-
+ClassBlock ::= LBRACE (ConstructorDeclaration|ClassMemberDeclaration|ApexClassFile)* RBRACE
+ConstructorDeclaration ::= TypeDeclaration LPAREN ParameterList RPAREN LBRACE LocalContents* RBRACE
 //TODO: add support for interface
-InterfaceBlock ::= LBRACE (MemberDeclaration|ApexClassFile)* RBRACE
+InterfaceBlock ::= LBRACE (InterfaceMemberDeclaration|ApexClassFile)* RBRACE
 
 /*Field declaration part*/
-MemberDeclaration ::= Annotation? MemberAccessModifier? (FINAL_KEYWORD|OVERRIDE_KEYWORD)? STATIC_KEYWORD? TypeDeclaration IDENTIFIER (FieldExtension|MethodParameterExtension)
-
+MemberHeader ::=Annotation? MemberAccessModifier? ((FINAL_KEYWORD|OVERRIDE_KEYWORD)? STATIC_KEYWORD? TypeDeclaration? IDENTIFIER)
+ ClassMemberDeclaration ::= ( MemberHeader) (FieldExtension|MethodParameterExtension)
+ InterfaceMemberDeclaration ::= MemberHeader (FieldExtension|MethodParameterBlock) SEMICOLON
 
 
 FieldExtension ::= (MoreCommaSeperatedIds? SEMICOLON|LBRACE GetSetGroup? RBRACE)
 MemberAccessModifier ::= (PUBLIC_KEYWORD|PRIVATE_KEYWORD|PROTECTED_KEYWORD|GLOBAL_KEYWORD)
 
-TypeDeclaration ::= IDENTIFIER (DOT IDENTIFIER)? (ANGLE_LEFT TypeDeclaration (COMMA TypeDeclaration)? ANGLE_RIGHT)?
+TypeDeclaration ::= IDENTIFIER (DOT IDENTIFIER)? (LESS TypeDeclaration (COMMA TypeDeclaration)? GREATER)?
 
 MoreCommaSeperatedIds ::= ((ASSIGNMENT RhsExpression)) | (COMMA IDENTIFIER (ASSIGNMENT RhsExpression)?)+
 
@@ -113,9 +127,9 @@ GetSetGroup ::= GetMethod SEMICOLON SetMethod SEMICOLON| SetMethod SEMICOLON Get
 GetMethod ::= GET_METHOD_KEYWORD
 SetMethod ::= SET_METHOD_KEYWORD
 
-RhsExpression ::=  BaseExpression LogicalExpression?
+RhsExpression ::=  BaseExpression (LogicalExpression|BinaryOperation)?
 
-BaseExpression ::= PrimitiveType | ValueRetrievingExpression | DatabaseExpression
+BaseExpression ::= PrimitiveType | ValueRetrievingExpression | DatabaseExpression | IncrementOrDecrementPreFix
 DatabaseExpression ::= SQURE_LEFT (SOQL | SOSL) SQURE_RIGHT
 
 PrimitiveType ::= NUMBER | STRING | TRUE_LITERAL | FALSE_LITERAL
@@ -123,27 +137,33 @@ PrimitiveType ::= NUMBER | STRING | TRUE_LITERAL | FALSE_LITERAL
 CollectionInitializer ::= LBRACE CollectionInitializerItem RBRACE
 CollectionInitializerItem ::= (RhsExpression (ASSIGNMENT ANGLE_RIGHT RhsExpression) ?) (COMMA RhsExpression (ASSIGNMENT ANGLE_RIGHT RhsExpression) ?)*
 
-ValueRetrievingExpression ::= MethodCallOrVariable | NewClassExpression (DOT ValueRetrievingExpression)?
+ValueRetrievingExpression ::= MethodCallOrVariable (DOT ValueRetrievingExpression)? | NewClassExpression (DOT ValueRetrievingExpression)?
 
 NewClassExpression ::= NEW_KEYWORD TypeDeclaration (ArgumentList|CollectionInitializer);
 
-MethodCallOrVariable ::= IDENTIFIER (DOT IDENTIFIER)? ArgumentList?
+MethodCallOrVariable ::= IDENTIFIER (IncrementOrDecrement | MethodCallMore)
+MethodCallMore ::=(DOT IDENTIFIER)? ArgumentList?
+
 
 ArgumentList ::= LPAREN (CommaSeperatedExpressions)? RPAREN
 CommaSeperatedExpressions ::=(RhsExpression SObjectInitializationUnit? (COMMA RhsExpression SObjectInitializationUnit?)*)
 SObjectInitializationUnit ::= ASSIGNMENT RhsExpression
 
 Annotation ::= AT MethodCallOrVariable
-MethodParameterExtension ::= LPAREN ParameterList RPAREN MethodBlock
+MethodParameterExtension ::= MethodParameterBlock MethodBlock
+MethodParameterBlock ::= LPAREN ParameterList RPAREN
 
 ParameterList ::= (ParameterUnit (COMMA ParameterUnit)*)?
 ParameterUnit ::= IDENTIFIER IDENTIFIER
 
 MethodBlock ::= LBRACE LocalContents* RBRACE
 
-LocalContents ::= LocalVariableDeclaration | LocalVariableORMethodCall | IfStatement | TryCatchBlock | SwitchStatement | ReturnStatement;
-ReturnStatement ::= RETURN_KEYWORD RhsExpression SEMICOLON
 
+LocalContents ::= Statement | IfStatement | ControlStructure;
+ControlStructure ::=TryCatchBlock | SwitchStatement | ForStatement
+Statement ::= LocalVariableDeclaration | LocalVariableORMethodCall | ReturnStatement
+
+ReturnStatement ::= RETURN_KEYWORD RhsExpression SEMICOLON
 LocalVariableDeclaration ::= TypeDeclaration IDENTIFIER (MoreCommaSeperatedIds)? SEMICOLON
 LocalVariableORMethodCall ::= RhsExpression (SEMICOLON|LocalVariableRightSide)
 LocalVariableRightSide ::= ASSIGNMENT RhsExpression SEMICOLON
@@ -164,6 +184,14 @@ ValueList ::= RhsExpression (COMMA RhsExpression)*
 
 SwitchType ::= STRING | NUMBER | IDENTIFIER
 
+
+
+ForStatement ::= FOR_KEYWORD LPAREN ForLoopCondition RPAREN LBRACE LocalContents* RBRACE
+ForLoopCondition ::= Statement? LocalContents? RhsExpression?
+
 /* All type of primary expressions */
 //logical
-LogicalExpression ::= EQUAL RhsExpression
+LogicalExpression ::= EQUAL RhsExpression | LESS RhsExpression
+IncrementOrDecrement ::= INCREMENT | DECREMENT
+IncrementOrDecrementPreFix ::= (INCREMENT | DECREMENT) RhsExpression
+BinaryOperation ::= (PLUS | MINUS | MULTIPLY | DIVIDE) RhsExpression
