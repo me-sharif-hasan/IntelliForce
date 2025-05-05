@@ -10,6 +10,7 @@
   tokenTypeClass="com.iishanto.language.sf.grammar.helper.SfApexTokenType"
 
   tokens = [
+    COMMENT = 'regexp:(//.*|(?s)/\*.*?\*/)'
     VIRTUAL_KEYWORD = 'virtual'
     ABSTRACT_KEYWORD = 'abstract'
     WITH_KEYWORD = 'with'
@@ -33,6 +34,7 @@
     NEW_KEYWORD = 'new'
     IF_KEYWORD = 'if'
     ELSE_KEYWORD = 'else'
+    WHEN_KEYWORD = 'when'
     FOR_KEYWORD = 'for'
     WHILE_KEYWORD = 'while'
     DO_KEYWORD = 'do'
@@ -43,6 +45,7 @@
     SWITCH_KEYWORD = 'switch'
     CASE_KEYWORD = 'case'
     DEFAULT_KEYWORD = 'default'
+    ENUM_KEYWORD = 'enum'
     BREAK_KEYWORD = 'break'
     CONTINUE_KEYWORD = 'continue'
     THROW_KEYWORD = 'throw'
@@ -91,7 +94,11 @@
 ApexFile ::= Annotation? ApexClassUnit
 
 ApexClassUnit ::= AccessModifier Modifiers (ClassDefinition | InterfaceDefinition)
-ClassDefinition ::= CLASS_KEYWORD TypeIdentifier Inheritance ClassBody
+ClassDefinition ::= (ENUM_KEYWORD TypeIdentifier EnumBody)|(CLASS_KEYWORD TypeIdentifier Inheritance ClassBody)
+EnumBody ::= LBRACE EnumItems RBRACE
+EnumItems ::= EnumItem (COMMA EnumItem)*
+EnumItem ::= IDENTIFIER
+
 InterfaceDefinition ::= INTERFACE_KEYWORD TypeIdentifier Inheritance InterfaceBody
 Modifiers ::= Modifier*
 Modifier ::= VIRTUAL_KEYWORD | ABSTRACT_KEYWORD | SharingClause
@@ -121,7 +128,7 @@ MethodDefinition ::= MethodPrototype MethodBody
 MethodPrototype ::= LPAREN Parameters RPAREN
 Parameters ::= (Parameter (COMMA Parameter)*)?
 Parameter ::= TypeIdentifier IDENTIFIER
-MethodBody ::= LBRACE CodeBlock* RBRACE
+MethodBody ::= LBRACE CodeBlock* RBRACE | Statements
 
 FieldDefinition ::= AdditionalFields? SEMICOLON | LBRACE PropertyAccessors? RBRACE
 MemberAccessModifier ::= PUBLIC_KEYWORD | PRIVATE_KEYWORD | PROTECTED_KEYWORD | GLOBAL_KEYWORD
@@ -129,12 +136,13 @@ TypeIdentifier ::= (PrimitiveType | QualifiedIdentifier) (GenericType | ARRAY_BR
 PrimitiveType ::= 'Integer' | 'String' | 'Boolean' | 'Double' | 'Long' | 'Date' | 'Datetime' | 'Id' | 'Object' | 'Blob'
 GenericType ::= LESS TypeIdentifier (COMMA TypeIdentifier)* GREATER
 AdditionalFields ::= (FieldInitializer | (COMMA IDENTIFIER FieldInitializer?)+)
-FieldInitializer ::= ASSIGN ValueExpression
+FieldInitializer ::= ASSIGN ValueExpression AdditionalFields?
 PropertyAccessors ::= GetAccessor SEMICOLON SetAccessor SEMICOLON | SetAccessor SEMICOLON GetAccessor SEMICOLON | GetAccessor SEMICOLON | SetAccessor SEMICOLON
 GetAccessor ::= GET_KEYWORD
 SetAccessor ::= SET_KEYWORD
 
-ValueExpression ::= PrimaryExpression (LogicalOperator | BinaryOperator)?
+ValueExpression ::= TypeCastExpression? (ReferenceExpression|PrimaryExpression) (LogicalOperator | BinaryOperator)?
+TypeCastExpression ::= LPAREN TypeIdentifier RPAREN
 PrimaryExpression ::= LiteralValue | ReferenceExpression | QueryExpression | PrefixIncrement
 QueryExpression ::= LBRACKET (SOQL | SOSL) RBRACKET
 LiteralValue ::= NUMBER | STRING | TRUE_LITERAL | FALSE_LITERAL
@@ -142,36 +150,39 @@ CollectionInitializer ::= LBRACE CollectionElements? RBRACE
 CollectionElements ::= (ValueExpression (ASSIGN GREATER ValueExpression)?) (COMMA ValueExpression (ASSIGN GREATER ValueExpression)?)*
 ReferenceExpression ::= MemberAccess (DOT ReferenceExpression)? | ObjectCreation (DOT ReferenceExpression)?
 ObjectCreation ::= NEW_KEYWORD TypeIdentifier (Arguments | CollectionInitializer)
-MemberAccess ::= IDENTIFIER ArrayAccess? (IncrementOperator | MethodInvocation)?
+MemberAccess ::= (IDENTIFIER|LiteralValue) ArrayAccess? (IncrementOperator | MethodInvocation)?
 
 ArrayAccess ::= LBRACKET ValueExpression RBRACKET
 
-MethodInvocation ::= (DOT (IDENTIFIER|GET_KEYWORD|SET_KEYWORD))? Arguments?
+MethodInvocation ::= (DOT (IDENTIFIER|GET_KEYWORD|CLASS_KEYWORD|SET_KEYWORD))? Arguments?
 Arguments ::= LPAREN ArgumentList? RPAREN
 ArgumentList ::= ValueExpression SObjectInitializer? (COMMA ValueExpression SObjectInitializer?)*
 SObjectInitializer ::= ASSIGN ValueExpression
 Annotation ::= AT MemberAccess
 
-CodeBlock ::= VariableDefinition | ExpressionStatement | ReturnStatement | ControlFlow
+CodeBlock ::=  Statements | MethodBody
+Statements ::= VariableDefinition | ExpressionStatement | ReturnStatement | ControlFlow
 ControlFlow ::= TryCatch | SwitchBlock | ForLoop | IfBlock
 ReturnStatement ::= RETURN_KEYWORD ValueExpression SEMICOLON
-VariableDefinition ::= TypeIdentifier IDENTIFIER (AdditionalFields? SEMICOLON | IteratorExpression?)
+VariableDefinition ::= VariableDefinitionExpression SEMICOLON
+VariableDefinitionExpression ::= TypeIdentifier IDENTIFIER AdditionalFields?
 ExpressionStatement ::= ValueExpression (SEMICOLON | Assignment)
 Assignment ::= ASSIGN ValueExpression SEMICOLON
-IfBlock ::= IF_KEYWORD LPAREN ValueExpression RPAREN LBRACE CodeBlock* RBRACE (ELSE_KEYWORD IfBlock)* (ELSE_KEYWORD LBRACE CodeBlock* RBRACE)?
-TryCatch ::= TRY_KEYWORD LBRACE CodeBlock* RBRACE CatchClause* FinallyClause*
-CatchClause ::= CATCH_KEYWORD LPAREN TypeIdentifier IDENTIFIER RPAREN LBRACE CodeBlock* RBRACE
-FinallyClause ::= FINALLY_KEYWORD LBRACE CodeBlock* RBRACE
+IfBlock ::= IF_KEYWORD LPAREN ValueExpression RPAREN ControlFlowBody (ELSE_KEYWORD IfBlock)* (ELSE_KEYWORD ControlFlowBody)?
+ControlFlowBody ::= (LBRACE CodeBlock* RBRACE) | CodeBlock | SEMICOLON
+TryCatch ::= TRY_KEYWORD ControlFlowBody CatchClause* FinallyClause*
+CatchClause ::= CATCH_KEYWORD LPAREN TypeIdentifier IDENTIFIER RPAREN ControlFlowBody
+FinallyClause ::= FINALLY_KEYWORD ControlFlowBody
 SwitchBlock ::= SWITCH_KEYWORD ON_KEYWORD SwitchExpression SwitchCases
 SwitchCases ::= LBRACE CaseClause* RBRACE
-CaseClause ::= WHEN (IDENTIFIER? CaseValues | ELSE_KEYWORD) LBRACE CodeBlock* RBRACE
+CaseClause ::= WHEN_KEYWORD (CaseValues | ELSE_KEYWORD) ControlFlowBody
 CaseValues ::= ValueExpression (COMMA ValueExpression)*
 SwitchExpression ::= STRING | NUMBER | IDENTIFIER
-ForLoop ::= FOR_KEYWORD LPAREN LoopCondition RPAREN LBRACE CodeBlock* RBRACE
-LoopCondition ::= IteratorExpression | TraditionalFor
-IteratorExpression ::= VariableDefinition COLON ValueExpression
-TraditionalFor ::= VariableDefinition? SEMICOLON ValueExpression? SEMICOLON ValueExpression?
-LogicalOperator ::= EQUAL ValueExpression | LESS ValueExpression
+ForLoop ::= FOR_KEYWORD LPAREN LoopCondition RPAREN ControlFlowBody
+LoopCondition ::= VariableDefinitionExpression (IteratorExpression|TraditionalFor)
+IteratorExpression ::= COLON ValueExpression
+TraditionalFor ::= SEMICOLON ValueExpression? SEMICOLON ValueExpression?
+LogicalOperator ::= EQUAL ValueExpression | LESS ValueExpression | NOT ValueExpression
 IncrementOperator ::= INCREMENT | DECREMENT
 PrefixIncrement ::= (INCREMENT | DECREMENT) ValueExpression
 BinaryOperator ::= (PLUS | MINUS | MULTIPLY | DIVIDE) ValueExpression
