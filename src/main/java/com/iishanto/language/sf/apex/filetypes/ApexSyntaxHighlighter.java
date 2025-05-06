@@ -17,6 +17,7 @@
 package com.iishanto.language.sf.apex.filetypes;
 
 import com.iishanto.language.sf.lexer.ApexLexer;
+import com.iishanto.language.sf.lexer.SfApexLexer;
 import com.intellij.lexer.Lexer;
 import com.intellij.openapi.editor.DefaultLanguageHighlighterColors;
 import com.intellij.openapi.editor.HighlighterColors;
@@ -25,6 +26,7 @@ import com.intellij.openapi.fileTypes.SyntaxHighlighterBase;
 import com.intellij.psi.TokenType;
 import com.intellij.psi.tree.IElementType;
 import com.intellij.psi.tree.TokenSet;
+import generated.GeneratedTypes;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
@@ -39,39 +41,38 @@ public class ApexSyntaxHighlighter extends SyntaxHighlighterBase {
     static {
         textAttributeMap = new HashMap<>();
         fillMap(textAttributeMap, getKeywordTokens(), DefaultLanguageHighlighterColors.KEYWORD);
-        textAttributeMap.put(COMMA, DefaultLanguageHighlighterColors.COMMA);
-        textAttributeMap.put(SEMICOLON, DefaultLanguageHighlighterColors.SEMICOLON);
-        textAttributeMap.put(DOT, DefaultLanguageHighlighterColors.DOT);
-        textAttributeMap.put(CHARACTER_LITERAL, DefaultLanguageHighlighterColors.STRING);
-        fillMap(textAttributeMap, TokenSet.create(LBRACE, RBRACE), DefaultLanguageHighlighterColors.BRACES);
-        fillMap(textAttributeMap, TokenSet.create(LPARENTH, RPARENTH), DefaultLanguageHighlighterColors.PARENTHESES);
-        fillMap(textAttributeMap, TokenSet.create(LBRACKET, RBRACKET), DefaultLanguageHighlighterColors.BRACKETS);
-        fillMap(textAttributeMap, TokenSet.create(INTEGER_LITERAL, LONG_LITERAL), DefaultLanguageHighlighterColors.NUMBER);
-        textAttributeMap.put(STRING_LITERAL, DefaultLanguageHighlighterColors.STRING);
-        textAttributeMap.put(IDENTIFIER, DefaultLanguageHighlighterColors.IDENTIFIER);
-        textAttributeMap.put(C_STYLE_COMMENT, DefaultLanguageHighlighterColors.BLOCK_COMMENT);
-        textAttributeMap.put(END_OF_LINE_COMMENT, DefaultLanguageHighlighterColors.LINE_COMMENT);
+        textAttributeMap.put(GeneratedTypes.COMMA, DefaultLanguageHighlighterColors.COMMA);
+        textAttributeMap.put(GeneratedTypes.SEMICOLON, DefaultLanguageHighlighterColors.SEMICOLON);
+        textAttributeMap.put(GeneratedTypes.DOT, DefaultLanguageHighlighterColors.DOT);
+        textAttributeMap.put(GeneratedTypes.STRING, DefaultLanguageHighlighterColors.STRING);
+        fillMap(textAttributeMap, TokenSet.create(GeneratedTypes.LBRACE, GeneratedTypes.RBRACE), DefaultLanguageHighlighterColors.BRACES);
+        fillMap(textAttributeMap, TokenSet.create(GeneratedTypes.LPAREN, GeneratedTypes.RPAREN), DefaultLanguageHighlighterColors.PARENTHESES);
+        fillMap(textAttributeMap, TokenSet.create(GeneratedTypes.LBRACKET, GeneratedTypes.RBRACKET), DefaultLanguageHighlighterColors.BRACKETS);
+        fillMap(textAttributeMap, TokenSet.create(GeneratedTypes.NUMBER), DefaultLanguageHighlighterColors.NUMBER);
+        textAttributeMap.put(GeneratedTypes.IDENTIFIER, DefaultLanguageHighlighterColors.IDENTIFIER);
+        textAttributeMap.put(GeneratedTypes.COMMENT, DefaultLanguageHighlighterColors.BLOCK_COMMENT);
         textAttributeMap.put(TokenType.BAD_CHARACTER, HighlighterColors.BAD_CHARACTER);
     }
 
     @NotNull
     @Override
     public Lexer getHighlightingLexer() {
-        return new ApexLexer();
+        return new SfApexLexer();
     }
 
     @NotNull
     @Override
     public TextAttributesKey @NotNull [] getTokenHighlights(IElementType tokenType) {
+        System.out.println("ii: Token type: " + tokenType);
         return pack(textAttributeMap.get(tokenType));
     }
 
     private static TokenSet getKeywordTokens() {
-        return TokenSet.create(CLASS_KEYWORD, TRUE_KEYWORD, FALSE_KEYWORD, PRIVATE_KEYWORD, PUBLIC_KEYWORD,
-                ABSTRACT_KEYWORD, WITH_KEYWORD, WITH_KEYWORD, EXTENDS_KEYWORD, IMPLEMENTS_KEYWORD, INTERFACE_KEYWORD,
-                VOID_KEYWORD, STATIC_KEYWORD, RETURN_KEYWORD, THROW_KEYWORD,
-                BREAK_KEYWORD, CONTINUE_KEYWORD, IF_KEYWORD, ELSE_KEYWORD, FOR_KEYWORD, WHILE_KEYWORD, TRY_KEYWORD,
-                CATCH_KEYWORD, FINALLY_KEYWORD, FINAL_KEYWORD, SUPER_KEYWORD, THIS_KEYWORD,
-                TRANSIENT_KEYWORD, ENUM_KEYWORD, NEW_KEYWORD);
+        return TokenSet.create(GeneratedTypes.CLASS_KEYWORD, GeneratedTypes.TRUE_LITERAL, GeneratedTypes.FALSE_LITERAL, GeneratedTypes.PRIVATE_KEYWORD, GeneratedTypes.PUBLIC_KEYWORD,
+                GeneratedTypes.ABSTRACT_KEYWORD, GeneratedTypes.WITH_KEYWORD, GeneratedTypes.WITH_KEYWORD, GeneratedTypes.EXTENDS_KEYWORD, GeneratedTypes.IMPLEMENTS_KEYWORD, GeneratedTypes.INTERFACE_KEYWORD,
+                GeneratedTypes.VOID_KEYWORD, GeneratedTypes.STATIC_KEYWORD, GeneratedTypes.RETURN_KEYWORD, GeneratedTypes.THROW_KEYWORD,
+                GeneratedTypes.BREAK_KEYWORD, GeneratedTypes.CONTINUE_KEYWORD, GeneratedTypes.IF_KEYWORD, GeneratedTypes.ELSE_KEYWORD, GeneratedTypes.FOR_KEYWORD, GeneratedTypes.WHILE_KEYWORD, GeneratedTypes.TRY_KEYWORD,
+                GeneratedTypes.CATCH_KEYWORD, GeneratedTypes.FINALLY_KEYWORD, GeneratedTypes.FINAL_KEYWORD, GeneratedTypes.SUPER_KEYWORD, GeneratedTypes.THIS_KEYWORD,
+                GeneratedTypes.ENUM_KEYWORD, GeneratedTypes.NEW_KEYWORD);
     }
 }

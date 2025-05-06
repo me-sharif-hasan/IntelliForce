@@ -25,17 +25,17 @@
                     fieldName="INSTANCE"
                     language="Apex"
                     extensions="apex"/>
-<!--        <lang.indentStrategy language="Apex" implementationClass="com.iishanto.language.sf.parser.ApexIntentStrategy"/>-->
-<!--        <lang.indentParser language="Apex" implementationClass="com.iishanto.language.sf.parser.ApexIntendParser"/>-->
 
             <lang.parserDefinition
                     language="Apex"
                     implementationClass="com.iishanto.language.sf.parser.ApexClassParserDefinition"/>
         <lang.formatter language="Apex" implementationClass="com.iishanto.ide.codeformatter.ApexLanguageFormattingModelBuilder"/>
-<!--        <lang.parserDefinition-->
-<!--                    language="Apex"-->
-<!--                    implementationClass="com.intellij.openapi.fileTypes.PlainTextParserDefinition"/>-->
-            <lang.syntaxHighlighterFactory
+        <extensions defaultExtensionNs="com.intellij">
+            <lang.codeStyleSettingsProvider
+                    language="Apex"
+                    implementationClass="com.intellij.ide.JavaLanguageCodeStyleSettingsProvider"/>
+        </extensions>
+        <lang.syntaxHighlighterFactory
                     language="Apex"
                     implementationClass="com.iishanto.language.sf.apex.filetypes.ApexSyntaxHighlighterFactory"/>
             <externalAnnotator
@@ -43,8 +43,7 @@
                     implementationClass="com.iishanto.ide.annotator.ApexLanguageExternalAnnotator"/>
             <postStartupActivity implementation="com.iishanto.ide.SalesforceProjectStartupActivity"/>
             <highlightErrorFilter implementation="com.iishanto.ide.filters.ErrorFilter"/>
-            <completion.contributor language="Apex" implementationClass="com.iishanto.ide.autocomplete.ApexLanguageAutoCompletionContributor"/>
-<!--            <completion.contributor language="JAVA" implementationClass="com.iishanto.ide.autocomplete.ApexLanguageAutoCompletionContributor"/>-->
+<!--            <completion.contributor language="Apex" implementationClass="com.iishanto.ide.autocomplete.ApexLanguageAutoCompletionContributor"/>-->
             <gotoDeclarationHandler implementation="com.iishanto.ide.gotodeclaration.ApexGotoDeclarationHandler"/>
             <typedHandler implementation="com.iishanto.ide.typedhandler.AutoCompleteTypedHandler"/>
             <moduleType id="SFDX_MODULE" implementationClass="com.iishanto.ide.modulebuilder.SalesforceProjectModuleType"/>

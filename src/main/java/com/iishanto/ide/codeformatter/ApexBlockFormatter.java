@@ -2,81 +2,92 @@ package com.iishanto.ide.codeformatter;
 
 import com.intellij.formatting.*;
 import com.intellij.lang.ASTNode;
-import com.intellij.psi.JavaTokenType;
+import com.intellij.psi.TokenType;
 import com.intellij.psi.formatter.common.AbstractBlock;
+import com.intellij.psi.tree.IElementType;
+import generated.GeneratedTypes;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
 
 public class ApexBlockFormatter extends AbstractBlock {
-    int blockId=0;
-    protected ApexBlockFormatter(@NotNull ASTNode node, @Nullable Wrap wrap, @Nullable Alignment alignment,int blockId) {
+    private static final Set<IElementType> INDENTED_BLOCKS = Set.of(
+//            GeneratedTypes.CLASS_BODY,
+            GeneratedTypes.METHOD_BODY,
+            GeneratedTypes.IF_STATEMENT,
+            GeneratedTypes.FOR_LOOP,
+            GeneratedTypes.WHILE_LOOP,
+            GeneratedTypes.DO_WHILE_LOOP,
+            GeneratedTypes.SWITCH_STATEMENT
+    );
+
+    private static final Set<IElementType> LINE_BREAK_BLOCKS = Set.of(
+            GeneratedTypes.METHOD_DEFINITION
+//            GeneratedTypes.CLASS_BODY
+//            GeneratedTypes.INTERFACE_DECLARATION
+    );
+
+    protected ApexBlockFormatter(@NotNull ASTNode node, @Nullable Wrap wrap, @Nullable Alignment alignment) {
         super(node, wrap, alignment);
-        this.blockId=blockId;
     }
 
-    public int getBlockId() {
-        return blockId;
-    }
-
-    private boolean isNestedScope(ASTNode astNode) {
-        String type = astNode.getElementType().toString();
-        return (
-                type.contains("JSHELL_ROOT_CLASS") ||
-                        type.contains("METHOD_DECLARATION") ||
-                        type.contains("FIELD_DECLARATION") ||
-                        type.contains("BLOCK_STATEMENT")
-        );
-    }
-    List <ASTNode> tokenStream = new java.util.ArrayList<>();
-    Map<Integer,Boolean> blockTypeMap=new HashMap<>();
     @Override
     protected List<Block> buildChildren() {
-        ASTNode astNode = myNode.getFirstChildNode();
-        ASTNode []allChildren = myNode.getChildren(null);
-        if(allChildren.length>0){
-            System.out.println("All children: "+allChildren[0].getElementType()+" "+allChildren[0].getElementType().getClass().getName());
-            tokenStream.clear();
-            blockTypeMap.clear();
-        }
-        List<Block>  blocks= new java.util.ArrayList<>();
-        while (astNode != null) {
-            if(!astNode.getElementType().equals(JavaTokenType.WHITE_SPACE)) {
-                System.out.println("Build children called "+astNode.getElementType()+" "+astNode.getElementType().getClass().getName());
-                tokenStream.add(astNode);
-                blocks.add(new ApexBlockFormatter(astNode, Wrap.createWrap(WrapType.NONE, false), null,tokenStream.size()));
+        List<Block> blocks = new ArrayList<>();
+        ASTNode child = myNode.getFirstChildNode();
+        while (child != null) {
+            IElementType elementType = child.getElementType();
+            if (elementType != TokenType.WHITE_SPACE) {
+                Wrap wrap = null;
+                boolean needsLineBreak = LINE_BREAK_BLOCKS.contains(elementType) || INDENTED_BLOCKS.contains(elementType);
+                if (needsLineBreak) {
+                    wrap = Wrap.createWrap(WrapType.NORMAL, true);
+                }
+                blocks.add(new ApexBlockFormatter(child, wrap, null));
             }
-            astNode = astNode.getTreeNext();
+            child = child.getTreeNext();
         }
         return blocks;
     }
 
-    public boolean shouldBreakLine(Block block) {
-        if (block instanceof ApexBlockFormatter blockFormatterForApex&&blockFormatterForApex.getBlockId()>=2) {
-            if(tokenStream.get(blockFormatterForApex.getBlockId()-2)!=null&&tokenStream.get(blockFormatterForApex.getBlockId()-2).getElementType().equals(JavaTokenType.LBRACE)){
-                return true;
-            }
-            if(tokenStream.get(blockFormatterForApex.getBlockId()-2)!=null&&tokenStream.get(blockFormatterForApex.getBlockId()-2).getElementType().equals(JavaTokenType.SEMICOLON)){
-                return true;
-            }
+    @Override
+    public @Nullable Spacing getSpacing(@Nullable Block block, @NotNull Block block1) {
+        if (!(block1 instanceof ApexBlockFormatter apexBlock)) {
+            return null;
         }
-        return false;
+
+        IElementType type = apexBlock.getNode().getElementType();
+        if (LINE_BREAK_BLOCKS.contains(type)) {
+            return Spacing.createSpacing(0, 0, 2, true, 1); // Two line breaks before methods/classes
+        }
+        if (INDENTED_BLOCKS.contains(type)) {
+            return Spacing.createSpacing(0, 0, 1, true, 1); // One line break for blocks
+        }
+        if (type == GeneratedTypes.COMMENT) {
+            return Spacing.createSpacing(0, 0, 1, false, 0); // No extra lines after comments
+        }
+        if (type == GeneratedTypes.RBRACE) {
+            return Spacing.createSpacing(0, 0, 1, true, 0); // Line break after braces
+        }
+        return Spacing.createSpacing(1, 1, 0, false, 0); // Default: one space, no line breaks
     }
 
     @Override
-    public @Nullable Spacing getSpacing(@Nullable Block block, @NotNull Block block1) {
-        if(block==null){
-            System.out.println("Block id is 0");
-            for (ASTNode astNode:tokenStream) {
-                System.out.print(astNode.getElementType().toString()+" ");
-            }
-            System.out.println();
+    public @Nullable Indent getIndent() {
+        IElementType type = myNode.getElementType();
+        if (INDENTED_BLOCKS.contains(type)) {
+            return Indent.getNormalIndent(); // Standard indent for blocks
         }
-        if(this.shouldBreakLine(block1)){
-            return Spacing.createSpacing(0, 0, 1, true, 0);
+        if (type == GeneratedTypes.STATEMENT || type == GeneratedTypes.WHEN_STATEMENT) {
+            return Indent.getNormalIndent(); // Indent statements inside blocks
         }
-        return null;
+        if (type == GeneratedTypes.RBRACE || type == GeneratedTypes.LBRACE) {
+            return Indent.getNoneIndent(); // No indent for braces
+        }
+        return Indent.getNoneIndent(); // Default: no indent
     }
 
     @Override

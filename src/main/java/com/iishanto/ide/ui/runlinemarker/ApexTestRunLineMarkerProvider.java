@@ -1,7 +1,6 @@
 package com.iishanto.ide.ui.runlinemarker;
 
 import com.iishanto.ide.utility.ScriptRunnerUtility;
-import com.iishanto.language.sf.apex.psi.ApexAnnotation;
 import com.intellij.codeInsight.daemon.LineMarkerInfo;
 import com.intellij.codeInsight.daemon.LineMarkerProvider;
 import com.intellij.icons.AllIcons;

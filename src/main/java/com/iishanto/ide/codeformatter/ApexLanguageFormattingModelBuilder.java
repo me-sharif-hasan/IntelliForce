@@ -15,7 +15,7 @@ public class ApexLanguageFormattingModelBuilder implements FormattingModelBuilde
         ASTNode rootNode = formattingContext.getNode();
         CodeStyleSettings settings = formattingContext.getCodeStyleSettings();
         PsiFile file = formattingContext.getContainingFile();
-        ApexBlockFormatter rootBlock = new ApexBlockFormatter(rootNode, Wrap.createWrap(WrapType.NONE, false), null,0);
+        ApexBlockFormatter rootBlock = new ApexBlockFormatter(rootNode, Wrap.createWrap(WrapType.NONE, false), null);
         return FormattingModelProvider.createFormattingModelForPsiFile(file,rootBlock,settings);
     }
 }
