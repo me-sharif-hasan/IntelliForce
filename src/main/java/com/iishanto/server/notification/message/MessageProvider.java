@@ -3,6 +3,8 @@ package com.iishanto.server.notification.message;
 import com.iishanto.common.Constants;
 import com.iishanto.common.MessageType;
 
+import java.io.File;
+
 public class MessageProvider {
     private static Integer version=0;
 
@@ -14,7 +16,7 @@ public class MessageProvider {
                     "method": "initialize",
                     "params": {
                         "processId": null,
-                        "rootUri": "file:///%s",
+                        "rootUri": "%s",
                         "rootPath": "%s",
                         "capabilities": {
                             "textDocument": {
@@ -51,7 +53,7 @@ public class MessageProvider {
                         }
                     }
                 }""";
-        return initRequest.formatted(uri, root);
+        return initRequest.formatted(new File(uri).toURI(), root);
     }
 
     public String getDidOpenRequest(String file, String content) {
@@ -61,7 +63,7 @@ public class MessageProvider {
                     "method": "textDocument/didOpen",
                     "params": {
                         "textDocument": {
-                            "uri": "file:///%s",
+                            "uri": "%s",
                             "languageId": "apex",
                             "version": %d,
                             "text": "%s"
@@ -69,7 +71,7 @@ public class MessageProvider {
                     }
                 }""";
 
-        return didOpenMessage.formatted(file, version++,content);
+        return didOpenMessage.formatted(new File(file).toURI(), version++,content);
     }
 
     public String getCompletionMessage(String file,int line,int character){
@@ -80,7 +82,7 @@ public class MessageProvider {
                     "method": "textDocument/completion",
                     "params": {
                         "textDocument": {
-                             "uri": "file:///%s"
+                             "uri": "%s"
                         },
                         "position": {
                             "line": %d,
@@ -91,7 +93,7 @@ public class MessageProvider {
                             "triggerCharacter": "."
                         }
                     }
-                }""".formatted(version++,file,line,character);
+                }""".formatted(version++,new File(file).toURI(),line,character);
     }
 
     public String getDefinitionMessage(String file,int line,int character){
@@ -102,14 +104,14 @@ public class MessageProvider {
                     "method": "textDocument/definition",
                     "params": {
                         "textDocument": {
-                             "uri": "file:///%s"
+                             "uri": "%s"
                         },
                         "position": {
                             "line": %d,
                             "character": %d
                         }
                     }
-                }""".formatted(MessageType.APEX_DEFINITION_MESSAGE,file,line,character);
+                }""".formatted(MessageType.APEX_DEFINITION_MESSAGE,new File(file).toURI(),line,character);
     }
 
     public String getTypeDefinitionMessage(String file,int line,int character){
@@ -120,14 +122,14 @@ public class MessageProvider {
                     "method": "textDocument/typeDefinition",
                     "params": {
                         "textDocument": {
-                             "uri": "file:///%s"
+                             "uri": "%s"
                         },
                         "position": {
                             "line": %d,
                             "character": %d
                         }
                     }
-                }""".formatted(MessageType.APEX_TYPE_DEFINITION,file,line,character);
+                }""".formatted(MessageType.APEX_TYPE_DEFINITION,new File(file).toURI(),line,character);
     }
 
     public String getDidChangeRequest(String file, String content,int lastLine,int lastCharacter) {
@@ -137,7 +139,7 @@ public class MessageProvider {
                     "method": "textDocument/didChange",
                     "params": {
                         "textDocument": {
-                            "uri": "file:///%s",
+                            "uri": "%s",
                             "version": %d
                         },
                         "contentChanges": [
@@ -152,7 +154,7 @@ public class MessageProvider {
                     }
                 }""";
 
-        return didOpenMessage.formatted(file, version++,content,lastLine,lastCharacter);
+        return didOpenMessage.formatted(new File(file).toURI(), version++,content,lastLine,lastCharacter);
     }
 
     public String getDidCloseRequest(String file) {
@@ -162,10 +164,10 @@ public class MessageProvider {
                     "method": "textDocument/didClose",
                     "params": {
                         "textDocument": {
-                            "uri": "file:///%s"
+                            "uri": "%s"
                         }
                     }
-                }""".formatted(file);
+                }""".formatted(new File(file).toURI());
     }
 
     public String getPullDiagnosticsRequest(String file) {
@@ -175,11 +177,11 @@ public class MessageProvider {
                   "method": "textDocument/diagnostic",
                   "params": {
                     "textDocument": {
-                      "uri": "file:///%s"
+                      "uri": "%s"
                     },
                     "identifier": "%s"
                   }
-                }""".formatted(file,'$'+Math.random());
+                }""".formatted(new File(file).toURI(),'$'+Math.random());
     }
 
     public String getDidSaveRequest(String file, String content) {
@@ -189,10 +191,10 @@ public class MessageProvider {
                     "method": "textDocument/didSave",
                     "params": {
                         "textDocument": {
-                            "uri": "file:///%s",
+                            "uri": "%s",
                             "version": %d
                         }
                     }
-                }""".formatted(file, version++);
+                }""".formatted(new File(file).toURI(), version++);
     }
 }

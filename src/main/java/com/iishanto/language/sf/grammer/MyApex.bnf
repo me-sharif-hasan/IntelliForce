@@ -370,7 +370,7 @@ private soql_sosl_keyword ::=   FROM_KEYWORD
                                 | UPDATE_KEYWORD
 
 private literal ::= NUMBER | STRING | TRUE_LITERAL | FALSE_LITERAL
-private paren_expr ::= LPAREN expression RPAREN {extends=expression}
+private paren_expr ::= LPAREN expression RPAREN QUESTION_MARK? DOT? expression? {extends=expression}
 private variable_reference_expr ::= object_creation_expr | CombinedIdentifier (LESS type_list GREATER)? (QUESTION_MARK? DOT variable_reference_expr)? (argument_group)? (DOT variable_reference_expr)? {extends=expression}
 private object_creation_expr ::= typedef (argument_group)? initializer_expr? (QUESTION_MARK? DOT variable_reference_expr)?
 private typedef ::= NEW_KEYWORD CombinedIdentifier (LESS type_list GREATER)? ARRAY_BRACKET?

@@ -2433,7 +2433,7 @@ public class ApexParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // LPAREN expression RPAREN
+  // LPAREN expression RPAREN QUESTION_MARK? DOT? expression?
   static boolean paren_expr(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "paren_expr")) return false;
     if (!nextTokenIs(b, LPAREN)) return false;
@@ -2442,8 +2442,32 @@ public class ApexParser implements PsiParser, LightPsiParser {
     r = consumeToken(b, LPAREN);
     r = r && expression(b, l + 1, -1);
     r = r && consumeToken(b, RPAREN);
+    r = r && paren_expr_3(b, l + 1);
+    r = r && paren_expr_4(b, l + 1);
+    r = r && paren_expr_5(b, l + 1);
     exit_section_(b, m, null, r);
     return r;
+  }
+
+  // QUESTION_MARK?
+  private static boolean paren_expr_3(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "paren_expr_3")) return false;
+    consumeToken(b, QUESTION_MARK);
+    return true;
+  }
+
+  // DOT?
+  private static boolean paren_expr_4(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "paren_expr_4")) return false;
+    consumeToken(b, DOT);
+    return true;
+  }
+
+  // expression?
+  private static boolean paren_expr_5(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "paren_expr_5")) return false;
+    expression(b, l + 1, -1);
+    return true;
   }
 
   /* ********************************************************** */
