@@ -25,7 +25,6 @@ import com.intellij.lang.ASTNode;
 import com.intellij.lang.Language;
 import com.intellij.lang.ParserDefinition;
 import com.intellij.lang.PsiParser;
-import com.intellij.lang.java.JavaParserDefinition;
 import com.intellij.lexer.Lexer;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.FileViewProvider;
@@ -41,10 +40,10 @@ import org.jetbrains.annotations.NotNull;
  *
  * Created by mark
  */
-public class ApexClassParserDefinition extends JavaParserDefinition {
+public class ApexClassParserDefinition implements ParserDefinition {
 
     private static final TokenSet WHITE_SPACES = TokenSet.create(TokenType.WHITE_SPACE);
-    private static final TokenSet COMMENTS = TokenSet.create(ApexTypes.LINE_COMMENT, ApexTypes.COMMENT);
+    private static final TokenSet COMMENTS = TokenSet.create(ApexTypes.COMMENT);
 
     public static final IFileElementType FILE = new IFileElementType(Language.<ApexLanguage>findInstance(ApexLanguage.class));
 

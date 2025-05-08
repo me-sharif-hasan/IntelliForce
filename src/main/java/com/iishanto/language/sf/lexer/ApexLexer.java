@@ -15,8 +15,10 @@
  */
 package com.iishanto.language.sf.lexer;
 
+import com.iishanto.language.sf.grammer._ApexLexer;
 import com.intellij.lang.java.lexer.JavaLexer;
 import com.intellij.lexer.DelegateLexer;
+import com.intellij.lexer.FlexAdapter;
 import com.intellij.lexer.LayeredLexer;
 import com.intellij.pom.java.LanguageLevel;
 import com.intellij.psi.JavaTokenType;
@@ -24,9 +26,9 @@ import com.intellij.psi.tree.IElementType;
 
 import java.util.Arrays;
 
-public class ApexLexer extends LayeredLexer {
+public class ApexLexer extends FlexAdapter {
     public ApexLexer() {
-        super(new ApexKeywordReplacingLexer(new JavaLexer(LanguageLevel.HIGHEST)));
+        super(new _ApexLexer());
     }
 
     private static class ApexKeywordReplacingLexer extends DelegateLexer {

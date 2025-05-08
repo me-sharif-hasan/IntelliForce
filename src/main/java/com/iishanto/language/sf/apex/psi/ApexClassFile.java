@@ -48,19 +48,19 @@ public class ApexClassFile extends PsiFileBase {
         return getVirtualFile().getNameWithoutExtension().endsWith("Exception");
     }
 
-    public boolean isInterface() {
-        return PsiTreeUtil.getChildOfType(this, ApexInterfaceDeclaration.class) != null;
-    }
+//    public boolean isInterface() {
+//        return PsiTreeUtil.getChildOfType(this, ApexInterfaceDeclaration.class) != null;
+//    }
 
-    public boolean isClass() {
-        return PsiTreeUtil.getChildOfType(this, ApexClassDeclaration.class) != null;
-    }
-
-    public boolean isEnum() {
-        return PsiTreeUtil.getChildOfType(this, ApexEnumDeclaration.class) != null;
-    }
-
-    public boolean isTrigger() {
-        return PsiTreeUtil.getChildOfType(this, ApexTriggerDefinition.class) != null;
-    }
+//    public boolean isClass() {
+//        return PsiTreeUtil.getChildOfType(this, ApexClassBody.class) != null;
+//    }
+//
+//    public boolean isEnum() {
+//        return PsiTreeUtil.getChildOfType(this, ApexEnumDeclaration.class) != null;
+//    }
+//
+//    public boolean isTrigger() {
+//        return PsiTreeUtil.getChildOfType(this, ApexTriggerDefinition.class) != null;
+//    }
 }

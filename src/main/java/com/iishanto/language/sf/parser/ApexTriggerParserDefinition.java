@@ -55,7 +55,7 @@ import org.jetbrains.annotations.NotNull;
 public class ApexTriggerParserDefinition implements ParserDefinition {
 
     private static final TokenSet WHITE_SPACES = TokenSet.create(TokenType.WHITE_SPACE);
-    private static final TokenSet COMMENTS = TokenSet.create(ApexTypes.LINE_COMMENT, ApexTypes.COMMENT);
+    private static final TokenSet COMMENTS = TokenSet.create( ApexTypes.COMMENT);
 
     public static final IFileElementType FILE = new IFileElementType(Language.<ApexLanguage>findInstance(ApexLanguage.class));
 

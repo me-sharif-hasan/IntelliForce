@@ -25,130 +25,119 @@ import static com.iishanto.language.sf.apex.psi.ApexTypes.*;
 EOL=\R
 WHITE_SPACE=\s+
 
-LINE_COMMENT="//".*
-COMMENT="/"\*(.|\n)*\*"/"
-IDENTIFIER=[a-zA-Z$_][a-zA-Z0-9$_]*
-STRING_LITERAL='(\\b|\\t|\\n|\\f|\\r|\\'|\'|\\|.)*'
-INTEGER_LITERAL=-?[0-9]*
-DECIMAL_LITERAL=-?[0-9]*\.[0-9]*
-LONG_LITERAL=-?[0-9]*L
+COMMENT=("//".*|("/"\*[^]]*?\*"/"))
+WHITE_SPACE=[ \t\n\x0B\f\r]+
+NUMBER=-?[0-9]+(\.?[0-9])*L?
+IDENTIFIER=[a-zA-Z_][a-zA-Z0-9_$]*
+STRING='([^'\\]|\\\\.)*'
 
 %%
 <YYINITIAL> {
-  {WHITE_SPACE}           { return WHITE_SPACE; }
+  {WHITE_SPACE}               { return WHITE_SPACE; }
 
-  "class"                 { return CLASS_KEYWORD; }
-  "("                     { return LPAREN; }
-  ")"                     { return RPAREN; }
-  "{"                     { return LBRACE; }
-  "}"                     { return RBRACE; }
-  "["                     { return LBRACK; }
-  "]"                     { return RBRACK; }
-  ";"                     { return SEMI; }
-  ","                     { return COMMA; }
-  "."                     { return DOT; }
-  "@"                     { return AT_SIGN; }
-  "="                     { return OPERATOR_ASSIGNMENT; }
-  ">"                     { return OPERATOR_GREATER_THAN; }
-  "<"                     { return OPERATOR_LESS_THAN; }
-  "!"                     { return OPERATOR_NOT; }
-  "?"                     { return OPERATOR_TERNARY; }
-  ":"                     { return OPERATOR_COLON; }
-  "=="                    { return OPERATOR_EQUALITY; }
-  "==="                   { return OPERATOR_EXACT_EQUALITY; }
-  "<="                    { return OPERATOR_LESS_THAN_EQUAL; }
-  ">="                    { return OPERATOR_GREATER_THAN_EQUAL; }
-  "!="                    { return OPERATOR_INEQUALITY; }
-  "!=="                   { return OPERATOR_EXACT_INEQUALITY; }
-  "&&"                    { return OPERATOR_AND; }
-  "||"                    { return OPERATOR_OR; }
-  "++"                    { return OPERATOR_INCREMENT; }
-  "--"                    { return OPERATOR_DECREMENT; }
-  "+"                     { return OPERATOR_ADDITION; }
-  "-"                     { return OPERATOR_SUBTRACTION; }
-  "*"                     { return OPERATOR_MULTIPLICATION; }
-  "/"                     { return OPERATOR_DIVSION; }
-  "&"                     { return OPERATOR_BITWISE_AND; }
-  "|"                     { return OPERATOR_BITWISE_OR; }
-  "+="                    { return OPERATOR_ADDITION_ASSIGNMENT; }
-  "-="                    { return OPERATOR_SUBTRACTION_ASSIGNMENT; }
-  "*="                    { return OPERATOR_MULTIPLICATION_ASSIGNMENT; }
-  "/="                    { return OPERATOR_DIVISION_ASSIGNMENT; }
-  "&="                    { return OPERATOR_AND_ASSIGNMENT; }
-  "|="                    { return OPERATOR_OR_ASSIGNMENT; }
-  "^="                    { return OPERATOR_BITWISE_EXCLUSIVE_OR2; }
-  "^"                     { return OPERATOR_BITWISE_EXCLUSIVE_OR1; }
-  "<<="                   { return OPERATOR_BITWISE_SHIFT_LEFT_ASSIGNMENT; }
-  ">>="                   { return OPERATOR_BITWISE_SHIFT_RIGHT_ASSIGNMENT; }
-  ">>>="                  { return OPERATOR_BITWISE_SHIFT_RIGHT_UNSIGNED_ASSIGNMENT; }
-  "public"                { return PUBLIC; }
-  "private"               { return PRIVATE; }
-  "global"                { return GLOBAL; }
-  "protected"             { return PROTECTED; }
-  "virtual"               { return VIRTUAL; }
-  "abstract"              { return ABSTRACT; }
-  "with"                  { return WITH; }
-  "sharing"               { return SHARING; }
-  "without"               { return WITHOUT; }
-  "extends"               { return EXTENDS; }
-  "implements"            { return IMPLEMENTS; }
-  "interface"             { return INTERFACE; }
-  "trigger"               { return TRIGGER; }
-  "on"                    { return ON; }
-  "before"                { return BEFORE; }
-  "insert"                { return INSERT; }
-  "update"                { return UPDATE; }
-  "delete"                { return DELETE; }
-  "after"                 { return AFTER; }
-  "undelete"              { return UNDELETE; }
-  "enum"                  { return ENUM; }
-  "static"                { return STATIC; }
-  "void"                  { return VOID; }
-  "transient"             { return TRANSIENT; }
-  "Blob"                  { return BLOB; }
-  "Boolean"               { return BOOLEAN; }
-  "Date"                  { return DATE; }
-  "Datetime"              { return DATETIME; }
-  "Decimal"               { return DECIMAL; }
-  "Double"                { return DOUBLE; }
-  "ID"                    { return ID; }
-  "Integer"               { return INTEGER; }
-  "Long"                  { return LONG; }
-  "String"                { return STRING; }
-  "Time"                  { return TIME; }
-  "List"                  { return LIST; }
-  "Set"                   { return SET; }
-  "Map"                   { return MAP; }
-  "final"                 { return FINAL; }
-  "return"                { return RETURN; }
-  "throw"                 { return THROW; }
-  "break"                 { return BREAK; }
-  "continue"              { return CONTINUE; }
-  "if"                    { return IF; }
-  "else"                  { return ELSE; }
-  "for"                   { return FOR; }
-  "while"                 { return WHILE; }
-  "do"                    { return DO; }
-  "try"                   { return TRY; }
-  "catch"                 { return CATCH; }
-  "finally"               { return FINALLY; }
-  "instanceof"            { return INSTANCEOF; }
-  "new"                   { return NEW; }
-  "this"                  { return THIS; }
-  "super"                 { return SUPER; }
-  "typeList"              { return TYPELIST; }
-  "typeArguments"         { return TYPEARGUMENTS; }
-  "null"                  { return NULL; }
-  "true"                  { return TRUE; }
-  "false"                 { return FALSE; }
+  "virtual"                   { return VIRTUAL_KEYWORD; }
+  "abstract"                  { return ABSTRACT_KEYWORD; }
+  "with"                      { return WITH_KEYWORD; }
+  "void"                      { return VOID_KEYWORD; }
+  "interface"                 { return INTERFACE_KEYWORD; }
+  "class"                     { return CLASS_KEYWORD; }
+  "sharing"                   { return SHARING_KEYWORD; }
+  "without"                   { return WITHOUT_KEYWORD; }
+  "inherited"                 { return INHERITED_KEYWORD; }
+  "public"                    { return PUBLIC_KEYWORD; }
+  "private"                   { return PRIVATE_KEYWORD; }
+  "global"                    { return GLOBAL_KEYWORD; }
+  "protected"                 { return PROTECTED_KEYWORD; }
+  "final"                     { return FINAL_KEYWORD; }
+  "static"                    { return STATIC_KEYWORD; }
+  "do"                        { return DO_KEYWORD; }
+  "implements"                { return IMPLEMENTS_KEYWORD; }
+  "extends"                   { return EXTENDS_KEYWORD; }
+  "get"                       { return GET_KEYWORD; }
+  "set"                       { return SET_KEYWORD; }
+  "true"                      { return TRUE_LITERAL; }
+  "false"                     { return FALSE_LITERAL; }
+  "new"                       { return NEW_KEYWORD; }
+  "if"                        { return IF_KEYWORD; }
+  "else"                      { return ELSE_KEYWORD; }
+  "when"                      { return WHEN_KEYWORD; }
+  "for"                       { return FOR_KEYWORD; }
+  "while"                     { return WHILE_KEYWORD; }
+  "try"                       { return TRY_KEYWORD; }
+  "catch"                     { return CATCH_KEYWORD; }
+  "finally"                   { return FINALLY_KEYWORD; }
+  "return"                    { return RETURN_KEYWORD; }
+  "switch"                    { return SWITCH_KEYWORD; }
+  "case"                      { return CASE_KEYWORD; }
+  "default"                   { return DEFAULT_KEYWORD; }
+  "FROM"                      { return FROM_KEYWORD; }
+  "SELECT"                    { return SELECT_KEYWORD; }
+  "WHERE"                     { return WHERE_KEYWORD; }
+  "ORDER BY"                  { return ORDER_BY_KEYWORD; }
+  "LIMIT"                     { return LIMIT_KEYWORD; }
+  "OFFSET"                    { return OFFSET_KEYWORD; }
+  "GROUP BY"                  { return GROUP_BY_KEYWORD; }
+  "HAVING"                    { return HAVING_KEYWORD; }
+  "DISTINCT"                  { return DISTINCT_KEYWORD; }
+  "FOR"                       { return SOQL_FOR_KEYWORD; }
+  "UPDATE"                    { return UPDATE_KEYWORD; }
+  "INSERT"                    { return INSERT_KEYWORD; }
+  "DELETE"                    { return DELETE_KEYWORD; }
+  "UPSERT"                    { return UPSERT_KEYWORD; }
+  "MERGE"                     { return MERGE_KEYWORD; }
+  "enum"                      { return ENUM_KEYWORD; }
+  "break"                     { return BREAK_KEYWORD; }
+  "continue"                  { return CONTINUE_KEYWORD; }
+  "throw"                     { return THROW_KEYWORD; }
+  "this"                      { return THIS_KEYWORD; }
+  "super"                     { return SUPER_KEYWORD; }
+  "on"                        { return ON_KEYWORD; }
+  "override"                  { return OVERRIDE_KEYWORD; }
+  "{"                         { return LBRACE; }
+  "}"                         { return RBRACE; }
+  "("                         { return LPAREN; }
+  ")"                         { return RPAREN; }
+  "["                         { return LBRACKET; }
+  "]"                         { return RBRACKET; }
+  ","                         { return COMMA; }
+  "."                         { return DOT; }
+  ":"                         { return COLON; }
+  "=="                        { return EQUAL; }
+  "!=="                       { return NOT_EQUAL_EQAL; }
+  "!="                        { return NOT_EQUAL; }
+  ">="                        { return GREATER_EQUAL; }
+  "<="                        { return LESS_EQUAL; }
+  "++"                        { return INCREMENT; }
+  "--"                        { return DECREMENT; }
+  ">"                         { return GREATER; }
+  "<"                         { return LESS; }
+  "+"                         { return PLUS; }
+  "-"                         { return MINUS; }
+  "*"                         { return MULTIPLY; }
+  "/"                         { return DIVIDE; }
+  "&&"                        { return AND; }
+  "||"                        { return OR; }
+  "!"                         { return NOT; }
+  "&"                         { return BITWISE_AND; }
+  "|"                         { return BITWISE_OR; }
+  "^"                         { return BITWISE_XOR; }
+  "="                         { return ASSIGN; }
+  ";"                         { return SEMICOLON; }
+  "@"                         { return AT; }
+  "[]"                        { return ARRAY_BRACKET; }
+  "ApexTrigger"               { return APEXTRIGGER; }
+  "ApexInterface"             { return APEXINTERFACE; }
+  "ApexScript"                { return APEXSCRIPT; }
+  "ApexEnum"                  { return APEXENUM; }
+  "ApexClassOrInterface"      { return APEXCLASSORINTERFACE; }
+  "ConstructorDefinition"     { return CONSTRUCTORDEFINITION; }
+  "SOSL"                      { return SOSL; }
 
-  {LINE_COMMENT}          { return LINE_COMMENT; }
-  {COMMENT}               { return COMMENT; }
-  {IDENTIFIER}            { return IDENTIFIER; }
-  {STRING_LITERAL}        { return STRING_LITERAL; }
-  {INTEGER_LITERAL}       { return INTEGER_LITERAL; }
-  {DECIMAL_LITERAL}       { return DECIMAL_LITERAL; }
-  {LONG_LITERAL}          { return LONG_LITERAL; }
+  {COMMENT}                   { return COMMENT; }
+  {WHITE_SPACE}               { return WHITE_SPACE; }
+  {NUMBER}                    { return NUMBER; }
+  {IDENTIFIER}                { return IDENTIFIER; }
+  {STRING}                    { return STRING; }
 
 }
 

@@ -29,7 +29,7 @@
                     language="Apex"
                     implementationClass="com.iishanto.ide.annotator.ApexLanguageExternalAnnotator"/>
             <postStartupActivity implementation="com.iishanto.ide.SalesforceProjectStartupActivity"/>
-            <highlightErrorFilter implementation="com.iishanto.ide.filters.ErrorFilter"/>
+<!--            <highlightErrorFilter implementation="com.iishanto.ide.filters.ErrorFilter"/>-->
             <completion.contributor language="Apex" implementationClass="com.iishanto.ide.autocomplete.ApexLanguageAutoCompletionContributor"/>
             <gotoDeclarationHandler implementation="com.iishanto.ide.gotodeclaration.ApexGotoDeclarationHandler"/>
             <typedHandler implementation="com.iishanto.ide.typedhandler.AutoCompleteTypedHandler"/>
