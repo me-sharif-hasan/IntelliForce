@@ -8,15 +8,9 @@ import com.intellij.psi.PsiElement;
 public interface ApexAssignmentStatement extends PsiElement {
 
   @Nullable
-  ApexAssignmentStatement getAssignmentStatement();
-
-  @Nullable
   ApexFieldDefinition getFieldDefinition();
 
-  @Nullable
-  ApexExpression getExpression();
-
-  @Nullable
-  PsiElement getIdentifier();
+  @NotNull
+  List<ApexExpression> getExpressionList();
 
 }

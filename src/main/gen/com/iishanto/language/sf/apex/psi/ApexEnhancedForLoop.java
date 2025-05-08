@@ -7,7 +7,7 @@ import com.intellij.psi.PsiElement;
 
 public interface ApexEnhancedForLoop extends PsiElement {
 
-  @NotNull
+  @Nullable
   ApexForBlock getForBlock();
 
   @Nullable

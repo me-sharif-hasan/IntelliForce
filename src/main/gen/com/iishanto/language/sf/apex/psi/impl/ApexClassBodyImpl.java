@@ -29,6 +29,12 @@ public class ApexClassBodyImpl extends ASTWrapperPsiElement implements ApexClass
 
   @Override
   @NotNull
+  public List<ApexApexClassOrInterface> getApexClassOrInterfaceList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, ApexApexClassOrInterface.class);
+  }
+
+  @Override
+  @NotNull
   public List<ApexClassDefinition> getClassDefinitionList() {
     return PsiTreeUtil.getChildrenOfTypeAsList(this, ApexClassDefinition.class);
   }

@@ -8,9 +8,9 @@ import com.intellij.psi.PsiElement;
 public interface ApexMethodCallStatement extends PsiElement {
 
   @Nullable
-  ApexMethodNameWithParameters getMethodNameWithParameters();
+  ApexMethodNameWithArgument getMethodNameWithArgument();
 
   @NotNull
-  List<ApexExpression> getExpressionList();
+  ApexExpression getExpression();
 
 }

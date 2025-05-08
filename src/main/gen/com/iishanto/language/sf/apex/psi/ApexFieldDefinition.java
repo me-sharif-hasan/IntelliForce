@@ -8,6 +8,9 @@ import com.intellij.psi.PsiElement;
 public interface ApexFieldDefinition extends PsiElement {
 
   @NotNull
+  List<ApexMethodBlock> getMethodBlockList();
+
+  @NotNull
   ApexTypeIdentifier getTypeIdentifier();
 
   @NotNull

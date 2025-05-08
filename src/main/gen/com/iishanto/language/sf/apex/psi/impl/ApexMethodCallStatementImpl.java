@@ -29,14 +29,14 @@ public class ApexMethodCallStatementImpl extends ASTWrapperPsiElement implements
 
   @Override
   @Nullable
-  public ApexMethodNameWithParameters getMethodNameWithParameters() {
-    return findChildByClass(ApexMethodNameWithParameters.class);
+  public ApexMethodNameWithArgument getMethodNameWithArgument() {
+    return findChildByClass(ApexMethodNameWithArgument.class);
   }
 
   @Override
   @NotNull
-  public List<ApexExpression> getExpressionList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, ApexExpression.class);
+  public ApexExpression getExpression() {
+    return findNotNullChildByClass(ApexExpression.class);
   }
 
 }

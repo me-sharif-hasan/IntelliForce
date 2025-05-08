@@ -29,8 +29,8 @@ public class ApexInterfaceIdentifierImpl extends ASTWrapperPsiElement implements
 
   @Override
   @NotNull
-  public ApexQualifiedIdentifier getQualifiedIdentifier() {
-    return findNotNullChildByClass(ApexQualifiedIdentifier.class);
+  public ApexTypeIdentifier getTypeIdentifier() {
+    return findNotNullChildByClass(ApexTypeIdentifier.class);
   }
 
 }

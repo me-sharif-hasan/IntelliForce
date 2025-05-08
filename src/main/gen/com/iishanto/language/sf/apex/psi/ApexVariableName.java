@@ -13,7 +13,7 @@ public interface ApexVariableName extends PsiElement {
   @Nullable
   ApexExpression getExpression();
 
-  @NotNull
+  @Nullable
   PsiElement getIdentifier();
 
 }

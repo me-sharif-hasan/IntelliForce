@@ -8,9 +8,21 @@ import com.intellij.psi.PsiElement;
 public interface ApexClassMember extends PsiElement {
 
   @Nullable
+  ApexApexClass getApexClass();
+
+  @Nullable
+  ApexApexEnum getApexEnum();
+
+  @Nullable
+  ApexApexInterface getApexInterface();
+
+  @Nullable
+  ApexConstructorDefinition getConstructorDefinition();
+
+  @Nullable
   ApexFieldDefinition getFieldDefinition();
 
-  @NotNull
+  @Nullable
   ApexMemberModifier getMemberModifier();
 
   @Nullable

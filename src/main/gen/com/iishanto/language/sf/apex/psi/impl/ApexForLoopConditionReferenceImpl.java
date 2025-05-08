@@ -34,9 +34,9 @@ public class ApexForLoopConditionReferenceImpl extends ASTWrapperPsiElement impl
   }
 
   @Override
-  @NotNull
+  @Nullable
   public ApexVariableName getVariableName() {
-    return findNotNullChildByClass(ApexVariableName.class);
+    return findChildByClass(ApexVariableName.class);
   }
 
 }

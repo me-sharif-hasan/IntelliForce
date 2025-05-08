@@ -12,25 +12,40 @@ public interface ApexTypes {
   IElementType ALLOWED_SWITCH_TYPE = new ApexElementType("ALLOWED_SWITCH_TYPE");
   IElementType ANNOTATION = new ApexElementType("ANNOTATION");
   IElementType APEX_CLASS = new ApexElementType("APEX_CLASS");
+  IElementType APEX_CLASS_OR_INTERFACE = new ApexElementType("APEX_CLASS_OR_INTERFACE");
+  IElementType APEX_ENUM = new ApexElementType("APEX_ENUM");
+  IElementType APEX_INTERFACE = new ApexElementType("APEX_INTERFACE");
   IElementType ARRAY_ACCESS_EXPR = new ApexElementType("ARRAY_ACCESS_EXPR");
   IElementType ASSIGNMENT_EXPR = new ApexElementType("ASSIGNMENT_EXPR");
   IElementType ASSIGNMENT_STATEMENT = new ApexElementType("ASSIGNMENT_STATEMENT");
   IElementType BITWISE_AND_EXPR = new ApexElementType("BITWISE_AND_EXPR");
   IElementType BITWISE_OR_EXPR = new ApexElementType("BITWISE_OR_EXPR");
   IElementType BITWISE_XOR_EXPR = new ApexElementType("BITWISE_XOR_EXPR");
+  IElementType CATCH_BLOCK = new ApexElementType("CATCH_BLOCK");
+  IElementType CATCH_BLOCK_BODY = new ApexElementType("CATCH_BLOCK_BODY");
+  IElementType CATCH_BODY = new ApexElementType("CATCH_BODY");
+  IElementType CATCH_CONDITION = new ApexElementType("CATCH_CONDITION");
   IElementType CLASS_ACCESS_MODIFIER = new ApexElementType("CLASS_ACCESS_MODIFIER");
   IElementType CLASS_BODY = new ApexElementType("CLASS_BODY");
   IElementType CLASS_DEFINITION = new ApexElementType("CLASS_DEFINITION");
   IElementType CLASS_MEMBER = new ApexElementType("CLASS_MEMBER");
   IElementType CONDITION_TRAIL = new ApexElementType("CONDITION_TRAIL");
+  IElementType CONSTRUCTOR_DEFINITION = new ApexElementType("CONSTRUCTOR_DEFINITION");
   IElementType DECISION_STATEMENT = new ApexElementType("DECISION_STATEMENT");
+  IElementType DELETE_STATEMENT = new ApexElementType("DELETE_STATEMENT");
   IElementType DIV_EXPR = new ApexElementType("DIV_EXPR");
+  IElementType DML_STATEMENT = new ApexElementType("DML_STATEMENT");
   IElementType DO_BLOCK = new ApexElementType("DO_BLOCK");
   IElementType DO_WHILE_LOOP = new ApexElementType("DO_WHILE_LOOP");
   IElementType ELSE_BLOCK = new ApexElementType("ELSE_BLOCK");
   IElementType ENHANCED_FOR_LOOP = new ApexElementType("ENHANCED_FOR_LOOP");
+  IElementType ENUM_ACCESS_MODIFIER = new ApexElementType("ENUM_ACCESS_MODIFIER");
+  IElementType ENUM_BODY = new ApexElementType("ENUM_BODY");
+  IElementType ENUM_DEFINITION = new ApexElementType("ENUM_DEFINITION");
   IElementType EXPRESSION = new ApexElementType("EXPRESSION");
   IElementType FIELD_DEFINITION = new ApexElementType("FIELD_DEFINITION");
+  IElementType FINALLY_BLOCK = new ApexElementType("FINALLY_BLOCK");
+  IElementType FINALLY_BODY = new ApexElementType("FINALLY_BODY");
   IElementType FOR_BLOCK = new ApexElementType("FOR_BLOCK");
   IElementType FOR_BODY = new ApexElementType("FOR_BODY");
   IElementType FOR_LOOP = new ApexElementType("FOR_LOOP");
@@ -43,7 +58,12 @@ public interface ApexTypes {
   IElementType IF_STATEMENT = new ApexElementType("IF_STATEMENT");
   IElementType IMPLEMENTS_CLAUSE = new ApexElementType("IMPLEMENTS_CLAUSE");
   IElementType INHERITANCE = new ApexElementType("INHERITANCE");
+  IElementType INSERT_STATEMENT = new ApexElementType("INSERT_STATEMENT");
+  IElementType INTERFACE_ACCESS_MODIFIER = new ApexElementType("INTERFACE_ACCESS_MODIFIER");
+  IElementType INTERFACE_BODY = new ApexElementType("INTERFACE_BODY");
+  IElementType INTERFACE_DEFINITION = new ApexElementType("INTERFACE_DEFINITION");
   IElementType INTERFACE_IDENTIFIER = new ApexElementType("INTERFACE_IDENTIFIER");
+  IElementType INTERFACE_SIGNATURE = new ApexElementType("INTERFACE_SIGNATURE");
   IElementType ITERATION_FOR_LOOP = new ApexElementType("ITERATION_FOR_LOOP");
   IElementType LOGICAL_AND_EXPR = new ApexElementType("LOGICAL_AND_EXPR");
   IElementType LOGICAL_EQUAL_EQUAL_EXPR = new ApexElementType("LOGICAL_EQUAL_EQUAL_EXPR");
@@ -60,33 +80,47 @@ public interface ApexTypes {
   IElementType LOOP_STATEMENT = new ApexElementType("LOOP_STATEMENT");
   IElementType MEMBER_ACCESS_MODIFIER = new ApexElementType("MEMBER_ACCESS_MODIFIER");
   IElementType MEMBER_MODIFIER = new ApexElementType("MEMBER_MODIFIER");
+  IElementType MERGE_STATEMENT = new ApexElementType("MERGE_STATEMENT");
   IElementType METHOD_BLOCK = new ApexElementType("METHOD_BLOCK");
   IElementType METHOD_BODY = new ApexElementType("METHOD_BODY");
   IElementType METHOD_CALL_STATEMENT = new ApexElementType("METHOD_CALL_STATEMENT");
   IElementType METHOD_DEFINITION = new ApexElementType("METHOD_DEFINITION");
+  IElementType METHOD_NAME_WITH_ARGUMENT = new ApexElementType("METHOD_NAME_WITH_ARGUMENT");
   IElementType METHOD_NAME_WITH_PARAMETERS = new ApexElementType("METHOD_NAME_WITH_PARAMETERS");
   IElementType MIN_EXPR = new ApexElementType("MIN_EXPR");
   IElementType MODIFIER = new ApexElementType("MODIFIER");
   IElementType MODIFIERS = new ApexElementType("MODIFIERS");
   IElementType MUL_EXPR = new ApexElementType("MUL_EXPR");
   IElementType NEGATION_EXPR = new ApexElementType("NEGATION_EXPR");
+  IElementType PARAMETER_LIST = new ApexElementType("PARAMETER_LIST");
   IElementType PARENT_CLASS = new ApexElementType("PARENT_CLASS");
   IElementType PRIMARY_EXPR = new ApexElementType("PRIMARY_EXPR");
   IElementType PRIMITIVE_TYPE = new ApexElementType("PRIMITIVE_TYPE");
   IElementType QUALIFIED_IDENTIFIER = new ApexElementType("QUALIFIED_IDENTIFIER");
+  IElementType RETURN_STATEMENT = new ApexElementType("RETURN_STATEMENT");
   IElementType SHARING_CLAUSE = new ApexElementType("SHARING_CLAUSE");
+  IElementType SHORTHAND_ASSIGNMENT_EXPR = new ApexElementType("SHORTHAND_ASSIGNMENT_EXPR");
   IElementType STATEMENT = new ApexElementType("STATEMENT");
   IElementType SWITCH_BLOCK = new ApexElementType("SWITCH_BLOCK");
+  IElementType SWITCH_BLOCK_BODY = new ApexElementType("SWITCH_BLOCK_BODY");
   IElementType SWITCH_BODY = new ApexElementType("SWITCH_BODY");
   IElementType SWITCH_STATEMENT = new ApexElementType("SWITCH_STATEMENT");
   IElementType SWITCH_WHEN_BLOCK = new ApexElementType("SWITCH_WHEN_BLOCK");
   IElementType SWITCH_WHEN_VALUE_LIST = new ApexElementType("SWITCH_WHEN_VALUE_LIST");
+  IElementType TERNARY_EXPR = new ApexElementType("TERNARY_EXPR");
+  IElementType THROW_STATEMENT = new ApexElementType("THROW_STATEMENT");
   IElementType TRADITIONAL_FOR_LOOP_CONDITION = new ApexElementType("TRADITIONAL_FOR_LOOP_CONDITION");
+  IElementType TRY_BLOCK = new ApexElementType("TRY_BLOCK");
+  IElementType TRY_BODY = new ApexElementType("TRY_BODY");
+  IElementType TRY_CATCH_STATEMENT = new ApexElementType("TRY_CATCH_STATEMENT");
+  IElementType TYPE_CAST_EXPR = new ApexElementType("TYPE_CAST_EXPR");
   IElementType TYPE_IDENTIFIER = new ApexElementType("TYPE_IDENTIFIER");
   IElementType UNARY_POSTFIX_DECREMENT_EXPR = new ApexElementType("UNARY_POSTFIX_DECREMENT_EXPR");
   IElementType UNARY_POSTFIX_INCREMENT_EXPR = new ApexElementType("UNARY_POSTFIX_INCREMENT_EXPR");
   IElementType UNARY_PREFIX_DECREMENT_EXPR = new ApexElementType("UNARY_PREFIX_DECREMENT_EXPR");
   IElementType UNARY_PREFIX_INCREMENT_EXPR = new ApexElementType("UNARY_PREFIX_INCREMENT_EXPR");
+  IElementType UPDATE_STATEMENT = new ApexElementType("UPDATE_STATEMENT");
+  IElementType UPSERT_STATEMENT = new ApexElementType("UPSERT_STATEMENT");
   IElementType VARIABLE_NAME = new ApexElementType("VARIABLE_NAME");
   IElementType WHEN_ELSE_STATEMENT = new ApexElementType("WHEN_ELSE_STATEMENT");
   IElementType WHEN_STATEMENT = new ApexElementType("WHEN_STATEMENT");
@@ -97,9 +131,6 @@ public interface ApexTypes {
 
   IElementType ABSTRACT_KEYWORD = new ApexTokenType("abstract");
   IElementType AND = new ApexTokenType("&&");
-  IElementType APEXCLASSORINTERFACE = new ApexTokenType("ApexClassOrInterface");
-  IElementType APEXENUM = new ApexTokenType("ApexEnum");
-  IElementType APEXINTERFACE = new ApexTokenType("ApexInterface");
   IElementType APEXSCRIPT = new ApexTokenType("ApexScript");
   IElementType APEXTRIGGER = new ApexTokenType("ApexTrigger");
   IElementType ARRAY_BRACKET = new ApexTokenType("[]");
@@ -115,11 +146,10 @@ public interface ApexTypes {
   IElementType COLON = new ApexTokenType(":");
   IElementType COMMA = new ApexTokenType(",");
   IElementType COMMENT = new ApexTokenType("COMMENT");
-  IElementType CONSTRUCTORDEFINITION = new ApexTokenType("ConstructorDefinition");
   IElementType CONTINUE_KEYWORD = new ApexTokenType("continue");
   IElementType DECREMENT = new ApexTokenType("--");
   IElementType DEFAULT_KEYWORD = new ApexTokenType("default");
-  IElementType DELETE_KEYWORD = new ApexTokenType("DELETE");
+  IElementType DELETE_KEYWORD = new ApexTokenType("delete");
   IElementType DISTINCT_KEYWORD = new ApexTokenType("DISTINCT");
   IElementType DIVIDE = new ApexTokenType("/");
   IElementType DOT = new ApexTokenType(".");
@@ -144,7 +174,7 @@ public interface ApexTypes {
   IElementType IMPLEMENTS_KEYWORD = new ApexTokenType("implements");
   IElementType INCREMENT = new ApexTokenType("++");
   IElementType INHERITED_KEYWORD = new ApexTokenType("inherited");
-  IElementType INSERT_KEYWORD = new ApexTokenType("INSERT");
+  IElementType INSERT_KEYWORD = new ApexTokenType("insert");
   IElementType INTERFACE_KEYWORD = new ApexTokenType("interface");
   IElementType LBRACE = new ApexTokenType("{");
   IElementType LBRACKET = new ApexTokenType("[");
@@ -152,13 +182,14 @@ public interface ApexTypes {
   IElementType LESS_EQUAL = new ApexTokenType("<=");
   IElementType LIMIT_KEYWORD = new ApexTokenType("LIMIT");
   IElementType LPAREN = new ApexTokenType("(");
-  IElementType MERGE_KEYWORD = new ApexTokenType("MERGE");
+  IElementType MERGE_KEYWORD = new ApexTokenType("merge");
   IElementType MINUS = new ApexTokenType("-");
   IElementType MULTIPLY = new ApexTokenType("*");
   IElementType NEW_KEYWORD = new ApexTokenType("new");
   IElementType NOT = new ApexTokenType("!");
   IElementType NOT_EQUAL = new ApexTokenType("!=");
   IElementType NOT_EQUAL_EQAL = new ApexTokenType("!==");
+  IElementType NULL_CHECK = new ApexTokenType("??");
   IElementType NUMBER = new ApexTokenType("NUMBER");
   IElementType OFFSET_KEYWORD = new ApexTokenType("OFFSET");
   IElementType ON_KEYWORD = new ApexTokenType("on");
@@ -169,6 +200,7 @@ public interface ApexTypes {
   IElementType PRIVATE_KEYWORD = new ApexTokenType("private");
   IElementType PROTECTED_KEYWORD = new ApexTokenType("protected");
   IElementType PUBLIC_KEYWORD = new ApexTokenType("public");
+  IElementType QUESTION_MARK = new ApexTokenType("?");
   IElementType RBRACE = new ApexTokenType("}");
   IElementType RBRACKET = new ApexTokenType("]");
   IElementType RETURN_KEYWORD = new ApexTokenType("return");
@@ -177,6 +209,14 @@ public interface ApexTypes {
   IElementType SEMICOLON = new ApexTokenType(";");
   IElementType SET_KEYWORD = new ApexTokenType("set");
   IElementType SHARING_KEYWORD = new ApexTokenType("sharing");
+  IElementType SHORT_HANDLE_BITWISE_AND = new ApexTokenType("&=");
+  IElementType SHORT_HANDLE_BITWISE_OR = new ApexTokenType("|=");
+  IElementType SHORT_HANDLE_BITWISE_XOR = new ApexTokenType("^=");
+  IElementType SHORT_HANDLE_DIVIDE = new ApexTokenType("/=");
+  IElementType SHORT_HANDLE_MINUS = new ApexTokenType("-=");
+  IElementType SHORT_HANDLE_MULTIPLY = new ApexTokenType("*=");
+  IElementType SHORT_HANDLE_NULL_CHECK = new ApexTokenType("??=");
+  IElementType SHORT_HANDLE_PLUS = new ApexTokenType("+=");
   IElementType SOQL_FOR_KEYWORD = new ApexTokenType("FOR");
   IElementType SOSL = new ApexTokenType("SOSL");
   IElementType STATIC_KEYWORD = new ApexTokenType("static");
@@ -187,8 +227,8 @@ public interface ApexTypes {
   IElementType THROW_KEYWORD = new ApexTokenType("throw");
   IElementType TRUE_LITERAL = new ApexTokenType("true");
   IElementType TRY_KEYWORD = new ApexTokenType("try");
-  IElementType UPDATE_KEYWORD = new ApexTokenType("UPDATE");
-  IElementType UPSERT_KEYWORD = new ApexTokenType("UPSERT");
+  IElementType UPDATE_KEYWORD = new ApexTokenType("UPDATE_KEYWORD");
+  IElementType UPSERT_KEYWORD = new ApexTokenType("upsert");
   IElementType VIRTUAL_KEYWORD = new ApexTokenType("virtual");
   IElementType VOID_KEYWORD = new ApexTokenType("void");
   IElementType WHEN_KEYWORD = new ApexTokenType("when");
@@ -212,6 +252,15 @@ public interface ApexTypes {
       else if (type == APEX_CLASS) {
         return new ApexApexClassImpl(node);
       }
+      else if (type == APEX_CLASS_OR_INTERFACE) {
+        return new ApexApexClassOrInterfaceImpl(node);
+      }
+      else if (type == APEX_ENUM) {
+        return new ApexApexEnumImpl(node);
+      }
+      else if (type == APEX_INTERFACE) {
+        return new ApexApexInterfaceImpl(node);
+      }
       else if (type == ARRAY_ACCESS_EXPR) {
         return new ApexArrayAccessExprImpl(node);
       }
@@ -230,6 +279,18 @@ public interface ApexTypes {
       else if (type == BITWISE_XOR_EXPR) {
         return new ApexBitwiseXorExprImpl(node);
       }
+      else if (type == CATCH_BLOCK) {
+        return new ApexCatchBlockImpl(node);
+      }
+      else if (type == CATCH_BLOCK_BODY) {
+        return new ApexCatchBlockBodyImpl(node);
+      }
+      else if (type == CATCH_BODY) {
+        return new ApexCatchBodyImpl(node);
+      }
+      else if (type == CATCH_CONDITION) {
+        return new ApexCatchConditionImpl(node);
+      }
       else if (type == CLASS_ACCESS_MODIFIER) {
         return new ApexClassAccessModifierImpl(node);
       }
@@ -245,11 +306,20 @@ public interface ApexTypes {
       else if (type == CONDITION_TRAIL) {
         return new ApexConditionTrailImpl(node);
       }
+      else if (type == CONSTRUCTOR_DEFINITION) {
+        return new ApexConstructorDefinitionImpl(node);
+      }
       else if (type == DECISION_STATEMENT) {
         return new ApexDecisionStatementImpl(node);
       }
+      else if (type == DELETE_STATEMENT) {
+        return new ApexDeleteStatementImpl(node);
+      }
       else if (type == DIV_EXPR) {
         return new ApexDivExprImpl(node);
+      }
+      else if (type == DML_STATEMENT) {
+        return new ApexDmlStatementImpl(node);
       }
       else if (type == DO_BLOCK) {
         return new ApexDoBlockImpl(node);
@@ -263,8 +333,23 @@ public interface ApexTypes {
       else if (type == ENHANCED_FOR_LOOP) {
         return new ApexEnhancedForLoopImpl(node);
       }
+      else if (type == ENUM_ACCESS_MODIFIER) {
+        return new ApexEnumAccessModifierImpl(node);
+      }
+      else if (type == ENUM_BODY) {
+        return new ApexEnumBodyImpl(node);
+      }
+      else if (type == ENUM_DEFINITION) {
+        return new ApexEnumDefinitionImpl(node);
+      }
       else if (type == FIELD_DEFINITION) {
         return new ApexFieldDefinitionImpl(node);
+      }
+      else if (type == FINALLY_BLOCK) {
+        return new ApexFinallyBlockImpl(node);
+      }
+      else if (type == FINALLY_BODY) {
+        return new ApexFinallyBodyImpl(node);
       }
       else if (type == FOR_BLOCK) {
         return new ApexForBlockImpl(node);
@@ -302,8 +387,23 @@ public interface ApexTypes {
       else if (type == INHERITANCE) {
         return new ApexInheritanceImpl(node);
       }
+      else if (type == INSERT_STATEMENT) {
+        return new ApexInsertStatementImpl(node);
+      }
+      else if (type == INTERFACE_ACCESS_MODIFIER) {
+        return new ApexInterfaceAccessModifierImpl(node);
+      }
+      else if (type == INTERFACE_BODY) {
+        return new ApexInterfaceBodyImpl(node);
+      }
+      else if (type == INTERFACE_DEFINITION) {
+        return new ApexInterfaceDefinitionImpl(node);
+      }
       else if (type == INTERFACE_IDENTIFIER) {
         return new ApexInterfaceIdentifierImpl(node);
+      }
+      else if (type == INTERFACE_SIGNATURE) {
+        return new ApexInterfaceSignatureImpl(node);
       }
       else if (type == ITERATION_FOR_LOOP) {
         return new ApexIterationForLoopImpl(node);
@@ -353,6 +453,9 @@ public interface ApexTypes {
       else if (type == MEMBER_MODIFIER) {
         return new ApexMemberModifierImpl(node);
       }
+      else if (type == MERGE_STATEMENT) {
+        return new ApexMergeStatementImpl(node);
+      }
       else if (type == METHOD_BLOCK) {
         return new ApexMethodBlockImpl(node);
       }
@@ -364,6 +467,9 @@ public interface ApexTypes {
       }
       else if (type == METHOD_DEFINITION) {
         return new ApexMethodDefinitionImpl(node);
+      }
+      else if (type == METHOD_NAME_WITH_ARGUMENT) {
+        return new ApexMethodNameWithArgumentImpl(node);
       }
       else if (type == METHOD_NAME_WITH_PARAMETERS) {
         return new ApexMethodNameWithParametersImpl(node);
@@ -383,6 +489,9 @@ public interface ApexTypes {
       else if (type == NEGATION_EXPR) {
         return new ApexNegationExprImpl(node);
       }
+      else if (type == PARAMETER_LIST) {
+        return new ApexParameterListImpl(node);
+      }
       else if (type == PARENT_CLASS) {
         return new ApexParentClassImpl(node);
       }
@@ -395,14 +504,23 @@ public interface ApexTypes {
       else if (type == QUALIFIED_IDENTIFIER) {
         return new ApexQualifiedIdentifierImpl(node);
       }
+      else if (type == RETURN_STATEMENT) {
+        return new ApexReturnStatementImpl(node);
+      }
       else if (type == SHARING_CLAUSE) {
         return new ApexSharingClauseImpl(node);
+      }
+      else if (type == SHORTHAND_ASSIGNMENT_EXPR) {
+        return new ApexShorthandAssignmentExprImpl(node);
       }
       else if (type == STATEMENT) {
         return new ApexStatementImpl(node);
       }
       else if (type == SWITCH_BLOCK) {
         return new ApexSwitchBlockImpl(node);
+      }
+      else if (type == SWITCH_BLOCK_BODY) {
+        return new ApexSwitchBlockBodyImpl(node);
       }
       else if (type == SWITCH_BODY) {
         return new ApexSwitchBodyImpl(node);
@@ -416,8 +534,26 @@ public interface ApexTypes {
       else if (type == SWITCH_WHEN_VALUE_LIST) {
         return new ApexSwitchWhenValueListImpl(node);
       }
+      else if (type == TERNARY_EXPR) {
+        return new ApexTernaryExprImpl(node);
+      }
+      else if (type == THROW_STATEMENT) {
+        return new ApexThrowStatementImpl(node);
+      }
       else if (type == TRADITIONAL_FOR_LOOP_CONDITION) {
         return new ApexTraditionalForLoopConditionImpl(node);
+      }
+      else if (type == TRY_BLOCK) {
+        return new ApexTryBlockImpl(node);
+      }
+      else if (type == TRY_BODY) {
+        return new ApexTryBodyImpl(node);
+      }
+      else if (type == TRY_CATCH_STATEMENT) {
+        return new ApexTryCatchStatementImpl(node);
+      }
+      else if (type == TYPE_CAST_EXPR) {
+        return new ApexTypeCastExprImpl(node);
       }
       else if (type == TYPE_IDENTIFIER) {
         return new ApexTypeIdentifierImpl(node);
@@ -433,6 +569,12 @@ public interface ApexTypes {
       }
       else if (type == UNARY_PREFIX_INCREMENT_EXPR) {
         return new ApexUnaryPrefixIncrementExprImpl(node);
+      }
+      else if (type == UPDATE_STATEMENT) {
+        return new ApexUpdateStatementImpl(node);
+      }
+      else if (type == UPSERT_STATEMENT) {
+        return new ApexUpsertStatementImpl(node);
       }
       else if (type == VARIABLE_NAME) {
         return new ApexVariableNameImpl(node);

@@ -28,9 +28,9 @@ public class ApexWhileBlockImpl extends ASTWrapperPsiElement implements ApexWhil
   }
 
   @Override
-  @NotNull
+  @Nullable
   public ApexWhileBody getWhileBody() {
-    return findNotNullChildByClass(ApexWhileBody.class);
+    return findChildByClass(ApexWhileBody.class);
   }
 
 }

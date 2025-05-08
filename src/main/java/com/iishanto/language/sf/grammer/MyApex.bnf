@@ -40,6 +40,11 @@ psiImplUtilClass="com.iishanto.language.sf.apex.psi.impl.ApexPsiImplUtil"
     DO_KEYWORD = 'do'
     IMPLEMENTS_KEYWORD = 'implements'
     EXTENDS_KEYWORD = 'extends'
+    INSERT_KEYWORD = 'insert'
+    UPDATE_KEYWORD = 'regexp:(update|UPDATE)'
+    DELETE_KEYWORD = 'delete'
+    MERGE_KEYWORD = 'merge'
+    UPSERT_KEYWORD = 'upsert'
     GET_KEYWORD = 'get'
     SET_KEYWORD = 'set'
     TRUE_LITERAL = 'true'
@@ -68,18 +73,13 @@ psiImplUtilClass="com.iishanto.language.sf.apex.psi.impl.ApexPsiImplUtil"
     HAVING_KEYWORD = 'HAVING'
     DISTINCT_KEYWORD = 'DISTINCT'
     SOQL_FOR_KEYWORD = 'FOR'
-    UPDATE_KEYWORD  = 'UPDATE'
-    INSERT_KEYWORD = 'INSERT'
-    DELETE_KEYWORD = 'DELETE'
-    UPSERT_KEYWORD = 'UPSERT'
-    UPDATE_KEYWORD = 'UPDATE'
-    MERGE_KEYWORD = 'MERGE'
 
     ENUM_KEYWORD = 'enum'
     BREAK_KEYWORD = 'break'
+    THIS_KEYWORD = 'this'
+    SUPER_KEYWORD = 'super'
     CONTINUE_KEYWORD = 'continue'
     THROW_KEYWORD = 'throw'
-    THIS_KEYWORD = 'this'
     SUPER_KEYWORD = 'super'
     ON_KEYWORD = 'on'
     OVERRIDE_KEYWORD = 'override'
@@ -88,6 +88,8 @@ psiImplUtilClass="com.iishanto.language.sf.apex.psi.impl.ApexPsiImplUtil"
     LBRACE = '{'
     RBRACE = '}'
     LPAREN = '('
+    NULL_CHECK = '??'
+    QUESTION_MARK = '?'
     RPAREN = ')'
     LBRACKET = '['
     RBRACKET = ']'
@@ -95,6 +97,14 @@ psiImplUtilClass="com.iishanto.language.sf.apex.psi.impl.ApexPsiImplUtil"
     DOT = '.'
     COLON = ':'
     EQUAL = '=='
+    SHORT_HANDLE_PLUS = '+='
+    SHORT_HANDLE_MINUS = '-='
+    SHORT_HANDLE_MULTIPLY = '*='
+    SHORT_HANDLE_DIVIDE = '/='
+    SHORT_HANDLE_BITWISE_AND = '&='
+    SHORT_HANDLE_BITWISE_OR = '|='
+    SHORT_HANDLE_BITWISE_XOR = '^='
+    SHORT_HANDLE_NULL_CHECK = '??='
     NOT_EQUAL_EQAL = '!=='
     NOT_EQUAL = '!='
     GREATER_EQUAL = '>='
@@ -118,88 +128,131 @@ psiImplUtilClass="com.iishanto.language.sf.apex.psi.impl.ApexPsiImplUtil"
     AT = '@'
 
     IDENTIFIER = 'regexp:[a-zA-Z_][a-zA-Z0-9_$]*'
-    STRING = "regexp:'([^'\\]|\\\\.)*'"
+    STRING = "regexp:'([^'\\]|\\['\\a-zA-Z0-9 ])*'"
+//    STRING_LITERAL  = "regexp:'(\\b|\\t|\\n|\\f|\\r|\\'|\\|.)*\'"
     ARRAY_BRACKET = '[]'
   ]
 }
 ApexFile ::=expression| ApexClass | ApexTrigger | ApexInterface | ApexScript | ApexEnum
+
 ApexClass ::= Annotation? ClassAccessModifier Modifiers ClassDefinition
-ClassAccessModifier ::= PUBLIC_KEYWORD | GLOBAL_KEYWORD
+ApexEnum ::= Annotation? EnumAccessModifier Modifiers EnumDefinition
+
+
+
+EnumAccessModifier ::= ClassAccessModifier
+EnumDefinition ::= ENUM_KEYWORD TypeIdentifier LBRACE EnumBody RBRACE
+EnumBody ::= (expression (COMMA expression)*)?
+
+
+ApexInterface ::= Annotation? InterfaceAccessModifier Modifiers InterfaceDefinition
+InterfaceAccessModifier ::= ClassAccessModifier
+InterfaceDefinition ::= INTERFACE_KEYWORD TypeIdentifier Inheritance LBRACE InterfaceBody RBRACE
+InterfaceBody ::= (ClassMember | ApexClassOrInterface| ClassDefinition |InterfaceSignature)*
+InterfaceSignature ::= InterfaceAccessModifier? VIRTUAL_KEYWORD? STATIC_KEYWORD? (FINAL_KEYWORD | OVERRIDE_KEYWORD)? TypeIdentifier CombinedIdentifier parameter_group SEMICOLON
+ApexClassOrInterface ::= Annotation? ClassAccessModifier Modifiers ClassDefinition
+
+ClassAccessModifier ::= PUBLIC_KEYWORD | GLOBAL_KEYWORD | PRIVATE_KEYWORD | PROTECTED_KEYWORD
 Modifiers ::= Modifier*
 Modifier ::= VIRTUAL_KEYWORD | ABSTRACT_KEYWORD | SharingClause
 SharingClause ::= (WITH_KEYWORD | WITHOUT_KEYWORD | INHERITED_KEYWORD) SHARING_KEYWORD
 ClassDefinition ::= CLASS_KEYWORD TypeIdentifier Inheritance LBRACE ClassBody RBRACE
-Inheritance ::= (EXTENDS_KEYWORD ParentClass)? ImplementsClause?
-ParentClass ::= QualifiedIdentifier
-QualifiedIdentifier ::= IDENTIFIER (DOT IDENTIFIER)?
+Inheritance ::= ((EXTENDS_KEYWORD) ParentClass)? ImplementsClause?
+ParentClass ::= TypeIdentifier
+QualifiedIdentifier ::= CombinedIdentifier (DOT CombinedIdentifier)?
 ImplementsClause ::= IMPLEMENTS_KEYWORD InterfaceIdentifier (COMMA InterfaceIdentifier)*
-InterfaceIdentifier ::= QualifiedIdentifier
+InterfaceIdentifier ::= TypeIdentifier
 TypeIdentifier ::= (PrimitiveType | QualifiedIdentifier) (GenericType | ARRAY_BRACKET)*
 PrimitiveType ::= 'Integer' | 'String' | 'Boolean' | 'Double' | 'Long' | 'Date' | 'Datetime' | 'Id' | 'Object' | 'Blob' | 'Decimal' | 'Time' | VOID_KEYWORD
 GenericType ::= LESS TypeIdentifier (COMMA TypeIdentifier)* GREATER
 
 ClassBody ::=  (ClassMember | ApexClassOrInterface| ClassDefinition)*
-ClassMember ::= MemberModifier (FieldDefinition | MethodDefinition | ConstructorDefinition)
-MemberModifier ::= Annotation? MemberAccessModifier? (FINAL_KEYWORD | OVERRIDE_KEYWORD)? STATIC_KEYWORD?
+ClassMember ::= (MemberModifier (FieldDefinition | MethodDefinition | ConstructorDefinition)|ApexClass|ApexEnum|ApexInterface)
+MemberModifier ::= Annotation? MemberAccessModifier? VIRTUAL_KEYWORD? STATIC_KEYWORD? (FINAL_KEYWORD | OVERRIDE_KEYWORD)?
 Annotation ::= AT TypeIdentifier argument_group?
 /**
 * Field definition handling
  */
-FieldDefinition ::= TypeIdentifier VariableName (SEMICOLON | (LBRACE ((GET_KEYWORD|SET_KEYWORD) SEMICOLON)? ((GET_KEYWORD|SET_KEYWORD) SEMICOLON)?  RBRACE))
-VariableName ::= IDENTIFIER (ASSIGN expression)? (COMMA VariableName)?
+FieldDefinition ::= TypeIdentifier VariableName (SEMICOLON | (LBRACE ((GET_KEYWORD|SET_KEYWORD) (MethodBlock | SEMICOLON)) ((GET_KEYWORD|SET_KEYWORD) (MethodBlock | SEMICOLON)))?  RBRACE))
+VariableName ::= CombinedIdentifier (ASSIGN expression)? (COMMA VariableName)?
 MemberAccessModifier ::= PUBLIC_KEYWORD | PRIVATE_KEYWORD | PROTECTED_KEYWORD | GLOBAL_KEYWORD
 /**
     * Method definition handling
  */
 MethodDefinition ::= TypeIdentifier MethodNameWithParameters MethodBlock
-MethodNameWithParameters ::= IDENTIFIER argument_group
+MethodNameWithParameters ::= CombinedIdentifier parameter_group
+MethodNameWithArgument ::= CombinedIdentifier argument_group
 MethodBlock ::= LBRACE MethodBody RBRACE
 MethodBody ::= Statement*
 Statement ::=   DecisionStatement
                 | LoopStatement
+                | ReturnStatement
+                | ThrowStatement
+                | TryCatchStatement
+                | DmlStatement
                 | AssignmentStatement
                 | LoopControlStatement
                 | MethodCallStatement
-AssignmentStatement ::= FieldDefinition | (IDENTIFIER AssignmentStatement expression)
+AssignmentStatement ::= FieldDefinition | expression (QUESTION_MARK? DOT expression) SEMICOLON//(CombinedIdentifier AssignmentStatement expression)
 LoopControlStatement ::= BREAK_KEYWORD SEMICOLON | CONTINUE_KEYWORD SEMICOLON
-MethodCallStatement ::= expression (DOT MethodNameWithParameters)? argument_group? SEMICOLON
+MethodCallStatement ::= expression (QUESTION_MARK? DOT MethodNameWithArgument)? SEMICOLON
 DecisionStatement ::= IfStatement | SwitchStatement
+ReturnStatement ::= RETURN_KEYWORD expression? SEMICOLON
+ThrowStatement ::= THROW_KEYWORD expression SEMICOLON
+/**
+* Constructor definition handling
+ */
+
+ ConstructorDefinition ::= MethodNameWithParameters MethodBlock
+
 /**
 * If statement handling
  */
-IfStatement ::= IF_KEYWORD LPAREN expression RPAREN IfBlock IfElseBlock? ElseBlock?
+IfStatement ::= IF_KEYWORD LPAREN expression RPAREN (SEMICOLON|IfBlock IfElseBlock? ElseBlock?)
 ElseBlock ::= ELSE_KEYWORD IfBlock
 IfElseBlock ::= ELSE_KEYWORD IfStatement
 IfBlock ::= LBRACE IfBody RBRACE
 IfBody ::= Statement*
+
 /**
 * Switch statement handling
  */
 SwitchStatement ::= SWITCH_KEYWORD ON_KEYWORD AllowedSwitchType SwitchBlock
 AllowedSwitchType ::= expression
-SwitchBlock ::= LBRACE (WhenStatement | WhenElseStatement)* RBRACE
+SwitchBlock ::= LBRACE SwitchBlockBody RBRACE
+SwitchBlockBody ::= (WhenStatement | WhenElseStatement)*
 WhenStatement ::= WHEN_KEYWORD SwitchWhenValueList SwitchWhenBlock
 SwitchWhenValueList ::= expression (COMMA expression)*
 SwitchWhenBlock ::= LBRACE SwitchBody RBRACE
 SwitchBody ::= Statement*
 WhenElseStatement ::= WHEN_KEYWORD ELSE_KEYWORD SwitchWhenBlock
+
+/**
+* DML statement handling
+ */
+ DmlStatement ::= InsertStatement | UpdateStatement | DeleteStatement | MergeStatement | UpsertStatement
+InsertStatement ::= INSERT_KEYWORD (argument_group)? expression SEMICOLON
+UpdateStatement ::= UPDATE_KEYWORD (argument_group)? expression SEMICOLON
+DeleteStatement ::= DELETE_KEYWORD (argument_group)? expression SEMICOLON
+MergeStatement ::= MERGE_KEYWORD (argument_group)? expression SEMICOLON
+UpsertStatement ::= UPSERT_KEYWORD (argument_group)? expression SEMICOLON
 /**
 * Loop statement handling
  */
 LoopStatement ::= ForLoop | WhileLoop | DoWhileLoop
 ForLoop ::= EnhancedForLoop
 // for loop
-EnhancedForLoop ::= FOR_KEYWORD LPAREN (ForLoopConditionDeclared|ForLoopConditionReference) RPAREN ForBlock
+EnhancedForLoop ::= FOR_KEYWORD LPAREN (ForLoopConditionDeclared|ForLoopConditionReference) RPAREN (SEMICOLON | ForBlock)
 ForLoopConditionDeclared ::= TypeIdentifier VariableName ConditionTrail
-ForLoopConditionReference ::= VariableName ConditionTrail
+ForLoopConditionReference ::= VariableName? ConditionTrail
 ConditionTrail ::= TraditionalForLoopCondition | IterationForLoop
-TraditionalForLoopCondition ::= SEMICOLON expression SEMICOLON expression
+TraditionalForLoopCondition ::= SEMICOLON expression? SEMICOLON expression?
 IterationForLoop ::= COLON expression
-WhileLoop ::= WHILE_KEYWORD LPAREN WhileCondition RPAREN WhileBlock
+WhileLoop ::= WHILE_KEYWORD LPAREN WhileCondition RPAREN (SEMICOLON|WhileBlock)
 WhileCondition ::= expression
-WhileBlock ::= LBRACE WhileBody RBRACE
+WhileBlock ::= LBRACE WhileBody? RBRACE
 WhileBody ::= Statement*
-ForBlock ::= LBRACE ForBody RBRACE
+ForBlock ::= LBRACE ForBody? RBRACE
 ForBody ::= Statement*
 
 /**
@@ -207,11 +260,28 @@ ForBody ::= Statement*
  */
  DoWhileLoop ::= DO_KEYWORD DoBlock WHILE_KEYWORD LPAREN expression RPAREN SEMICOLON
  DoBlock ::= ForBlock
+
+ /**
+* Try catch statement handling
+  */
+TryCatchStatement ::= TRY_KEYWORD TryBlock CatchBlock* FinallyBlock?
+TryBlock ::= LBRACE TryBody RBRACE
+TryBody ::= Statement*
+CatchBlock ::= CATCH_KEYWORD LPAREN CatchCondition RPAREN CatchBlockBody
+CatchCondition ::= TypeIdentifier VariableName
+CatchBlockBody ::= LBRACE CatchBody RBRACE
+CatchBody ::= Statement*
+FinallyBlock ::= FINALLY_KEYWORD LBRACE FinallyBody RBRACE
+FinallyBody ::= Statement*
+
 /**
  * Expression grammar using Pratt parsing to handle left recursion
  * Rules are structured to define operator precedence and collapse into expression
  */
-expression ::=  ( add_expr
+expression ::=  (
+                ternary_expr
+                | type_cast_expr
+                | add_expr
                 | min_expr
                 | mul_expr
                 | div_expr
@@ -236,6 +306,7 @@ expression ::=  ( add_expr
                 | unary_prefix_decrement_expr
                 | unary_postfix_increment_expr
                 | unary_postfix_decrement_expr
+                | shorthand_assignment_expr
                 | negation_expr)
 // Arithmetic expressions (lower precedence)
 add_expr ::= expression PLUS expression {extends=expression}
@@ -259,7 +330,8 @@ bitwise_and_expr ::= expression BITWISE_AND expression {extends=expression}
 bitwise_or_expr ::= expression BITWISE_OR expression {extends=expression}
 bitwise_xor_expr ::= expression BITWISE_XOR expression {extends=expression}
 assignment_expr ::= expression ASSIGN GREATER? COLON? expression {extends=expression}
-array_access_expr ::= expression LBRACKET expression RBRACKET {extends=expression}
+array_access_expr ::= expression LBRACKET expression RBRACKET (QUESTION_MARK? DOT expression)? {extends=expression}
+type_cast_expr ::= LPAREN TypeIdentifier RPAREN expression {extends=expression}
 negation_expr ::= MINUS expression {extends=expression}
 /*
  * Unary expressions
@@ -268,17 +340,24 @@ unary_prefix_increment_expr ::= INCREMENT expression {extends=expression}
 unary_prefix_decrement_expr ::= DECREMENT expression {extends=expression}
 unary_postfix_increment_expr ::= expression INCREMENT {extends=expression}
 unary_postfix_decrement_expr ::= expression DECREMENT {extends=expression}
+shorthand_assignment_expr ::= expression ( SHORT_HANDLE_PLUS | SHORT_HANDLE_MINUS | SHORT_HANDLE_MULTIPLY | SHORT_HANDLE_DIVIDE | SHORT_HANDLE_BITWISE_AND | SHORT_HANDLE_BITWISE_OR | SHORT_HANDLE_BITWISE_XOR | SHORT_HANDLE_NULL_CHECK
+) expression {extends=expression}
+ternary_expr ::= expression QUESTION_MARK expression COLON expression {extends=expression}
 // Primary expressions (highest precedence)
 primary_expr ::= literal_with_attribute
              | variable_reference_expr
+             | THIS_KEYWORD
+             | SUPER_KEYWORD
              | paren_expr
              {extends=expression}
 
-private literal_with_attribute ::= (literal|soql_expr|SOSL) (DOT VariableName)? (LBRACKET expression RBRACKET)? (LPAREN expression? RPAREN)?
-private soql_expr ::= LBRACKET SELECT_KEYWORD soql_token_composition RBRACKET
-private soql_token_composition ::= soql_expression_unit COMMA? soql_expression_unit*
-private soql_expression_unit ::= custom_soql_sosl_expression|soql_expr
-private custom_soql_sosl_expression ::= soql_sosl_keyword | expression
+private literal_with_attribute ::= (literal|soql_expr|SOSL) (QUESTION_MARK? DOT VariableName)? (LBRACKET expression RBRACKET)? (LPAREN expression? RPAREN)?
+private soql_expr ::= LBRACKET soql_base_expr RBRACKET
+private soql_base_expr ::= SELECT_KEYWORD soql_token_composition
+private soql_token_composition ::= soql_expression_unit COMMA? (soql_expression_unit|COLON)*
+private soql_expression_unit ::= custom_soql_sosl_expression|(LPAREN soql_base_expr RPAREN) | field_expression
+private custom_soql_sosl_expression ::= soql_sosl_keyword
+private field_expression ::= expression (COMMA expression)*
 private soql_sosl_keyword ::=   FROM_KEYWORD
                                 | WHERE_KEYWORD
                                 | ORDER_BY_KEYWORD
@@ -292,12 +371,20 @@ private soql_sosl_keyword ::=   FROM_KEYWORD
 
 private literal ::= NUMBER | STRING | TRUE_LITERAL | FALSE_LITERAL
 private paren_expr ::= LPAREN expression RPAREN {extends=expression}
-private variable_reference_expr ::= object_creation_expr | IDENTIFIER (LESS type_list GREATER)? (DOT variable_reference_expr)? (argument_group)? (DOT variable_reference_expr)? {extends=expression}
-private object_creation_expr ::= typedef (argument_group)? initializer_expr? (DOT variable_reference_expr)?
-private typedef ::= NEW_KEYWORD IDENTIFIER (LESS type_list GREATER)? ARRAY_BRACKET?
+private variable_reference_expr ::= object_creation_expr | CombinedIdentifier (LESS type_list GREATER)? (QUESTION_MARK? DOT variable_reference_expr)? (argument_group)? (DOT variable_reference_expr)? {extends=expression}
+private object_creation_expr ::= typedef (argument_group)? initializer_expr? (QUESTION_MARK? DOT variable_reference_expr)?
+private typedef ::= NEW_KEYWORD CombinedIdentifier (LESS type_list GREATER)? ARRAY_BRACKET?
 private initializer_expr ::= LBRACE initialization_unit_list RBRACE
 private initialization_unit_list ::= initialization_unit (COMMA initialization_unit)*
 private initialization_unit ::= (expression EQUAL GREATER?)? expression
 private type_list ::= variable_reference_expr (COMMA variable_reference_expr)*
 private argument_group ::= LPAREN value_expression_list? RPAREN
+private parameter_group ::= LPAREN parameter_list? RPAREN
+parameter_list ::= TypeIdentifier CombinedIdentifier (COMMA TypeIdentifier CombinedIdentifier)*
 private value_expression_list ::= expression (COMMA expression)*
+
+private CombinedIdentifier ::= IDENTIFIER | GET_KEYWORD | SET_KEYWORD | THIS_KEYWORD | SUPER_KEYWORD
+
+/**
+TODO: I Have do wrong with array access, added dot expression which should not be there.
+ */

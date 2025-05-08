@@ -41,6 +41,12 @@ public class ApexStatementImpl extends ASTWrapperPsiElement implements ApexState
 
   @Override
   @Nullable
+  public ApexDmlStatement getDmlStatement() {
+    return findChildByClass(ApexDmlStatement.class);
+  }
+
+  @Override
+  @Nullable
   public ApexLoopControlStatement getLoopControlStatement() {
     return findChildByClass(ApexLoopControlStatement.class);
   }
@@ -55,6 +61,24 @@ public class ApexStatementImpl extends ASTWrapperPsiElement implements ApexState
   @Nullable
   public ApexMethodCallStatement getMethodCallStatement() {
     return findChildByClass(ApexMethodCallStatement.class);
+  }
+
+  @Override
+  @Nullable
+  public ApexReturnStatement getReturnStatement() {
+    return findChildByClass(ApexReturnStatement.class);
+  }
+
+  @Override
+  @Nullable
+  public ApexThrowStatement getThrowStatement() {
+    return findChildByClass(ApexThrowStatement.class);
+  }
+
+  @Override
+  @Nullable
+  public ApexTryCatchStatement getTryCatchStatement() {
+    return findChildByClass(ApexTryCatchStatement.class);
   }
 
 }

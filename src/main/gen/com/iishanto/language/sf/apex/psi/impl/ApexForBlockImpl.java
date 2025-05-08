@@ -28,9 +28,9 @@ public class ApexForBlockImpl extends ASTWrapperPsiElement implements ApexForBlo
   }
 
   @Override
-  @NotNull
+  @Nullable
   public ApexForBody getForBody() {
-    return findNotNullChildByClass(ApexForBody.class);
+    return findChildByClass(ApexForBody.class);
   }
 
 }

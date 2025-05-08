@@ -8,6 +8,6 @@ import com.intellij.psi.PsiElement;
 public interface ApexInterfaceIdentifier extends PsiElement {
 
   @NotNull
-  ApexQualifiedIdentifier getQualifiedIdentifier();
+  ApexTypeIdentifier getTypeIdentifier();
 
 }

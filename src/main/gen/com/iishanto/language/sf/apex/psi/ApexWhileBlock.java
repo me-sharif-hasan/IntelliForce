@@ -7,7 +7,7 @@ import com.intellij.psi.PsiElement;
 
 public interface ApexWhileBlock extends PsiElement {
 
-  @NotNull
+  @Nullable
   ApexWhileBody getWhileBody();
 
 }

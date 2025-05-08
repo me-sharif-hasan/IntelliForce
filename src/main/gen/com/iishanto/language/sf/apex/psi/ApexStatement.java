@@ -14,6 +14,9 @@ public interface ApexStatement extends PsiElement {
   ApexDecisionStatement getDecisionStatement();
 
   @Nullable
+  ApexDmlStatement getDmlStatement();
+
+  @Nullable
   ApexLoopControlStatement getLoopControlStatement();
 
   @Nullable
@@ -21,5 +24,14 @@ public interface ApexStatement extends PsiElement {
 
   @Nullable
   ApexMethodCallStatement getMethodCallStatement();
+
+  @Nullable
+  ApexReturnStatement getReturnStatement();
+
+  @Nullable
+  ApexThrowStatement getThrowStatement();
+
+  @Nullable
+  ApexTryCatchStatement getTryCatchStatement();
 
 }

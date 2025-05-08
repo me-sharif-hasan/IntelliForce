@@ -34,9 +34,9 @@ public class ApexIfStatementImpl extends ASTWrapperPsiElement implements ApexIfS
   }
 
   @Override
-  @NotNull
+  @Nullable
   public ApexIfBlock getIfBlock() {
-    return findNotNullChildByClass(ApexIfBlock.class);
+    return findChildByClass(ApexIfBlock.class);
   }
 
   @Override

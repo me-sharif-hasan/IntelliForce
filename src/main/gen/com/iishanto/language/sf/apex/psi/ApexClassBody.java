@@ -8,6 +8,9 @@ import com.intellij.psi.PsiElement;
 public interface ApexClassBody extends PsiElement {
 
   @NotNull
+  List<ApexApexClassOrInterface> getApexClassOrInterfaceList();
+
+  @NotNull
   List<ApexClassDefinition> getClassDefinitionList();
 
   @NotNull

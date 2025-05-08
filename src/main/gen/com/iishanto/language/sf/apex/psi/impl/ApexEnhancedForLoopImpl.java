@@ -28,9 +28,9 @@ public class ApexEnhancedForLoopImpl extends ASTWrapperPsiElement implements Ape
   }
 
   @Override
-  @NotNull
+  @Nullable
   public ApexForBlock getForBlock() {
-    return findNotNullChildByClass(ApexForBlock.class);
+    return findChildByClass(ApexForBlock.class);
   }
 
   @Override

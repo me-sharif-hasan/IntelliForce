@@ -19,7 +19,35 @@ public class ApexVisitor extends PsiElementVisitor {
     visitPsiElement(o);
   }
 
+  public void visitApexClassOrInterface(@NotNull ApexApexClassOrInterface o) {
+    visitPsiElement(o);
+  }
+
+  public void visitApexEnum(@NotNull ApexApexEnum o) {
+    visitPsiElement(o);
+  }
+
+  public void visitApexInterface(@NotNull ApexApexInterface o) {
+    visitPsiElement(o);
+  }
+
   public void visitAssignmentStatement(@NotNull ApexAssignmentStatement o) {
+    visitPsiElement(o);
+  }
+
+  public void visitCatchBlock(@NotNull ApexCatchBlock o) {
+    visitPsiElement(o);
+  }
+
+  public void visitCatchBlockBody(@NotNull ApexCatchBlockBody o) {
+    visitPsiElement(o);
+  }
+
+  public void visitCatchBody(@NotNull ApexCatchBody o) {
+    visitPsiElement(o);
+  }
+
+  public void visitCatchCondition(@NotNull ApexCatchCondition o) {
     visitPsiElement(o);
   }
 
@@ -43,7 +71,19 @@ public class ApexVisitor extends PsiElementVisitor {
     visitPsiElement(o);
   }
 
+  public void visitConstructorDefinition(@NotNull ApexConstructorDefinition o) {
+    visitPsiElement(o);
+  }
+
   public void visitDecisionStatement(@NotNull ApexDecisionStatement o) {
+    visitPsiElement(o);
+  }
+
+  public void visitDeleteStatement(@NotNull ApexDeleteStatement o) {
+    visitPsiElement(o);
+  }
+
+  public void visitDmlStatement(@NotNull ApexDmlStatement o) {
     visitPsiElement(o);
   }
 
@@ -63,7 +103,27 @@ public class ApexVisitor extends PsiElementVisitor {
     visitPsiElement(o);
   }
 
+  public void visitEnumAccessModifier(@NotNull ApexEnumAccessModifier o) {
+    visitPsiElement(o);
+  }
+
+  public void visitEnumBody(@NotNull ApexEnumBody o) {
+    visitPsiElement(o);
+  }
+
+  public void visitEnumDefinition(@NotNull ApexEnumDefinition o) {
+    visitPsiElement(o);
+  }
+
   public void visitFieldDefinition(@NotNull ApexFieldDefinition o) {
+    visitPsiElement(o);
+  }
+
+  public void visitFinallyBlock(@NotNull ApexFinallyBlock o) {
+    visitPsiElement(o);
+  }
+
+  public void visitFinallyBody(@NotNull ApexFinallyBody o) {
     visitPsiElement(o);
   }
 
@@ -115,7 +175,27 @@ public class ApexVisitor extends PsiElementVisitor {
     visitPsiElement(o);
   }
 
+  public void visitInsertStatement(@NotNull ApexInsertStatement o) {
+    visitPsiElement(o);
+  }
+
+  public void visitInterfaceAccessModifier(@NotNull ApexInterfaceAccessModifier o) {
+    visitPsiElement(o);
+  }
+
+  public void visitInterfaceBody(@NotNull ApexInterfaceBody o) {
+    visitPsiElement(o);
+  }
+
+  public void visitInterfaceDefinition(@NotNull ApexInterfaceDefinition o) {
+    visitPsiElement(o);
+  }
+
   public void visitInterfaceIdentifier(@NotNull ApexInterfaceIdentifier o) {
+    visitPsiElement(o);
+  }
+
+  public void visitInterfaceSignature(@NotNull ApexInterfaceSignature o) {
     visitPsiElement(o);
   }
 
@@ -139,6 +219,10 @@ public class ApexVisitor extends PsiElementVisitor {
     visitPsiElement(o);
   }
 
+  public void visitMergeStatement(@NotNull ApexMergeStatement o) {
+    visitPsiElement(o);
+  }
+
   public void visitMethodBlock(@NotNull ApexMethodBlock o) {
     visitPsiElement(o);
   }
@@ -152,6 +236,10 @@ public class ApexVisitor extends PsiElementVisitor {
   }
 
   public void visitMethodDefinition(@NotNull ApexMethodDefinition o) {
+    visitPsiElement(o);
+  }
+
+  public void visitMethodNameWithArgument(@NotNull ApexMethodNameWithArgument o) {
     visitPsiElement(o);
   }
 
@@ -179,6 +267,10 @@ public class ApexVisitor extends PsiElementVisitor {
     visitPsiElement(o);
   }
 
+  public void visitReturnStatement(@NotNull ApexReturnStatement o) {
+    visitPsiElement(o);
+  }
+
   public void visitSharingClause(@NotNull ApexSharingClause o) {
     visitPsiElement(o);
   }
@@ -188,6 +280,10 @@ public class ApexVisitor extends PsiElementVisitor {
   }
 
   public void visitSwitchBlock(@NotNull ApexSwitchBlock o) {
+    visitPsiElement(o);
+  }
+
+  public void visitSwitchBlockBody(@NotNull ApexSwitchBlockBody o) {
     visitPsiElement(o);
   }
 
@@ -207,11 +303,35 @@ public class ApexVisitor extends PsiElementVisitor {
     visitPsiElement(o);
   }
 
+  public void visitThrowStatement(@NotNull ApexThrowStatement o) {
+    visitPsiElement(o);
+  }
+
   public void visitTraditionalForLoopCondition(@NotNull ApexTraditionalForLoopCondition o) {
     visitPsiElement(o);
   }
 
+  public void visitTryBlock(@NotNull ApexTryBlock o) {
+    visitPsiElement(o);
+  }
+
+  public void visitTryBody(@NotNull ApexTryBody o) {
+    visitPsiElement(o);
+  }
+
+  public void visitTryCatchStatement(@NotNull ApexTryCatchStatement o) {
+    visitPsiElement(o);
+  }
+
   public void visitTypeIdentifier(@NotNull ApexTypeIdentifier o) {
+    visitPsiElement(o);
+  }
+
+  public void visitUpdateStatement(@NotNull ApexUpdateStatement o) {
+    visitPsiElement(o);
+  }
+
+  public void visitUpsertStatement(@NotNull ApexUpsertStatement o) {
     visitPsiElement(o);
   }
 
@@ -331,7 +451,23 @@ public class ApexVisitor extends PsiElementVisitor {
     visitExpression(o);
   }
 
+  public void visitParameterList(@NotNull ApexParameterList o) {
+    visitPsiElement(o);
+  }
+
   public void visitPrimaryExpr(@NotNull ApexPrimaryExpr o) {
+    visitExpression(o);
+  }
+
+  public void visitShorthandAssignmentExpr(@NotNull ApexShorthandAssignmentExpr o) {
+    visitExpression(o);
+  }
+
+  public void visitTernaryExpr(@NotNull ApexTernaryExpr o) {
+    visitExpression(o);
+  }
+
+  public void visitTypeCastExpr(@NotNull ApexTypeCastExpr o) {
     visitExpression(o);
   }
 

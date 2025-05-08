@@ -29,14 +29,38 @@ public class ApexClassMemberImpl extends ASTWrapperPsiElement implements ApexCla
 
   @Override
   @Nullable
+  public ApexApexClass getApexClass() {
+    return findChildByClass(ApexApexClass.class);
+  }
+
+  @Override
+  @Nullable
+  public ApexApexEnum getApexEnum() {
+    return findChildByClass(ApexApexEnum.class);
+  }
+
+  @Override
+  @Nullable
+  public ApexApexInterface getApexInterface() {
+    return findChildByClass(ApexApexInterface.class);
+  }
+
+  @Override
+  @Nullable
+  public ApexConstructorDefinition getConstructorDefinition() {
+    return findChildByClass(ApexConstructorDefinition.class);
+  }
+
+  @Override
+  @Nullable
   public ApexFieldDefinition getFieldDefinition() {
     return findChildByClass(ApexFieldDefinition.class);
   }
 
   @Override
-  @NotNull
+  @Nullable
   public ApexMemberModifier getMemberModifier() {
-    return findNotNullChildByClass(ApexMemberModifier.class);
+    return findChildByClass(ApexMemberModifier.class);
   }
 
   @Override

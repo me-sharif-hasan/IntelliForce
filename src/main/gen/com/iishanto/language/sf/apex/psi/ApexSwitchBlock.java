@@ -8,9 +8,6 @@ import com.intellij.psi.PsiElement;
 public interface ApexSwitchBlock extends PsiElement {
 
   @NotNull
-  List<ApexWhenElseStatement> getWhenElseStatementList();
-
-  @NotNull
-  List<ApexWhenStatement> getWhenStatementList();
+  ApexSwitchBlockBody getSwitchBlockBody();
 
 }

@@ -29,6 +29,12 @@ public class ApexFieldDefinitionImpl extends ASTWrapperPsiElement implements Ape
 
   @Override
   @NotNull
+  public List<ApexMethodBlock> getMethodBlockList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, ApexMethodBlock.class);
+  }
+
+  @Override
+  @NotNull
   public ApexTypeIdentifier getTypeIdentifier() {
     return findNotNullChildByClass(ApexTypeIdentifier.class);
   }

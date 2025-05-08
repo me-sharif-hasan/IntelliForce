@@ -7,10 +7,10 @@ import com.intellij.psi.PsiElement;
 
 public interface ApexMethodNameWithParameters extends PsiElement {
 
-  @NotNull
-  List<ApexExpression> getExpressionList();
+  @Nullable
+  ApexParameterList getParameterList();
 
-  @NotNull
+  @Nullable
   PsiElement getIdentifier();
 
 }

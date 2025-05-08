@@ -29,14 +29,8 @@ public class ApexSwitchBlockImpl extends ASTWrapperPsiElement implements ApexSwi
 
   @Override
   @NotNull
-  public List<ApexWhenElseStatement> getWhenElseStatementList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, ApexWhenElseStatement.class);
-  }
-
-  @Override
-  @NotNull
-  public List<ApexWhenStatement> getWhenStatementList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, ApexWhenStatement.class);
+  public ApexSwitchBlockBody getSwitchBlockBody() {
+    return findNotNullChildByClass(ApexSwitchBlockBody.class);
   }
 
 }

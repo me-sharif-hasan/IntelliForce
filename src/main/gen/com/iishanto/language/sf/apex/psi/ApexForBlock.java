@@ -7,7 +7,7 @@ import com.intellij.psi.PsiElement;
 
 public interface ApexForBlock extends PsiElement {
 
-  @NotNull
+  @Nullable
   ApexForBody getForBody();
 
 }

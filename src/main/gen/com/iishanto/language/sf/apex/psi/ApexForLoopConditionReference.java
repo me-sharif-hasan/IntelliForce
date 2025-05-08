@@ -10,7 +10,7 @@ public interface ApexForLoopConditionReference extends PsiElement {
   @NotNull
   ApexConditionTrail getConditionTrail();
 
-  @NotNull
+  @Nullable
   ApexVariableName getVariableName();
 
 }

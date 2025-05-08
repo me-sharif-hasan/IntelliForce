@@ -29,8 +29,8 @@ public class ApexParentClassImpl extends ASTWrapperPsiElement implements ApexPar
 
   @Override
   @NotNull
-  public ApexQualifiedIdentifier getQualifiedIdentifier() {
-    return findNotNullChildByClass(ApexQualifiedIdentifier.class);
+  public ApexTypeIdentifier getTypeIdentifier() {
+    return findNotNullChildByClass(ApexTypeIdentifier.class);
   }
 
 }

@@ -29,26 +29,14 @@ public class ApexAssignmentStatementImpl extends ASTWrapperPsiElement implements
 
   @Override
   @Nullable
-  public ApexAssignmentStatement getAssignmentStatement() {
-    return findChildByClass(ApexAssignmentStatement.class);
-  }
-
-  @Override
-  @Nullable
   public ApexFieldDefinition getFieldDefinition() {
     return findChildByClass(ApexFieldDefinition.class);
   }
 
   @Override
-  @Nullable
-  public ApexExpression getExpression() {
-    return findChildByClass(ApexExpression.class);
-  }
-
-  @Override
-  @Nullable
-  public PsiElement getIdentifier() {
-    return findChildByType(IDENTIFIER);
+  @NotNull
+  public List<ApexExpression> getExpressionList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, ApexExpression.class);
   }
 
 }

@@ -28,15 +28,15 @@ public class ApexMethodNameWithParametersImpl extends ASTWrapperPsiElement imple
   }
 
   @Override
-  @NotNull
-  public List<ApexExpression> getExpressionList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, ApexExpression.class);
+  @Nullable
+  public ApexParameterList getParameterList() {
+    return findChildByClass(ApexParameterList.class);
   }
 
   @Override
-  @NotNull
+  @Nullable
   public PsiElement getIdentifier() {
-    return findNotNullChildByType(IDENTIFIER);
+    return findChildByType(IDENTIFIER);
   }
 
 }
