@@ -1,5 +1,6 @@
 package com.iishanto.ide.codeformatter;
 
+import com.iishanto.language.sf.apex.psi.ApexTypes;
 import com.intellij.formatting.*;
 import com.intellij.lang.ASTNode;
 import com.intellij.openapi.util.TextRange;
@@ -60,7 +61,16 @@ public class ApexLanguageBlock implements Block {
 
     @Override
     public @NotNull ChildAttributes getChildAttributes(int newChildIndex) {
-        return new ChildAttributes(Indent.getNormalIndent(), null);
+        // Determine the indent for a new line based on the context
+        if (isBlockNode(node)) {
+            // Inside a block (e.g., method body, class body), new lines should have normal indent
+            return new ChildAttributes(Indent.getNormalIndent(), null);
+        } else if (isStatementNode(node)) {
+            // If the current node is a statement, new lines should align with the statement
+            return new ChildAttributes(Indent.getNoneIndent(), null);
+        }
+        // Default: no additional indent
+        return new ChildAttributes(Indent.getNoneIndent(), null);
     }
 
     @Override
@@ -75,14 +85,46 @@ public class ApexLanguageBlock implements Block {
 
     private Indent getChildIndent(ASTNode child) {
         // Apply indentation rules based on the child node type
-        if (isBlockElement(child)) {
-            return Indent.getNormalIndent(); // Indent for block elements
+        if (isBlockNode(child.getTreeParent()) && isStatementNode(child)) {
+            // Statements inside a block should have normal indent
+            return Indent.getNormalIndent();
+        } else if (isBlockElement(child)) {
+            // Braces or block delimiters should have no indent
+            return Indent.getNoneIndent();
         }
-        return Indent.getNoneIndent(); // No indent for others
+        // Default: no indent for other nodes
+        return Indent.getNoneIndent();
     }
 
     private boolean isBlockElement(ASTNode node) {
-        // Define block elements (e.g., braces, statements, etc.)
-        return "{".equals(node.getText()) || "}".equals(node.getText());
+        // Braces as block delimiters
+        return node.getElementType() == ApexTypes.LBRACE || node.getElementType() == ApexTypes.RBRACE;
+    }
+
+    private boolean isBlockNode(ASTNode node) {
+        // Check if the node represents a block (e.g., method body, class body, if block)
+        return node.getElementType() == ApexTypes.METHOD_BLOCK ||
+                node.getElementType() == ApexTypes.CLASS_BODY ||
+                node.getElementType() == ApexTypes.IF_BLOCK ||
+                node.getElementType() == ApexTypes.FOR_BLOCK ||
+                node.getElementType() == ApexTypes.WHILE_BLOCK ||
+                node.getElementType() == ApexTypes.TRY_BLOCK ||
+                node.getElementType() == ApexTypes.CATCH_BLOCK ||
+                node.getElementType() == ApexTypes.FINALLY_BLOCK ||
+                node.getElementType() == ApexTypes.SWITCH_BLOCK;
+    }
+
+    private boolean isStatementNode(ASTNode node) {
+        // Check if the node is a statement
+        return node.getElementType() == ApexTypes.STATEMENT ||
+                node.getElementType() == ApexTypes.ASSIGNMENT_STATEMENT ||
+                node.getElementType() == ApexTypes.METHOD_CALL_STATEMENT ||
+                node.getElementType() == ApexTypes.RETURN_STATEMENT ||
+                node.getElementType() == ApexTypes.THROW_STATEMENT ||
+                node.getElementType() == ApexTypes.DML_STATEMENT ||
+                node.getElementType() == ApexTypes.LOOP_CONTROL_STATEMENT ||
+                node.getElementType() == ApexTypes.DECISION_STATEMENT ||
+                node.getElementType() == ApexTypes.LOOP_STATEMENT ||
+                node.getElementType() == ApexTypes.TRY_CATCH_STATEMENT;
     }
 }
