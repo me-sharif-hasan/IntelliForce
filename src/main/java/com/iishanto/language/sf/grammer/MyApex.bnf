@@ -173,7 +173,7 @@ Annotation ::= AT TypeIdentifier argument_group?
 /**
 * Field definition handling
  */
-FieldDefinition ::= TypeIdentifier VariableName (SEMICOLON | (LBRACE ((GET_KEYWORD|SET_KEYWORD) (MethodBlock | SEMICOLON)) ((GET_KEYWORD|SET_KEYWORD) (MethodBlock | SEMICOLON)))?  RBRACE))
+FieldDefinition ::= TypeIdentifier VariableName (SEMICOLON | (LBRACE ((GET_KEYWORD|SET_KEYWORD) (MethodBlock | SEMICOLON)) ((GET_KEYWORD|SET_KEYWORD) (MethodBlock | SEMICOLON)))?  RBRACE)
 VariableName ::= CombinedIdentifier (ASSIGN expression)? (COMMA VariableName)?
 MemberAccessModifier ::= PUBLIC_KEYWORD | PRIVATE_KEYWORD | PROTECTED_KEYWORD | GLOBAL_KEYWORD
 /**
