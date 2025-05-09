@@ -285,6 +285,7 @@ expression ::=  (
                 | min_expr
                 | mul_expr
                 | div_expr
+                | null_coalescing_expr
                 | logical_and_expr
                 | logical_or_expr
                 | logical_greater_expr
@@ -313,6 +314,7 @@ add_expr ::= expression PLUS expression {extends=expression}
 min_expr ::= expression MINUS expression {extends=expression}
 mul_expr ::= expression MULTIPLY expression {extends=expression}
 div_expr ::= expression DIVIDE expression {extends=expression}
+null_coalescing_expr ::= expression NULL_CHECK expression {extends=expression}
 // Logical expressions
 logical_and_expr ::= expression AND expression {extends=expression}
 logical_or_expr ::= expression OR expression {extends=expression}
