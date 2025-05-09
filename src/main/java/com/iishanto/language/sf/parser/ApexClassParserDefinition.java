@@ -43,7 +43,7 @@ import org.jetbrains.annotations.NotNull;
 public class ApexClassParserDefinition implements ParserDefinition {
 
     private static final TokenSet WHITE_SPACES = TokenSet.create(TokenType.WHITE_SPACE);
-    private static final TokenSet COMMENTS = TokenSet.create(ApexTypes.COMMENT);
+    private static final TokenSet COMMENTS = TokenSet.create(ApexTypes.COMMENT,ApexTypes.BLOCK_COMMENT);
 
     public static final IFileElementType FILE = new IFileElementType(Language.<ApexLanguage>findInstance(ApexLanguage.class));
 

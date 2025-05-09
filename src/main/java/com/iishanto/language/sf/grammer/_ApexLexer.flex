@@ -25,7 +25,8 @@ import static com.iishanto.language.sf.apex.psi.ApexTypes.*;
 EOL=\R
 WHITE_SPACE=\s+
 
-COMMENT=("//".*|("/"\*[^]]*?\*"/"))
+BLOCK_COMMENT="/"\*(.|\n)*\*"/"
+COMMENT="//".*
 UPDATE_KEYWORD=(update|UPDATE)
 WHITE_SPACE=[ \t\n\x0B\f\r]+
 NUMBER=-?[0-9]+(\.?[0-9])*L?
@@ -109,10 +110,13 @@ STRING='([^'\\]|\\['\\a-zA-Z0-9 ])*'
   "-="                   { return SHORT_HANDLE_MINUS; }
   "*="                   { return SHORT_HANDLE_MULTIPLY; }
   "/="                   { return SHORT_HANDLE_DIVIDE; }
+  "%="                   { return SHORT_HANDLE_MODULO; }
   "&="                   { return SHORT_HANDLE_BITWISE_AND; }
   "|="                   { return SHORT_HANDLE_BITWISE_OR; }
   "^="                   { return SHORT_HANDLE_BITWISE_XOR; }
   "??="                  { return SHORT_HANDLE_NULL_CHECK; }
+  "<<="                  { return SHORT_HANDLE_LEFT_SHIFT; }
+  ">>="                  { return SHORT_HANDLE_RIGHT_SHIFT; }
   "!=="                  { return NOT_EQUAL_EQAL; }
   "!="                   { return NOT_EQUAL; }
   ">="                   { return GREATER_EQUAL; }
@@ -125,6 +129,7 @@ STRING='([^'\\]|\\['\\a-zA-Z0-9 ])*'
   "-"                    { return MINUS; }
   "*"                    { return MULTIPLY; }
   "/"                    { return DIVIDE; }
+  "%"                    { return MODULO; }
   "&&"                   { return AND; }
   "||"                   { return OR; }
   "!"                    { return NOT; }
@@ -139,6 +144,7 @@ STRING='([^'\\]|\\['\\a-zA-Z0-9 ])*'
   "ApexScript"           { return APEXSCRIPT; }
   "SOSL"                 { return SOSL; }
 
+  {BLOCK_COMMENT}        { return BLOCK_COMMENT; }
   {COMMENT}              { return COMMENT; }
   {UPDATE_KEYWORD}       { return UPDATE_KEYWORD; }
   {WHITE_SPACE}          { return WHITE_SPACE; }

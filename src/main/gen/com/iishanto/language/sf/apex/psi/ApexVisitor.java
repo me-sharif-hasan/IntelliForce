@@ -395,6 +395,10 @@ public class ApexVisitor extends PsiElementVisitor {
     visitPsiElement(o);
   }
 
+  public void visitLeftShiftExpr(@NotNull ApexLeftShiftExpr o) {
+    visitExpression(o);
+  }
+
   public void visitLogicalAndExpr(@NotNull ApexLogicalAndExpr o) {
     visitExpression(o);
   }
@@ -443,6 +447,10 @@ public class ApexVisitor extends PsiElementVisitor {
     visitExpression(o);
   }
 
+  public void visitModuloExpr(@NotNull ApexModuloExpr o) {
+    visitExpression(o);
+  }
+
   public void visitMulExpr(@NotNull ApexMulExpr o) {
     visitExpression(o);
   }
@@ -451,11 +459,19 @@ public class ApexVisitor extends PsiElementVisitor {
     visitExpression(o);
   }
 
+  public void visitNullCoalescingExpr(@NotNull ApexNullCoalescingExpr o) {
+    visitExpression(o);
+  }
+
   public void visitParameterList(@NotNull ApexParameterList o) {
     visitPsiElement(o);
   }
 
   public void visitPrimaryExpr(@NotNull ApexPrimaryExpr o) {
+    visitExpression(o);
+  }
+
+  public void visitRightShiftExpr(@NotNull ApexRightShiftExpr o) {
     visitExpression(o);
   }
 

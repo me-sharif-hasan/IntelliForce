@@ -65,6 +65,7 @@ public interface ApexTypes {
   IElementType INTERFACE_IDENTIFIER = new ApexElementType("INTERFACE_IDENTIFIER");
   IElementType INTERFACE_SIGNATURE = new ApexElementType("INTERFACE_SIGNATURE");
   IElementType ITERATION_FOR_LOOP = new ApexElementType("ITERATION_FOR_LOOP");
+  IElementType LEFT_SHIFT_EXPR = new ApexElementType("LEFT_SHIFT_EXPR");
   IElementType LOGICAL_AND_EXPR = new ApexElementType("LOGICAL_AND_EXPR");
   IElementType LOGICAL_EQUAL_EQUAL_EXPR = new ApexElementType("LOGICAL_EQUAL_EQUAL_EXPR");
   IElementType LOGICAL_EQUAL_EXPR = new ApexElementType("LOGICAL_EQUAL_EXPR");
@@ -90,14 +91,17 @@ public interface ApexTypes {
   IElementType MIN_EXPR = new ApexElementType("MIN_EXPR");
   IElementType MODIFIER = new ApexElementType("MODIFIER");
   IElementType MODIFIERS = new ApexElementType("MODIFIERS");
+  IElementType MODULO_EXPR = new ApexElementType("MODULO_EXPR");
   IElementType MUL_EXPR = new ApexElementType("MUL_EXPR");
   IElementType NEGATION_EXPR = new ApexElementType("NEGATION_EXPR");
+  IElementType NULL_COALESCING_EXPR = new ApexElementType("NULL_COALESCING_EXPR");
   IElementType PARAMETER_LIST = new ApexElementType("PARAMETER_LIST");
   IElementType PARENT_CLASS = new ApexElementType("PARENT_CLASS");
   IElementType PRIMARY_EXPR = new ApexElementType("PRIMARY_EXPR");
   IElementType PRIMITIVE_TYPE = new ApexElementType("PRIMITIVE_TYPE");
   IElementType QUALIFIED_IDENTIFIER = new ApexElementType("QUALIFIED_IDENTIFIER");
   IElementType RETURN_STATEMENT = new ApexElementType("RETURN_STATEMENT");
+  IElementType RIGHT_SHIFT_EXPR = new ApexElementType("RIGHT_SHIFT_EXPR");
   IElementType SHARING_CLAUSE = new ApexElementType("SHARING_CLAUSE");
   IElementType SHORTHAND_ASSIGNMENT_EXPR = new ApexElementType("SHORTHAND_ASSIGNMENT_EXPR");
   IElementType STATEMENT = new ApexElementType("STATEMENT");
@@ -139,6 +143,7 @@ public interface ApexTypes {
   IElementType BITWISE_AND = new ApexTokenType("&");
   IElementType BITWISE_OR = new ApexTokenType("|");
   IElementType BITWISE_XOR = new ApexTokenType("^");
+  IElementType BLOCK_COMMENT = new ApexTokenType("BLOCK_COMMENT");
   IElementType BREAK_KEYWORD = new ApexTokenType("break");
   IElementType CASE_KEYWORD = new ApexTokenType("case");
   IElementType CATCH_KEYWORD = new ApexTokenType("catch");
@@ -184,6 +189,7 @@ public interface ApexTypes {
   IElementType LPAREN = new ApexTokenType("(");
   IElementType MERGE_KEYWORD = new ApexTokenType("merge");
   IElementType MINUS = new ApexTokenType("-");
+  IElementType MODULO = new ApexTokenType("%");
   IElementType MULTIPLY = new ApexTokenType("*");
   IElementType NEW_KEYWORD = new ApexTokenType("new");
   IElementType NOT = new ApexTokenType("!");
@@ -213,10 +219,13 @@ public interface ApexTypes {
   IElementType SHORT_HANDLE_BITWISE_OR = new ApexTokenType("|=");
   IElementType SHORT_HANDLE_BITWISE_XOR = new ApexTokenType("^=");
   IElementType SHORT_HANDLE_DIVIDE = new ApexTokenType("/=");
+  IElementType SHORT_HANDLE_LEFT_SHIFT = new ApexTokenType("<<=");
   IElementType SHORT_HANDLE_MINUS = new ApexTokenType("-=");
+  IElementType SHORT_HANDLE_MODULO = new ApexTokenType("%=");
   IElementType SHORT_HANDLE_MULTIPLY = new ApexTokenType("*=");
   IElementType SHORT_HANDLE_NULL_CHECK = new ApexTokenType("??=");
   IElementType SHORT_HANDLE_PLUS = new ApexTokenType("+=");
+  IElementType SHORT_HANDLE_RIGHT_SHIFT = new ApexTokenType(">>=");
   IElementType SOQL_FOR_KEYWORD = new ApexTokenType("FOR");
   IElementType SOSL = new ApexTokenType("SOSL");
   IElementType STATIC_KEYWORD = new ApexTokenType("static");
@@ -408,6 +417,9 @@ public interface ApexTypes {
       else if (type == ITERATION_FOR_LOOP) {
         return new ApexIterationForLoopImpl(node);
       }
+      else if (type == LEFT_SHIFT_EXPR) {
+        return new ApexLeftShiftExprImpl(node);
+      }
       else if (type == LOGICAL_AND_EXPR) {
         return new ApexLogicalAndExprImpl(node);
       }
@@ -483,11 +495,17 @@ public interface ApexTypes {
       else if (type == MODIFIERS) {
         return new ApexModifiersImpl(node);
       }
+      else if (type == MODULO_EXPR) {
+        return new ApexModuloExprImpl(node);
+      }
       else if (type == MUL_EXPR) {
         return new ApexMulExprImpl(node);
       }
       else if (type == NEGATION_EXPR) {
         return new ApexNegationExprImpl(node);
+      }
+      else if (type == NULL_COALESCING_EXPR) {
+        return new ApexNullCoalescingExprImpl(node);
       }
       else if (type == PARAMETER_LIST) {
         return new ApexParameterListImpl(node);
@@ -506,6 +524,9 @@ public interface ApexTypes {
       }
       else if (type == RETURN_STATEMENT) {
         return new ApexReturnStatementImpl(node);
+      }
+      else if (type == RIGHT_SHIFT_EXPR) {
+        return new ApexRightShiftExprImpl(node);
       }
       else if (type == SHARING_CLAUSE) {
         return new ApexSharingClauseImpl(node);

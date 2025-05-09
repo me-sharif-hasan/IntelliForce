@@ -21,7 +21,8 @@ psiImplUtilClass="com.iishanto.language.sf.apex.psi.impl.ApexPsiImplUtil"
   // Enable Pratt parsing by collapsing all *Expr rules into expression
   extends(".*expr")=expression
   tokens = [
-    COMMENT = 'regexp:(//.*|(/\*[^]]*?\*/))'
+    BLOCK_COMMENT = 'regexp:/\*(.|\n)*\*/'
+    COMMENT = 'regexp://.*'
     VIRTUAL_KEYWORD = 'virtual'
     ABSTRACT_KEYWORD = 'abstract'
     WITH_KEYWORD = 'with'
@@ -101,15 +102,20 @@ psiImplUtilClass="com.iishanto.language.sf.apex.psi.impl.ApexPsiImplUtil"
     SHORT_HANDLE_MINUS = '-='
     SHORT_HANDLE_MULTIPLY = '*='
     SHORT_HANDLE_DIVIDE = '/='
+    SHORT_HANDLE_MODULO = '%='
     SHORT_HANDLE_BITWISE_AND = '&='
     SHORT_HANDLE_BITWISE_OR = '|='
     SHORT_HANDLE_BITWISE_XOR = '^='
     SHORT_HANDLE_NULL_CHECK = '??='
+    SHORT_HANDLE_LEFT_SHIFT = '<<='
+    SHORT_HANDLE_RIGHT_SHIFT = '>>='
     NOT_EQUAL_EQAL = '!=='
     NOT_EQUAL = '!='
     GREATER_EQUAL = '>='
     LESS_EQUAL = '<='
     INCREMENT = '++'
+//    RIGHT_SHIFT = '>>'
+//    LEFT_SHIFT = '<<'
     DECREMENT = '--'
     GREATER = '>'
     LESS = '<'
@@ -117,6 +123,7 @@ psiImplUtilClass="com.iishanto.language.sf.apex.psi.impl.ApexPsiImplUtil"
     MINUS = '-'
     MULTIPLY = '*'
     DIVIDE = '/'
+    MODULO = '%'
     AND = '&&'
     OR = '||'
     NOT = '!'
@@ -285,6 +292,9 @@ expression ::=  (
                 | min_expr
                 | mul_expr
                 | div_expr
+                | right_shift_expr
+                | left_shift_expr
+                | modulo_expr
                 | null_coalescing_expr
                 | logical_and_expr
                 | logical_or_expr
@@ -314,6 +324,9 @@ add_expr ::= expression PLUS expression {extends=expression}
 min_expr ::= expression MINUS expression {extends=expression}
 mul_expr ::= expression MULTIPLY expression {extends=expression}
 div_expr ::= expression DIVIDE expression {extends=expression}
+right_shift_expr ::= expression GREATER GREATER expression {extends=expression}
+left_shift_expr ::= expression LESS LESS expression {extends=expression}
+modulo_expr ::= expression MODULO expression {extends=expression}
 null_coalescing_expr ::= expression NULL_CHECK expression {extends=expression}
 // Logical expressions
 logical_and_expr ::= expression AND expression {extends=expression}
@@ -342,8 +355,20 @@ unary_prefix_increment_expr ::= INCREMENT expression {extends=expression}
 unary_prefix_decrement_expr ::= DECREMENT expression {extends=expression}
 unary_postfix_increment_expr ::= expression INCREMENT {extends=expression}
 unary_postfix_decrement_expr ::= expression DECREMENT {extends=expression}
-shorthand_assignment_expr ::= expression ( SHORT_HANDLE_PLUS | SHORT_HANDLE_MINUS | SHORT_HANDLE_MULTIPLY | SHORT_HANDLE_DIVIDE | SHORT_HANDLE_BITWISE_AND | SHORT_HANDLE_BITWISE_OR | SHORT_HANDLE_BITWISE_XOR | SHORT_HANDLE_NULL_CHECK
-) expression {extends=expression}
+shorthand_assignment_expr ::= expression (
+                            SHORT_HANDLE_PLUS |
+                            SHORT_HANDLE_MINUS |
+                            SHORT_HANDLE_MULTIPLY |
+                            SHORT_HANDLE_DIVIDE |
+                            SHORT_HANDLE_MODULO |
+                            SHORT_HANDLE_BITWISE_AND |
+                            SHORT_HANDLE_BITWISE_OR |
+                            SHORT_HANDLE_BITWISE_XOR |
+                            SHORT_HANDLE_NULL_CHECK |
+                            SHORT_HANDLE_LEFT_SHIFT |
+                            SHORT_HANDLE_RIGHT_SHIFT
+                            ) expression {extends=expression}
+
 ternary_expr ::= expression QUESTION_MARK expression COLON expression {extends=expression}
 // Primary expressions (highest precedence)
 primary_expr ::= literal_with_attribute
@@ -385,7 +410,7 @@ private parameter_group ::= LPAREN parameter_list? RPAREN
 parameter_list ::= TypeIdentifier CombinedIdentifier (COMMA TypeIdentifier CombinedIdentifier)*
 private value_expression_list ::= expression (COMMA expression)*
 
-private CombinedIdentifier ::= IDENTIFIER | GET_KEYWORD | SET_KEYWORD | THIS_KEYWORD | SUPER_KEYWORD
+private CombinedIdentifier ::= IDENTIFIER | GET_KEYWORD | SET_KEYWORD | THIS_KEYWORD | SUPER_KEYWORD | CLASS_KEYWORD
 
 /**
 TODO: I Have do wrong with array access, added dot expression which should not be there.

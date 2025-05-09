@@ -38,10 +38,11 @@ public class ApexParser implements PsiParser, LightPsiParser {
   public static final TokenSet[] EXTENDS_SETS_ = new TokenSet[] {
     create_token_set_(ADD_EXPR, ARRAY_ACCESS_EXPR, ASSIGNMENT_EXPR, BITWISE_AND_EXPR,
       BITWISE_OR_EXPR, BITWISE_XOR_EXPR, DIV_EXPR, EXPRESSION,
-      LOGICAL_AND_EXPR, LOGICAL_EQUAL_EQUAL_EXPR, LOGICAL_EQUAL_EXPR, LOGICAL_GREATER_EQUAL_EXPR,
-      LOGICAL_GREATER_EXPR, LOGICAL_LESS_EQUAL_EXPR, LOGICAL_LESS_EXPR, LOGICAL_NOT_EQUAL_EQUAL_EXPR,
-      LOGICAL_NOT_EQUAL_EXPR, LOGICAL_NOT_EXPR, LOGICAL_OR_EXPR, MIN_EXPR,
-      MUL_EXPR, NEGATION_EXPR, PRIMARY_EXPR, SHORTHAND_ASSIGNMENT_EXPR,
+      LEFT_SHIFT_EXPR, LOGICAL_AND_EXPR, LOGICAL_EQUAL_EQUAL_EXPR, LOGICAL_EQUAL_EXPR,
+      LOGICAL_GREATER_EQUAL_EXPR, LOGICAL_GREATER_EXPR, LOGICAL_LESS_EQUAL_EXPR, LOGICAL_LESS_EXPR,
+      LOGICAL_NOT_EQUAL_EQUAL_EXPR, LOGICAL_NOT_EQUAL_EXPR, LOGICAL_NOT_EXPR, LOGICAL_OR_EXPR,
+      MIN_EXPR, MODULO_EXPR, MUL_EXPR, NEGATION_EXPR,
+      NULL_COALESCING_EXPR, PRIMARY_EXPR, RIGHT_SHIFT_EXPR, SHORTHAND_ASSIGNMENT_EXPR,
       TERNARY_EXPR, TYPE_CAST_EXPR, UNARY_POSTFIX_DECREMENT_EXPR, UNARY_POSTFIX_INCREMENT_EXPR,
       UNARY_PREFIX_DECREMENT_EXPR, UNARY_PREFIX_INCREMENT_EXPR),
   };
@@ -365,7 +366,7 @@ public class ApexParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // IDENTIFIER | GET_KEYWORD | SET_KEYWORD | THIS_KEYWORD | SUPER_KEYWORD
+  // IDENTIFIER | GET_KEYWORD | SET_KEYWORD | THIS_KEYWORD | SUPER_KEYWORD | CLASS_KEYWORD
   static boolean CombinedIdentifier(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "CombinedIdentifier")) return false;
     boolean r;
@@ -374,6 +375,7 @@ public class ApexParser implements PsiParser, LightPsiParser {
     if (!r) r = consumeToken(b, SET_KEYWORD);
     if (!r) r = consumeToken(b, THIS_KEYWORD);
     if (!r) r = consumeToken(b, SUPER_KEYWORD);
+    if (!r) r = consumeToken(b, CLASS_KEYWORD);
     return r;
   }
 
@@ -2813,29 +2815,33 @@ public class ApexParser implements PsiParser, LightPsiParser {
   // 3: BINARY(min_expr)
   // 4: BINARY(mul_expr)
   // 5: BINARY(div_expr)
-  // 6: BINARY(logical_and_expr)
-  // 7: BINARY(logical_or_expr)
-  // 8: BINARY(logical_greater_expr)
-  // 9: BINARY(logical_less_expr)
-  // 10: BINARY(logical_greater_equal_expr)
-  // 11: BINARY(logical_less_equal_expr)
-  // 12: BINARY(logical_equal_expr)
-  // 13: BINARY(logical_equal_equal_expr)
-  // 14: BINARY(logical_not_equal_expr)
-  // 15: BINARY(logical_not_equal_equal_expr)
-  // 16: PREFIX(logical_not_expr)
-  // 17: BINARY(bitwise_and_expr)
-  // 18: BINARY(bitwise_or_expr)
-  // 19: BINARY(bitwise_xor_expr)
-  // 20: ATOM(primary_expr)
-  // 21: BINARY(assignment_expr)
-  // 22: BINARY(array_access_expr)
-  // 23: PREFIX(unary_prefix_increment_expr)
-  // 24: PREFIX(unary_prefix_decrement_expr)
-  // 25: POSTFIX(unary_postfix_increment_expr)
-  // 26: POSTFIX(unary_postfix_decrement_expr)
-  // 27: BINARY(shorthand_assignment_expr)
-  // 28: PREFIX(negation_expr)
+  // 6: BINARY(right_shift_expr)
+  // 7: BINARY(left_shift_expr)
+  // 8: BINARY(modulo_expr)
+  // 9: BINARY(null_coalescing_expr)
+  // 10: BINARY(logical_and_expr)
+  // 11: BINARY(logical_or_expr)
+  // 12: BINARY(logical_greater_expr)
+  // 13: BINARY(logical_less_expr)
+  // 14: BINARY(logical_greater_equal_expr)
+  // 15: BINARY(logical_less_equal_expr)
+  // 16: BINARY(logical_equal_expr)
+  // 17: BINARY(logical_equal_equal_expr)
+  // 18: BINARY(logical_not_equal_expr)
+  // 19: BINARY(logical_not_equal_equal_expr)
+  // 20: PREFIX(logical_not_expr)
+  // 21: BINARY(bitwise_and_expr)
+  // 22: BINARY(bitwise_or_expr)
+  // 23: BINARY(bitwise_xor_expr)
+  // 24: ATOM(primary_expr)
+  // 25: BINARY(assignment_expr)
+  // 26: BINARY(array_access_expr)
+  // 27: PREFIX(unary_prefix_increment_expr)
+  // 28: PREFIX(unary_prefix_decrement_expr)
+  // 29: POSTFIX(unary_postfix_increment_expr)
+  // 30: POSTFIX(unary_postfix_decrement_expr)
+  // 31: BINARY(shorthand_assignment_expr)
+  // 32: PREFIX(negation_expr)
   public static boolean expression(PsiBuilder b, int l, int g) {
     if (!recursion_guard_(b, l, "expression")) return false;
     addVariant(b, "<expression>");
@@ -2879,73 +2885,89 @@ public class ApexParser implements PsiParser, LightPsiParser {
         r = expression(b, l, 5);
         exit_section_(b, l, m, DIV_EXPR, r, true, null);
       }
-      else if (g < 6 && consumeTokenSmart(b, AND)) {
+      else if (g < 6 && parseTokensSmart(b, 0, GREATER, GREATER)) {
         r = expression(b, l, 6);
+        exit_section_(b, l, m, RIGHT_SHIFT_EXPR, r, true, null);
+      }
+      else if (g < 7 && parseTokensSmart(b, 0, LESS, LESS)) {
+        r = expression(b, l, 7);
+        exit_section_(b, l, m, LEFT_SHIFT_EXPR, r, true, null);
+      }
+      else if (g < 8 && consumeTokenSmart(b, MODULO)) {
+        r = expression(b, l, 8);
+        exit_section_(b, l, m, MODULO_EXPR, r, true, null);
+      }
+      else if (g < 9 && consumeTokenSmart(b, NULL_CHECK)) {
+        r = expression(b, l, 9);
+        exit_section_(b, l, m, NULL_COALESCING_EXPR, r, true, null);
+      }
+      else if (g < 10 && consumeTokenSmart(b, AND)) {
+        r = expression(b, l, 10);
         exit_section_(b, l, m, LOGICAL_AND_EXPR, r, true, null);
       }
-      else if (g < 7 && consumeTokenSmart(b, OR)) {
-        r = expression(b, l, 7);
+      else if (g < 11 && consumeTokenSmart(b, OR)) {
+        r = expression(b, l, 11);
         exit_section_(b, l, m, LOGICAL_OR_EXPR, r, true, null);
       }
-      else if (g < 8 && consumeTokenSmart(b, GREATER)) {
-        r = expression(b, l, 8);
+      else if (g < 12 && consumeTokenSmart(b, GREATER)) {
+        r = expression(b, l, 12);
         exit_section_(b, l, m, LOGICAL_GREATER_EXPR, r, true, null);
       }
-      else if (g < 9 && consumeTokenSmart(b, LESS)) {
-        r = expression(b, l, 9);
+      else if (g < 13 && consumeTokenSmart(b, LESS)) {
+        r = expression(b, l, 13);
         exit_section_(b, l, m, LOGICAL_LESS_EXPR, r, true, null);
       }
-      else if (g < 10 && consumeTokenSmart(b, GREATER_EQUAL)) {
-        r = expression(b, l, 10);
+      else if (g < 14 && consumeTokenSmart(b, GREATER_EQUAL)) {
+        r = expression(b, l, 14);
         exit_section_(b, l, m, LOGICAL_GREATER_EQUAL_EXPR, r, true, null);
       }
-      else if (g < 11 && consumeTokenSmart(b, LESS_EQUAL)) {
-        r = expression(b, l, 11);
+      else if (g < 15 && consumeTokenSmart(b, LESS_EQUAL)) {
+        r = expression(b, l, 15);
         exit_section_(b, l, m, LOGICAL_LESS_EQUAL_EXPR, r, true, null);
       }
-      else if (g < 12 && consumeTokenSmart(b, EQUAL)) {
-        r = expression(b, l, 12);
+      else if (g < 16 && consumeTokenSmart(b, EQUAL)) {
+        r = expression(b, l, 16);
         exit_section_(b, l, m, LOGICAL_EQUAL_EXPR, r, true, null);
       }
-      else if (g < 13 && consumeTokenSmart(b, NOT_EQUAL_EQAL)) {
-        r = expression(b, l, 13);
+      else if (g < 17 && consumeTokenSmart(b, NOT_EQUAL_EQAL)) {
+        r = expression(b, l, 17);
         exit_section_(b, l, m, LOGICAL_EQUAL_EQUAL_EXPR, r, true, null);
       }
-      else if (g < 14 && consumeTokenSmart(b, NOT_EQUAL)) {
-        r = expression(b, l, 14);
+      else if (g < 18 && consumeTokenSmart(b, NOT_EQUAL)) {
+        r = expression(b, l, 18);
         exit_section_(b, l, m, LOGICAL_NOT_EQUAL_EXPR, r, true, null);
       }
-      else if (g < 17 && consumeTokenSmart(b, BITWISE_AND)) {
-        r = expression(b, l, 17);
+      else if (g < 21 && consumeTokenSmart(b, BITWISE_AND)) {
+        r = expression(b, l, 21);
         exit_section_(b, l, m, BITWISE_AND_EXPR, r, true, null);
       }
-      else if (g < 18 && consumeTokenSmart(b, BITWISE_OR)) {
-        r = expression(b, l, 18);
+      else if (g < 22 && consumeTokenSmart(b, BITWISE_OR)) {
+        r = expression(b, l, 22);
         exit_section_(b, l, m, BITWISE_OR_EXPR, r, true, null);
       }
-      else if (g < 19 && consumeTokenSmart(b, BITWISE_XOR)) {
-        r = expression(b, l, 19);
+      else if (g < 23 && consumeTokenSmart(b, BITWISE_XOR)) {
+        r = expression(b, l, 23);
         exit_section_(b, l, m, BITWISE_XOR_EXPR, r, true, null);
       }
-      else if (g < 21 && assignment_expr_0(b, l + 1)) {
-        r = expression(b, l, 21);
+      else if (g < 25 && assignment_expr_0(b, l + 1)) {
+        r = expression(b, l, 25);
         exit_section_(b, l, m, ASSIGNMENT_EXPR, r, true, null);
       }
-      else if (g < 22 && consumeTokenSmart(b, LBRACKET)) {
-        r = report_error_(b, expression(b, l, 22));
+      else if (g < 26 && consumeTokenSmart(b, LBRACKET)) {
+        r = report_error_(b, expression(b, l, 26));
         r = array_access_expr_1(b, l + 1) && r;
         exit_section_(b, l, m, ARRAY_ACCESS_EXPR, r, true, null);
       }
-      else if (g < 25 && consumeTokenSmart(b, INCREMENT)) {
+      else if (g < 29 && consumeTokenSmart(b, INCREMENT)) {
         r = true;
         exit_section_(b, l, m, UNARY_POSTFIX_INCREMENT_EXPR, r, true, null);
       }
-      else if (g < 26 && consumeTokenSmart(b, DECREMENT)) {
+      else if (g < 30 && consumeTokenSmart(b, DECREMENT)) {
         r = true;
         exit_section_(b, l, m, UNARY_POSTFIX_DECREMENT_EXPR, r, true, null);
       }
-      else if (g < 27 && shorthand_assignment_expr_0(b, l + 1)) {
-        r = expression(b, l, 27);
+      else if (g < 31 && shorthand_assignment_expr_0(b, l + 1)) {
+        r = expression(b, l, 31);
         exit_section_(b, l, m, SHORTHAND_ASSIGNMENT_EXPR, r, true, null);
       }
       else {
@@ -3010,7 +3032,7 @@ public class ApexParser implements PsiParser, LightPsiParser {
     Marker m = enter_section_(b, l, _NONE_, null);
     r = consumeTokenSmart(b, NOT);
     p = r;
-    r = p && expression(b, l, 16);
+    r = p && expression(b, l, 20);
     exit_section_(b, l, m, LOGICAL_NOT_EXPR, r, p, null);
     return r || p;
   }
@@ -3103,7 +3125,7 @@ public class ApexParser implements PsiParser, LightPsiParser {
     Marker m = enter_section_(b, l, _NONE_, null);
     r = consumeTokenSmart(b, INCREMENT);
     p = r;
-    r = p && expression(b, l, 23);
+    r = p && expression(b, l, 27);
     exit_section_(b, l, m, UNARY_PREFIX_INCREMENT_EXPR, r, p, null);
     return r || p;
   }
@@ -3115,12 +3137,22 @@ public class ApexParser implements PsiParser, LightPsiParser {
     Marker m = enter_section_(b, l, _NONE_, null);
     r = consumeTokenSmart(b, DECREMENT);
     p = r;
-    r = p && expression(b, l, 24);
+    r = p && expression(b, l, 28);
     exit_section_(b, l, m, UNARY_PREFIX_DECREMENT_EXPR, r, p, null);
     return r || p;
   }
 
-  // SHORT_HANDLE_PLUS | SHORT_HANDLE_MINUS | SHORT_HANDLE_MULTIPLY | SHORT_HANDLE_DIVIDE | SHORT_HANDLE_BITWISE_AND | SHORT_HANDLE_BITWISE_OR | SHORT_HANDLE_BITWISE_XOR | SHORT_HANDLE_NULL_CHECK
+  // SHORT_HANDLE_PLUS |
+  //                             SHORT_HANDLE_MINUS |
+  //                             SHORT_HANDLE_MULTIPLY |
+  //                             SHORT_HANDLE_DIVIDE |
+  //                             SHORT_HANDLE_MODULO |
+  //                             SHORT_HANDLE_BITWISE_AND |
+  //                             SHORT_HANDLE_BITWISE_OR |
+  //                             SHORT_HANDLE_BITWISE_XOR |
+  //                             SHORT_HANDLE_NULL_CHECK |
+  //                             SHORT_HANDLE_LEFT_SHIFT |
+  //                             SHORT_HANDLE_RIGHT_SHIFT
   private static boolean shorthand_assignment_expr_0(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "shorthand_assignment_expr_0")) return false;
     boolean r;
@@ -3128,10 +3160,13 @@ public class ApexParser implements PsiParser, LightPsiParser {
     if (!r) r = consumeTokenSmart(b, SHORT_HANDLE_MINUS);
     if (!r) r = consumeTokenSmart(b, SHORT_HANDLE_MULTIPLY);
     if (!r) r = consumeTokenSmart(b, SHORT_HANDLE_DIVIDE);
+    if (!r) r = consumeTokenSmart(b, SHORT_HANDLE_MODULO);
     if (!r) r = consumeTokenSmart(b, SHORT_HANDLE_BITWISE_AND);
     if (!r) r = consumeTokenSmart(b, SHORT_HANDLE_BITWISE_OR);
     if (!r) r = consumeTokenSmart(b, SHORT_HANDLE_BITWISE_XOR);
     if (!r) r = consumeTokenSmart(b, SHORT_HANDLE_NULL_CHECK);
+    if (!r) r = consumeTokenSmart(b, SHORT_HANDLE_LEFT_SHIFT);
+    if (!r) r = consumeTokenSmart(b, SHORT_HANDLE_RIGHT_SHIFT);
     return r;
   }
 
