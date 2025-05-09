@@ -197,4 +197,34 @@ public class MessageProvider {
                     }
                 }""".formatted(new File(file).toURI(), version++);
     }
+
+    public String getWillCreateFileRequest(String filePath) {
+        return """
+                {
+                    "jsonrpc": "2.0",
+                    "method": "workspace/willCreateFiles",
+                    "params": {
+                        "files": [
+                            {
+                                "uri": "%s"
+                            }
+                        ]
+                    }
+                }""".formatted(new File(filePath).toURI());
+    }
+
+    public String getDidCreateFileRequest(String outputPath) {
+        return """
+                {
+                    "jsonrpc": "2.0",
+                    "method": "workspace/didCreateFiles",
+                    "params": {
+                        "files": [
+                            {
+                                "uri": "%s"
+                            }
+                        ]
+                    }
+                }""".formatted(new File(outputPath).toURI());
+    }
 }

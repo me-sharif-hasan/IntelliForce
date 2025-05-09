@@ -14,6 +14,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -53,7 +54,8 @@ public class ApexLanguageServerDefinition{
 
     public void submitNotification(String notification) throws IOException {
         System.out.println("Sending "+notification);
-        String formattedMessage = "Content-Length: " + (notification.length()) + "\r\n\r\n" + notification;
+        String formattedMessage = "Content-Length: " + (notification.getBytes(StandardCharsets.UTF_8).length) + "\n\n" + notification;
+        System.out.println("Formatted message: " + formattedMessage);
         serverOutputStream.write(formattedMessage.getBytes());
         serverOutputStream.flush();
         serverOutputStream.flush();

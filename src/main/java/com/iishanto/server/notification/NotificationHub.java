@@ -110,6 +110,14 @@ public class NotificationHub extends LspResponseListener {
         return instance;
     }
 
+    public void willCreateFile(String filePath, LspResponseListener lspResponseListener) throws IOException {
+        if (Configs.getInstance().getProjectRoot() == null || isLocked) return;
+        listenerRegistry.put(lspResponseListener.getTargetMethod(), lspResponseListener);
+        apexLanguageServerDefinition.submitNotification(
+                messageProvider.getWillCreateFileRequest(filePath)
+        );
+    }
+
 
     @Override
     public void listen(JsonObject jsonObject) {
@@ -134,5 +142,17 @@ public class NotificationHub extends LspResponseListener {
     @Override
     public String getTargetMethod() {
         return "indexer/done";
+    }
+
+    public void didCreateFile(String outputPath, LspResponseListener lspResponseListener) {
+        if (Configs.getInstance().getProjectRoot() == null || isLocked) return;
+        listenerRegistry.put(lspResponseListener.getTargetMethod(), lspResponseListener);
+        try {
+            apexLanguageServerDefinition.submitNotification(
+                    messageProvider.getDidCreateFileRequest(outputPath)
+            );
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

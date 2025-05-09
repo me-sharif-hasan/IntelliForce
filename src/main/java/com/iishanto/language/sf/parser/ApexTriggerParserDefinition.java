@@ -22,12 +22,10 @@ import com.iishanto.language.sf.apex.parser.ApexParser;
 import com.iishanto.language.sf.apex.psi.ApexTriggerFile;
 import com.iishanto.language.sf.apex.psi.ApexTypes;
 import com.iishanto.language.sf.lexer.ApexLexer;
-import com.iishanto.language.sf.lexer.BnfApexLexer;
 import com.intellij.lang.ASTNode;
 import com.intellij.lang.Language;
 import com.intellij.lang.ParserDefinition;
 import com.intellij.lang.PsiParser;
-import com.intellij.lang.java.JShellParserDefinition;
 import com.intellij.lexer.Lexer;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.FileViewProvider;
@@ -57,14 +55,14 @@ import org.jetbrains.annotations.NotNull;
 public class ApexTriggerParserDefinition implements ParserDefinition {
 
     private static final TokenSet WHITE_SPACES = TokenSet.create(TokenType.WHITE_SPACE);
-    private static final TokenSet COMMENTS = TokenSet.create(ApexTypes.LINE_COMMENT, ApexTypes.COMMENT);
+    private static final TokenSet COMMENTS = TokenSet.create( ApexTypes.COMMENT);
 
     public static final IFileElementType FILE = new IFileElementType(Language.<ApexLanguage>findInstance(ApexLanguage.class));
 
     @NotNull
     @Override
     public Lexer createLexer(Project project) {
-        return new BnfApexLexer();
+        return new ApexLexer();
     }
 
     @Override

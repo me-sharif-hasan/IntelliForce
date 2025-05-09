@@ -1,14 +1,15 @@
 {
   extends="com.intellij.extapi.psi.ASTWrapperPsiElement"
-  psiClassPrefix="Simple"
-  psiImplClassSuffix="Impl"
+  psiClassPrefix="SfApex"
+  psiImplClassSuffix="Implementation"
   // Enable Pratt parsing by collapsing all *Expr rules into expression
   extends(".*expr")=expression
   tokens = [
-    COMMENT = 'regexp:(//.*|(?s)/\*.*?\*/)'
+    COMMENT = 'regexp:(//.*|(/\*[^]]*?\*/))'
     VIRTUAL_KEYWORD = 'virtual'
     ABSTRACT_KEYWORD = 'abstract'
     WITH_KEYWORD = 'with'
+    VOID_KEYWORD = 'void'
     INTERFACE_KEYWORD = 'interface'
     CLASS_KEYWORD = 'class'
     SHARING_KEYWORD = 'sharing'
@@ -41,6 +42,23 @@
     SWITCH_KEYWORD = 'switch'
     CASE_KEYWORD = 'case'
     DEFAULT_KEYWORD = 'default'
+    FROM_KEYWORD = 'FROM'
+    SELECT_KEYWORD = 'SELECT'
+    WHERE_KEYWORD = 'WHERE'
+    ORDER_BY_KEYWORD = 'ORDER BY'
+    LIMIT_KEYWORD = 'LIMIT'
+    OFFSET_KEYWORD = 'OFFSET'
+    GROUP_BY_KEYWORD = 'GROUP BY'
+    HAVING_KEYWORD = 'HAVING'
+    DISTINCT_KEYWORD = 'DISTINCT'
+    SOQL_FOR_KEYWORD = 'FOR'
+    UPDATE_KEYWORD  = 'UPDATE'
+    INSERT_KEYWORD = 'INSERT'
+    DELETE_KEYWORD = 'DELETE'
+    UPSERT_KEYWORD = 'UPSERT'
+    UPDATE_KEYWORD = 'UPDATE'
+    MERGE_KEYWORD = 'MERGE'
+
     ENUM_KEYWORD = 'enum'
     BREAK_KEYWORD = 'break'
     CONTINUE_KEYWORD = 'continue'
@@ -49,7 +67,7 @@
     SUPER_KEYWORD = 'super'
     ON_KEYWORD = 'on'
     OVERRIDE_KEYWORD = 'override'
-    WHITESPACE = 'regexp:\s+'
+    WHITE_SPACE = 'regexp:\s+'
     NUMBER = 'regexp:-?[0-9]+(\.?[0-9])*L?'
     LBRACE = '{'
     RBRACE = '}'
@@ -82,11 +100,17 @@
     ASSIGN = '='
     SEMICOLON = ';'
     AT = '@'
-    SOQL = 'regexp:SELECT (.*?)(?=])'
-    SOSL = 'regexp:FIND (.*?)(?=])'
+
     IDENTIFIER = 'regexp:[a-zA-Z_][a-zA-Z0-9_$]*'
-    STRING = "regexp:'.*?'"
+    STRING = "regexp:'([^'\\]|\\\\.)*'"
     ARRAY_BRACKET = '[]'
+  ]
+  indent_keys = [
+    CLASS_KEYWORD
+    INTERFACE_KEYWORD
+    ENUM_KEYWORD
+    LBRACE
+    LBRACKET
   ]
 }
 ApexFile ::=expression| ApexClass | ApexTrigger | ApexInterface | ApexScript | ApexEnum
@@ -95,17 +119,17 @@ ClassAccessModifier ::= PUBLIC_KEYWORD | GLOBAL_KEYWORD
 Modifiers ::= Modifier*
 Modifier ::= VIRTUAL_KEYWORD | ABSTRACT_KEYWORD | SharingClause
 SharingClause ::= (WITH_KEYWORD | WITHOUT_KEYWORD | INHERITED_KEYWORD) SHARING_KEYWORD
-ClassDefinition ::= CLASS_KEYWORD TypeIdentifier Inheritance ClassBody
+ClassDefinition ::= CLASS_KEYWORD TypeIdentifier Inheritance LBRACE ClassBody RBRACE
 Inheritance ::= (EXTENDS_KEYWORD ParentClass)? ImplementsClause?
 ParentClass ::= QualifiedIdentifier
 QualifiedIdentifier ::= IDENTIFIER (DOT IDENTIFIER)?
 ImplementsClause ::= IMPLEMENTS_KEYWORD InterfaceIdentifier (COMMA InterfaceIdentifier)*
 InterfaceIdentifier ::= QualifiedIdentifier
 TypeIdentifier ::= (PrimitiveType | QualifiedIdentifier) (GenericType | ARRAY_BRACKET)*
-PrimitiveType ::= 'Integer' | 'String' | 'Boolean' | 'Double' | 'Long' | 'Date' | 'Datetime' | 'Id' | 'Object' | 'Blob'
+PrimitiveType ::= 'Integer' | 'String' | 'Boolean' | 'Double' | 'Long' | 'Date' | 'Datetime' | 'Id' | 'Object' | 'Blob' | 'Decimal' | 'Time' | VOID_KEYWORD
 GenericType ::= LESS TypeIdentifier (COMMA TypeIdentifier)* GREATER
 
-ClassBody ::= LBRACE (ClassMember | ApexClassOrInterface| ClassBody)* RBRACE
+ClassBody ::=  (ClassMember | ApexClassOrInterface| ClassDefinition)*
 ClassMember ::= MemberModifier (FieldDefinition | MethodDefinition | ConstructorDefinition)
 MemberModifier ::= Annotation? MemberAccessModifier? (FINAL_KEYWORD | OVERRIDE_KEYWORD)? STATIC_KEYWORD?
 Annotation ::= AT TypeIdentifier argument_group?
@@ -226,7 +250,7 @@ logical_not_expr ::= NOT expression {extends=expression}
 bitwise_and_expr ::= expression BITWISE_AND expression {extends=expression}
 bitwise_or_expr ::= expression BITWISE_OR expression {extends=expression}
 bitwise_xor_expr ::= expression BITWISE_XOR expression {extends=expression}
-assignment_expr ::= expression ASSIGN GREATER? expression {extends=expression}
+assignment_expr ::= expression ASSIGN GREATER? COLON? expression {extends=expression}
 array_access_expr ::= expression LBRACKET expression RBRACKET {extends=expression}
 negation_expr ::= MINUS expression {extends=expression}
 /*
@@ -242,7 +266,22 @@ primary_expr ::= literal_with_attribute
              | paren_expr
              {extends=expression}
 
-private literal_with_attribute ::= literal (DOT VariableName)? (LBRACKET expression RBRACKET)? (LPAREN expression? RPAREN)?
+private literal_with_attribute ::= (literal|soql_expr|SOSL) (DOT VariableName)? (LBRACKET expression RBRACKET)? (LPAREN expression? RPAREN)?
+private soql_expr ::= LBRACKET SELECT_KEYWORD soql_token_composition RBRACKET
+private soql_token_composition ::= soql_expression_unit COMMA? soql_expression_unit*
+private soql_expression_unit ::= custom_soql_sosl_expression|soql_expr
+private custom_soql_sosl_expression ::= soql_sosl_keyword | expression
+private soql_sosl_keyword ::=   FROM_KEYWORD
+                                | WHERE_KEYWORD
+                                | ORDER_BY_KEYWORD
+                                | LIMIT_KEYWORD
+                                | OFFSET_KEYWORD
+                                | GROUP_BY_KEYWORD
+                                | HAVING_KEYWORD
+                                | DISTINCT_KEYWORD
+                                | SOQL_FOR_KEYWORD
+                                | UPDATE_KEYWORD
+
 private literal ::= NUMBER | STRING | TRUE_LITERAL | FALSE_LITERAL
 private paren_expr ::= LPAREN expression RPAREN {extends=expression}
 private variable_reference_expr ::= object_creation_expr | IDENTIFIER (LESS type_list GREATER)? (DOT variable_reference_expr)? (argument_group)? (DOT variable_reference_expr)? {extends=expression}
@@ -254,81 +293,3 @@ private initialization_unit ::= (expression EQUAL GREATER?)? expression
 private type_list ::= variable_reference_expr (COMMA variable_reference_expr)*
 private argument_group ::= LPAREN value_expression_list? RPAREN
 private value_expression_list ::= expression (COMMA expression)*
-
-/**
-@AuraEnabled(cacheable=true)
-public class ABCD{
-
-void ok(){
-int [] arr=new ArrayList[]{3,4,5};
-}
-public int a{get;}
-public static String x;
-public static String y,asdsa='dadasdad asdfasd sadsa dasdsa',x=4+3+23;
-public List<String> lst=new List<String>{1,2,3,new List()};
-Set<String> userProject = new Set<String>();
-
-public void testMethod(){
-int main=4,sdfsd=3,lst=new List<String>{1,2,3};
-if(a==-b*new A()){}
-switch on Account{
-when SwitchWhenValueList,32,232,23{}
-when else{}
-}
-switch on expression {
-when value1 { // when block 1
-// code block 1
-}
-when value2 { // when block 2
-// code block 2
-}
-when value3 { // when block 3
-// code block 3
-}
-when else { // default block, optional
-// code block 4
-}
-}
-hello.world();
-methodCall();
-List<String>().methodCall();
-for(int i=0;i<4;i++){
-for(int j=0;j<4;j++){
-if(i==j){
-for (i = 0, j = 0; i < 10; i++) {
-System.debug(i+1);
-}
-break;
-}
-}
-for (Integer i : myInts) {
-System.debug(i);
-}
-Integer[] myInts = new Integer[]{1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
-for (Integer i : myInts) {
-System.debug(i);
-}
-Integer[] myInts = new Integer[]{1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
-for (Integer i : myInts.list()) {
-System.debug(i);
-i=9;
-for (variable : list_or_set) {
-code_block;
-}
-while (condition) {
-code_block;
-s=str.length();
-}
-Integer count = 1;
-while (count < 11) {
-System.debug(count);
-count++;
-do{
-i=2.len;
-}  while(76.hello(412412+3243)+world<444);
-}
-}
-}
-}
-}
- */

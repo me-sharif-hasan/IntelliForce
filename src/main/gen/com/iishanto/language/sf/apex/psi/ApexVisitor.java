@@ -1,18 +1,4 @@
-/*
- *  Copyright 2014 Mark Borner
- *
- *  Licensed under the Apache License, Version 2.0 (the "License");
- *  you may not use this file except in compliance with the License.
- *  You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- *  Unless required by applicable law or agreed to in writing, software
- *  distributed under the License is distributed on an "AS IS" BASIS,
- *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *  See the License for the specific language governing permissions and
- *  limitations under the License.
-*/
+// This is a generated file. Not intended for manual editing.
 package com.iishanto.language.sf.apex.psi;
 
 import org.jetbrains.annotations.*;
@@ -21,107 +7,51 @@ import com.intellij.psi.PsiElement;
 
 public class ApexVisitor extends PsiElementVisitor {
 
-  public void visitDeclaration(@NotNull ApexDeclaration o) {
-    visitDeclarationElement(o);
-  }
-
-  public void visitReference(@NotNull ApexReference o) {
-    visitReferenceElement(o);
-  }
-
-  public void visitAdditionAssignExpression(@NotNull ApexAdditionAssignExpression o) {
-    visitExpression(o);
-  }
-
-  public void visitAdditionExpression(@NotNull ApexAdditionExpression o) {
-    visitExpression(o);
-  }
-
-  public void visitAndAssignExpression(@NotNull ApexAndAssignExpression o) {
-    visitExpression(o);
-  }
-
-  public void visitAndExpression(@NotNull ApexAndExpression o) {
-    visitExpression(o);
+  public void visitAllowedSwitchType(@NotNull ApexAllowedSwitchType o) {
+    visitPsiElement(o);
   }
 
   public void visitAnnotation(@NotNull ApexAnnotation o) {
     visitPsiElement(o);
   }
 
-  public void visitAnnotationParameter(@NotNull ApexAnnotationParameter o) {
+  public void visitApexClass(@NotNull ApexApexClass o) {
     visitPsiElement(o);
   }
 
-  public void visitAnnotationParameterValue(@NotNull ApexAnnotationParameterValue o) {
+  public void visitApexClassOrInterface(@NotNull ApexApexClassOrInterface o) {
     visitPsiElement(o);
   }
 
-  public void visitArguments(@NotNull ApexArguments o) {
+  public void visitApexEnum(@NotNull ApexApexEnum o) {
     visitPsiElement(o);
   }
 
-  public void visitArrayCreatorRest(@NotNull ApexArrayCreatorRest o) {
+  public void visitApexInterface(@NotNull ApexApexInterface o) {
     visitPsiElement(o);
   }
 
-  public void visitArrayInitializer(@NotNull ApexArrayInitializer o) {
+  public void visitAssignmentStatement(@NotNull ApexAssignmentStatement o) {
     visitPsiElement(o);
   }
 
-  public void visitArrayPositionExpression(@NotNull ApexArrayPositionExpression o) {
-    visitExpression(o);
-  }
-
-  public void visitAssignExpression(@NotNull ApexAssignExpression o) {
-    visitExpression(o);
-  }
-
-  public void visitBitwiseAndExpression(@NotNull ApexBitwiseAndExpression o) {
-    visitExpression(o);
-  }
-
-  public void visitBitwiseExclusiveOr1Expression(@NotNull ApexBitwiseExclusiveOr1Expression o) {
-    visitExpression(o);
-  }
-
-  public void visitBitwiseExclusiveOr2Expression(@NotNull ApexBitwiseExclusiveOr2Expression o) {
-    visitExpression(o);
-  }
-
-  public void visitBitwiseOrExpression(@NotNull ApexBitwiseOrExpression o) {
-    visitExpression(o);
-  }
-
-  public void visitBitwiseShiftLeftExpression(@NotNull ApexBitwiseShiftLeftExpression o) {
-    visitExpression(o);
-  }
-
-  public void visitBitwiseShiftRightExpression(@NotNull ApexBitwiseShiftRightExpression o) {
-    visitExpression(o);
-  }
-
-  public void visitBitwiseShiftRightUnsignedExpression(@NotNull ApexBitwiseShiftRightUnsignedExpression o) {
-    visitExpression(o);
-  }
-
-  public void visitBlock(@NotNull ApexBlock o) {
+  public void visitCatchBlock(@NotNull ApexCatchBlock o) {
     visitPsiElement(o);
   }
 
-  public void visitBlockStatement(@NotNull ApexBlockStatement o) {
+  public void visitCatchBlockBody(@NotNull ApexCatchBlockBody o) {
     visitPsiElement(o);
   }
 
-  public void visitBooleanLiteral(@NotNull ApexBooleanLiteral o) {
+  public void visitCatchBody(@NotNull ApexCatchBody o) {
     visitPsiElement(o);
   }
 
-  public void visitCastExpression(@NotNull ApexCastExpression o) {
-    visitExpression(o);
+  public void visitCatchCondition(@NotNull ApexCatchCondition o) {
+    visitPsiElement(o);
   }
 
-  public void visitCatchClause(@NotNull ApexCatchClause o) {
+  public void visitClassAccessModifier(@NotNull ApexClassAccessModifier o) {
     visitPsiElement(o);
   }
 
@@ -129,111 +59,63 @@ public class ApexVisitor extends PsiElementVisitor {
     visitPsiElement(o);
   }
 
-  public void visitClassCreatorRest(@NotNull ApexClassCreatorRest o) {
+  public void visitClassDefinition(@NotNull ApexClassDefinition o) {
     visitPsiElement(o);
   }
 
-  public void visitClassDeclaration(@NotNull ApexClassDeclaration o) {
-    visitDeclaration(o);
-  }
-
-  public void visitClassInterfaceOrPrimitiveType(@NotNull ApexClassInterfaceOrPrimitiveType o) {
+  public void visitClassMember(@NotNull ApexClassMember o) {
     visitPsiElement(o);
   }
 
-  public void visitClassOrInterfaceReference(@NotNull ApexClassOrInterfaceReference o) {
-    visitReference(o);
-  }
-
-  public void visitClassicForStatement(@NotNull ApexClassicForStatement o) {
+  public void visitConditionTrail(@NotNull ApexConditionTrail o) {
     visitPsiElement(o);
   }
 
-  public void visitConstructorBody(@NotNull ApexConstructorBody o) {
+  public void visitConstructorDefinition(@NotNull ApexConstructorDefinition o) {
     visitPsiElement(o);
   }
 
-  public void visitConstructorDeclaration(@NotNull ApexConstructorDeclaration o) {
-    visitDeclaration(o);
-  }
-
-  public void visitCreatedName(@NotNull ApexCreatedName o) {
+  public void visitDecisionStatement(@NotNull ApexDecisionStatement o) {
     visitPsiElement(o);
   }
 
-  public void visitCreator(@NotNull ApexCreator o) {
+  public void visitDeleteStatement(@NotNull ApexDeleteStatement o) {
     visitPsiElement(o);
   }
 
-  public void visitDecrementAfterExpression(@NotNull ApexDecrementAfterExpression o) {
-    visitExpression(o);
-  }
-
-  public void visitDecrementBeforeExpression(@NotNull ApexDecrementBeforeExpression o) {
-    visitExpression(o);
-  }
-
-  public void visitDivideAssignExpression(@NotNull ApexDivideAssignExpression o) {
-    visitExpression(o);
-  }
-
-  public void visitDivisionExpression(@NotNull ApexDivisionExpression o) {
-    visitExpression(o);
-  }
-
-  public void visitDoStatement(@NotNull ApexDoStatement o) {
+  public void visitDmlStatement(@NotNull ApexDmlStatement o) {
     visitPsiElement(o);
   }
 
-  public void visitEnhancedForStatement(@NotNull ApexEnhancedForStatement o) {
+  public void visitDoBlock(@NotNull ApexDoBlock o) {
     visitPsiElement(o);
   }
 
-  public void visitEnumDeclaration(@NotNull ApexEnumDeclaration o) {
-    visitDeclaration(o);
-  }
-
-  public void visitEqualityExpression(@NotNull ApexEqualityExpression o) {
-    visitExpression(o);
-  }
-
-  public void visitExactEqualityExpression(@NotNull ApexExactEqualityExpression o) {
-    visitExpression(o);
-  }
-
-  public void visitExactInequalityExpression(@NotNull ApexExactInequalityExpression o) {
-    visitExpression(o);
-  }
-
-  public void visitExplicitGenericInvocation(@NotNull ApexExplicitGenericInvocation o) {
+  public void visitDoWhileLoop(@NotNull ApexDoWhileLoop o) {
     visitPsiElement(o);
   }
 
-  public void visitExplicitGenericInvocationSuffix(@NotNull ApexExplicitGenericInvocationSuffix o) {
+  public void visitElseBlock(@NotNull ApexElseBlock o) {
     visitPsiElement(o);
   }
 
-  public void visitExpression(@NotNull ApexExpression o) {
+  public void visitEnhancedForLoop(@NotNull ApexEnhancedForLoop o) {
     visitPsiElement(o);
   }
 
-  public void visitExpressionList(@NotNull ApexExpressionList o) {
+  public void visitEnumAccessModifier(@NotNull ApexEnumAccessModifier o) {
     visitPsiElement(o);
   }
 
-  public void visitExpressionListExpression(@NotNull ApexExpressionListExpression o) {
-    visitExpression(o);
-  }
-
-  public void visitExtendsClause(@NotNull ApexExtendsClause o) {
+  public void visitEnumBody(@NotNull ApexEnumBody o) {
     visitPsiElement(o);
   }
 
-  public void visitFieldDeclarator(@NotNull ApexFieldDeclarator o) {
+  public void visitEnumDefinition(@NotNull ApexEnumDefinition o) {
     visitPsiElement(o);
   }
 
-  public void visitFieldVisibility(@NotNull ApexFieldVisibility o) {
+  public void visitFieldDefinition(@NotNull ApexFieldDefinition o) {
     visitPsiElement(o);
   }
 
@@ -241,28 +123,44 @@ public class ApexVisitor extends PsiElementVisitor {
     visitPsiElement(o);
   }
 
-  public void visitForInit(@NotNull ApexForInit o) {
+  public void visitFinallyBody(@NotNull ApexFinallyBody o) {
     visitPsiElement(o);
   }
 
-  public void visitForUpdate(@NotNull ApexForUpdate o) {
+  public void visitForBlock(@NotNull ApexForBlock o) {
     visitPsiElement(o);
   }
 
-  public void visitGenericExpression(@NotNull ApexGenericExpression o) {
-    visitExpression(o);
+  public void visitForBody(@NotNull ApexForBody o) {
+    visitPsiElement(o);
   }
 
-  public void visitGreaterEqualExpression(@NotNull ApexGreaterEqualExpression o) {
-    visitExpression(o);
+  public void visitForLoop(@NotNull ApexForLoop o) {
+    visitPsiElement(o);
   }
 
-  public void visitGreaterThanExpression(@NotNull ApexGreaterThanExpression o) {
-    visitExpression(o);
+  public void visitForLoopConditionDeclared(@NotNull ApexForLoopConditionDeclared o) {
+    visitPsiElement(o);
   }
 
-  public void visitIdentifierExpression(@NotNull ApexIdentifierExpression o) {
-    visitExpression(o);
+  public void visitForLoopConditionReference(@NotNull ApexForLoopConditionReference o) {
+    visitPsiElement(o);
+  }
+
+  public void visitGenericType(@NotNull ApexGenericType o) {
+    visitPsiElement(o);
+  }
+
+  public void visitIfBlock(@NotNull ApexIfBlock o) {
+    visitPsiElement(o);
+  }
+
+  public void visitIfBody(@NotNull ApexIfBody o) {
+    visitPsiElement(o);
+  }
+
+  public void visitIfElseBlock(@NotNull ApexIfElseBlock o) {
+    visitPsiElement(o);
   }
 
   public void visitIfStatement(@NotNull ApexIfStatement o) {
@@ -273,67 +171,59 @@ public class ApexVisitor extends PsiElementVisitor {
     visitPsiElement(o);
   }
 
-  public void visitIncrementAfterExpression(@NotNull ApexIncrementAfterExpression o) {
-    visitExpression(o);
-  }
-
-  public void visitIncrementBeforeExpression(@NotNull ApexIncrementBeforeExpression o) {
-    visitExpression(o);
-  }
-
-  public void visitInequalityExpression(@NotNull ApexInequalityExpression o) {
-    visitExpression(o);
-  }
-
-  public void visitInnerCreator(@NotNull ApexInnerCreator o) {
+  public void visitInheritance(@NotNull ApexInheritance o) {
     visitPsiElement(o);
   }
 
-  public void visitInstanceOfExpression(@NotNull ApexInstanceOfExpression o) {
-    visitExpression(o);
+  public void visitInsertStatement(@NotNull ApexInsertStatement o) {
+    visitPsiElement(o);
   }
 
-  public void visitInstantiationExpression(@NotNull ApexInstantiationExpression o) {
-    visitExpression(o);
+  public void visitInterfaceAccessModifier(@NotNull ApexInterfaceAccessModifier o) {
+    visitPsiElement(o);
   }
 
   public void visitInterfaceBody(@NotNull ApexInterfaceBody o) {
     visitPsiElement(o);
   }
 
-  public void visitInterfaceDeclaration(@NotNull ApexInterfaceDeclaration o) {
-    visitDeclaration(o);
-  }
-
-  public void visitLessEqualExpression(@NotNull ApexLessEqualExpression o) {
-    visitExpression(o);
-  }
-
-  public void visitLessThanExpression(@NotNull ApexLessThanExpression o) {
-    visitExpression(o);
-  }
-
-  public void visitListCollection(@NotNull ApexListCollection o) {
+  public void visitInterfaceDefinition(@NotNull ApexInterfaceDefinition o) {
     visitPsiElement(o);
   }
 
-  public void visitLiteral(@NotNull ApexLiteral o) {
+  public void visitInterfaceIdentifier(@NotNull ApexInterfaceIdentifier o) {
     visitPsiElement(o);
   }
 
-  public void visitLocalVariableDeclarationStatement(@NotNull ApexLocalVariableDeclarationStatement o) {
+  public void visitInterfaceSignature(@NotNull ApexInterfaceSignature o) {
     visitPsiElement(o);
   }
 
-  public void visitLocalVariableDeclarator(@NotNull ApexLocalVariableDeclarator o) {
+  public void visitIterationForLoop(@NotNull ApexIterationForLoop o) {
     visitPsiElement(o);
   }
 
-  public void visitLogicalComplimentExpression(@NotNull ApexLogicalComplimentExpression o) {
-    visitExpression(o);
+  public void visitLoopControlStatement(@NotNull ApexLoopControlStatement o) {
+    visitPsiElement(o);
   }
 
-  public void visitMapCollection(@NotNull ApexMapCollection o) {
+  public void visitLoopStatement(@NotNull ApexLoopStatement o) {
+    visitPsiElement(o);
+  }
+
+  public void visitMemberAccessModifier(@NotNull ApexMemberAccessModifier o) {
+    visitPsiElement(o);
+  }
+
+  public void visitMemberModifier(@NotNull ApexMemberModifier o) {
+    visitPsiElement(o);
+  }
+
+  public void visitMergeStatement(@NotNull ApexMergeStatement o) {
+    visitPsiElement(o);
+  }
+
+  public void visitMethodBlock(@NotNull ApexMethodBlock o) {
     visitPsiElement(o);
   }
 
@@ -341,168 +231,276 @@ public class ApexVisitor extends PsiElementVisitor {
     visitPsiElement(o);
   }
 
-  public void visitMethodDeclaration(@NotNull ApexMethodDeclaration o) {
-    visitDeclaration(o);
-  }
-
-  public void visitMultiplicationAssignExpression(@NotNull ApexMultiplicationAssignExpression o) {
-    visitExpression(o);
-  }
-
-  public void visitMultiplicationExpression(@NotNull ApexMultiplicationExpression o) {
-    visitExpression(o);
-  }
-
-  public void visitNonWildcardTypeArguments(@NotNull ApexNonWildcardTypeArguments o) {
+  public void visitMethodCallStatement(@NotNull ApexMethodCallStatement o) {
     visitPsiElement(o);
   }
 
-  public void visitNonWildcardTypeArgumentsOrDiamond(@NotNull ApexNonWildcardTypeArgumentsOrDiamond o) {
+  public void visitMethodDefinition(@NotNull ApexMethodDefinition o) {
     visitPsiElement(o);
   }
 
-  public void visitOrAssignExpression(@NotNull ApexOrAssignExpression o) {
-    visitExpression(o);
-  }
-
-  public void visitOrExpression(@NotNull ApexOrExpression o) {
-    visitExpression(o);
-  }
-
-  public void visitParameterDefinition(@NotNull ApexParameterDefinition o) {
+  public void visitMethodNameWithArgument(@NotNull ApexMethodNameWithArgument o) {
     visitPsiElement(o);
   }
 
-  public void visitParameters(@NotNull ApexParameters o) {
+  public void visitMethodNameWithParameters(@NotNull ApexMethodNameWithParameters o) {
     visitPsiElement(o);
   }
 
-  public void visitPrimaryExpression(@NotNull ApexPrimaryExpression o) {
-    visitExpression(o);
+  public void visitModifier(@NotNull ApexModifier o) {
+    visitPsiElement(o);
+  }
+
+  public void visitModifiers(@NotNull ApexModifiers o) {
+    visitPsiElement(o);
+  }
+
+  public void visitParentClass(@NotNull ApexParentClass o) {
+    visitPsiElement(o);
   }
 
   public void visitPrimitiveType(@NotNull ApexPrimitiveType o) {
     visitPsiElement(o);
   }
 
-  public void visitSetCollection(@NotNull ApexSetCollection o) {
+  public void visitQualifiedIdentifier(@NotNull ApexQualifiedIdentifier o) {
     visitPsiElement(o);
   }
 
-  public void visitSharingModifier(@NotNull ApexSharingModifier o) {
+  public void visitReturnStatement(@NotNull ApexReturnStatement o) {
     visitPsiElement(o);
   }
 
-  public void visitShiftLeftAssignExpression(@NotNull ApexShiftLeftAssignExpression o) {
-    visitExpression(o);
-  }
-
-  public void visitShiftRightAssignExpression(@NotNull ApexShiftRightAssignExpression o) {
-    visitExpression(o);
-  }
-
-  public void visitShiftRightUnsignedAssignExpression(@NotNull ApexShiftRightUnsignedAssignExpression o) {
-    visitExpression(o);
+  public void visitSharingClause(@NotNull ApexSharingClause o) {
+    visitPsiElement(o);
   }
 
   public void visitStatement(@NotNull ApexStatement o) {
     visitPsiElement(o);
   }
 
-  public void visitStaticBlock(@NotNull ApexStaticBlock o) {
+  public void visitSwitchBlock(@NotNull ApexSwitchBlock o) {
     visitPsiElement(o);
   }
 
-  public void visitStaticOrTransientModifier(@NotNull ApexStaticOrTransientModifier o) {
+  public void visitSwitchBlockBody(@NotNull ApexSwitchBlockBody o) {
     visitPsiElement(o);
   }
 
-  public void visitSubtractionAssignExpression(@NotNull ApexSubtractionAssignExpression o) {
+  public void visitSwitchBody(@NotNull ApexSwitchBody o) {
+    visitPsiElement(o);
+  }
+
+  public void visitSwitchStatement(@NotNull ApexSwitchStatement o) {
+    visitPsiElement(o);
+  }
+
+  public void visitSwitchWhenBlock(@NotNull ApexSwitchWhenBlock o) {
+    visitPsiElement(o);
+  }
+
+  public void visitSwitchWhenValueList(@NotNull ApexSwitchWhenValueList o) {
+    visitPsiElement(o);
+  }
+
+  public void visitThrowStatement(@NotNull ApexThrowStatement o) {
+    visitPsiElement(o);
+  }
+
+  public void visitTraditionalForLoopCondition(@NotNull ApexTraditionalForLoopCondition o) {
+    visitPsiElement(o);
+  }
+
+  public void visitTryBlock(@NotNull ApexTryBlock o) {
+    visitPsiElement(o);
+  }
+
+  public void visitTryBody(@NotNull ApexTryBody o) {
+    visitPsiElement(o);
+  }
+
+  public void visitTryCatchStatement(@NotNull ApexTryCatchStatement o) {
+    visitPsiElement(o);
+  }
+
+  public void visitTypeIdentifier(@NotNull ApexTypeIdentifier o) {
+    visitPsiElement(o);
+  }
+
+  public void visitUpdateStatement(@NotNull ApexUpdateStatement o) {
+    visitPsiElement(o);
+  }
+
+  public void visitUpsertStatement(@NotNull ApexUpsertStatement o) {
+    visitPsiElement(o);
+  }
+
+  public void visitVariableName(@NotNull ApexVariableName o) {
+    visitPsiElement(o);
+  }
+
+  public void visitWhenElseStatement(@NotNull ApexWhenElseStatement o) {
+    visitPsiElement(o);
+  }
+
+  public void visitWhenStatement(@NotNull ApexWhenStatement o) {
+    visitPsiElement(o);
+  }
+
+  public void visitWhileBlock(@NotNull ApexWhileBlock o) {
+    visitPsiElement(o);
+  }
+
+  public void visitWhileBody(@NotNull ApexWhileBody o) {
+    visitPsiElement(o);
+  }
+
+  public void visitWhileCondition(@NotNull ApexWhileCondition o) {
+    visitPsiElement(o);
+  }
+
+  public void visitWhileLoop(@NotNull ApexWhileLoop o) {
+    visitPsiElement(o);
+  }
+
+  public void visitAddExpr(@NotNull ApexAddExpr o) {
     visitExpression(o);
   }
 
-  public void visitSubtractionExpression(@NotNull ApexSubtractionExpression o) {
+  public void visitArrayAccessExpr(@NotNull ApexArrayAccessExpr o) {
     visitExpression(o);
   }
 
-  public void visitSuperSuffix(@NotNull ApexSuperSuffix o) {
-    visitPsiElement(o);
-  }
-
-  public void visitSuperExpression(@NotNull ApexSuperExpression o) {
+  public void visitAssignmentExpr(@NotNull ApexAssignmentExpr o) {
     visitExpression(o);
   }
 
-  public void visitTernaryExpression(@NotNull ApexTernaryExpression o) {
+  public void visitBitwiseAndExpr(@NotNull ApexBitwiseAndExpr o) {
     visitExpression(o);
   }
 
-  public void visitThisExpression(@NotNull ApexThisExpression o) {
+  public void visitBitwiseOrExpr(@NotNull ApexBitwiseOrExpr o) {
     visitExpression(o);
   }
 
-  public void visitTriggerBody(@NotNull ApexTriggerBody o) {
-    visitPsiElement(o);
-  }
-
-  public void visitTriggerDefinition(@NotNull ApexTriggerDefinition o) {
-    visitPsiElement(o);
-  }
-
-  public void visitTriggerParameter(@NotNull ApexTriggerParameter o) {
-    visitPsiElement(o);
-  }
-
-  public void visitTryStatement(@NotNull ApexTryStatement o) {
-    visitPsiElement(o);
-  }
-
-  public void visitTypeArgument(@NotNull ApexTypeArgument o) {
-    visitPsiElement(o);
-  }
-
-  public void visitTypeArgumentsOrDiamond(@NotNull ApexTypeArgumentsOrDiamond o) {
-    visitPsiElement(o);
-  }
-
-  public void visitUnaryNegationExpression(@NotNull ApexUnaryNegationExpression o) {
+  public void visitBitwiseXorExpr(@NotNull ApexBitwiseXorExpr o) {
     visitExpression(o);
   }
 
-  public void visitVariableDefinition(@NotNull ApexVariableDefinition o) {
-    visitPsiElement(o);
-  }
-
-  public void visitVariableInitializer(@NotNull ApexVariableInitializer o) {
-    visitPsiElement(o);
-  }
-
-  public void visitVariableModifier(@NotNull ApexVariableModifier o) {
-    visitPsiElement(o);
-  }
-
-  public void visitVirtualOrAbstractModifier(@NotNull ApexVirtualOrAbstractModifier o) {
-    visitPsiElement(o);
-  }
-
-  public void visitVisibility(@NotNull ApexVisibility o) {
-    visitPsiElement(o);
-  }
-
-  public void visitWeirdExpression(@NotNull ApexWeirdExpression o) {
+  public void visitDivExpr(@NotNull ApexDivExpr o) {
     visitExpression(o);
   }
 
-  public void visitWhileStatement(@NotNull ApexWhileStatement o) {
+  public void visitExpression(@NotNull ApexExpression o) {
     visitPsiElement(o);
   }
 
-  public void visitDeclarationElement(@NotNull ApexDeclarationElement o) {
+  public void visitLeftShiftExpr(@NotNull ApexLeftShiftExpr o) {
+    visitExpression(o);
+  }
+
+  public void visitLogicalAndExpr(@NotNull ApexLogicalAndExpr o) {
+    visitExpression(o);
+  }
+
+  public void visitLogicalEqualEqualExpr(@NotNull ApexLogicalEqualEqualExpr o) {
+    visitExpression(o);
+  }
+
+  public void visitLogicalEqualExpr(@NotNull ApexLogicalEqualExpr o) {
+    visitExpression(o);
+  }
+
+  public void visitLogicalGreaterEqualExpr(@NotNull ApexLogicalGreaterEqualExpr o) {
+    visitExpression(o);
+  }
+
+  public void visitLogicalGreaterExpr(@NotNull ApexLogicalGreaterExpr o) {
+    visitExpression(o);
+  }
+
+  public void visitLogicalLessEqualExpr(@NotNull ApexLogicalLessEqualExpr o) {
+    visitExpression(o);
+  }
+
+  public void visitLogicalLessExpr(@NotNull ApexLogicalLessExpr o) {
+    visitExpression(o);
+  }
+
+  public void visitLogicalNotEqualEqualExpr(@NotNull ApexLogicalNotEqualEqualExpr o) {
+    visitExpression(o);
+  }
+
+  public void visitLogicalNotEqualExpr(@NotNull ApexLogicalNotEqualExpr o) {
+    visitExpression(o);
+  }
+
+  public void visitLogicalNotExpr(@NotNull ApexLogicalNotExpr o) {
+    visitExpression(o);
+  }
+
+  public void visitLogicalOrExpr(@NotNull ApexLogicalOrExpr o) {
+    visitExpression(o);
+  }
+
+  public void visitMinExpr(@NotNull ApexMinExpr o) {
+    visitExpression(o);
+  }
+
+  public void visitModuloExpr(@NotNull ApexModuloExpr o) {
+    visitExpression(o);
+  }
+
+  public void visitMulExpr(@NotNull ApexMulExpr o) {
+    visitExpression(o);
+  }
+
+  public void visitNegationExpr(@NotNull ApexNegationExpr o) {
+    visitExpression(o);
+  }
+
+  public void visitNullCoalescingExpr(@NotNull ApexNullCoalescingExpr o) {
+    visitExpression(o);
+  }
+
+  public void visitParameterList(@NotNull ApexParameterList o) {
     visitPsiElement(o);
   }
 
-  public void visitReferenceElement(@NotNull ApexReferenceElement o) {
-    visitPsiElement(o);
+  public void visitPrimaryExpr(@NotNull ApexPrimaryExpr o) {
+    visitExpression(o);
+  }
+
+  public void visitRightShiftExpr(@NotNull ApexRightShiftExpr o) {
+    visitExpression(o);
+  }
+
+  public void visitShorthandAssignmentExpr(@NotNull ApexShorthandAssignmentExpr o) {
+    visitExpression(o);
+  }
+
+  public void visitTernaryExpr(@NotNull ApexTernaryExpr o) {
+    visitExpression(o);
+  }
+
+  public void visitTypeCastExpr(@NotNull ApexTypeCastExpr o) {
+    visitExpression(o);
+  }
+
+  public void visitUnaryPostfixDecrementExpr(@NotNull ApexUnaryPostfixDecrementExpr o) {
+    visitExpression(o);
+  }
+
+  public void visitUnaryPostfixIncrementExpr(@NotNull ApexUnaryPostfixIncrementExpr o) {
+    visitExpression(o);
+  }
+
+  public void visitUnaryPrefixDecrementExpr(@NotNull ApexUnaryPrefixDecrementExpr o) {
+    visitExpression(o);
+  }
+
+  public void visitUnaryPrefixIncrementExpr(@NotNull ApexUnaryPrefixIncrementExpr o) {
+    visitExpression(o);
   }
 
   public void visitPsiElement(@NotNull PsiElement o) {

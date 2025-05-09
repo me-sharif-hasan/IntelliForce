@@ -1,0 +1,282 @@
+{
+  extends="com.intellij.extapi.psi.ASTWrapperPsiElement"
+  psiClassPrefix="Simple"
+  psiImplClassSuffix="Impl"
+
+  // Enable Pratt parsing by collapsing all *Expr rules into expression
+  extends(".*expr")=expression
+
+  tokens = [
+    COMMENT = 'regexp:(//.*|(?s)/\*.*?\*/)'
+    VIRTUAL_KEYWORD = 'virtual'
+    ABSTRACT_KEYWORD = 'abstract'
+    WITH_KEYWORD = 'with'
+    INTERFACE_KEYWORD = 'interface'
+    CLASS_KEYWORD = 'class'
+    SHARING_KEYWORD = 'sharing'
+    WITHOUT_KEYWORD = 'without'
+    INHERITED_KEYWORD = 'inherited'
+    PUBLIC_KEYWORD = 'public'
+    PRIVATE_KEYWORD = 'private'
+    GLOBAL_KEYWORD = 'global'
+    PROTECTED_KEYWORD = 'protected'
+    FINAL_KEYWORD = 'final'
+    STATIC_KEYWORD = 'static'
+    IMPLEMENTS_KEYWORD = 'implements'
+    EXTENDS_KEYWORD = 'extends'
+    GET_KEYWORD = 'get'
+    SET_KEYWORD = 'set'
+    TRUE_LITERAL = 'true'
+    FALSE_LITERAL = 'false'
+    NEW_KEYWORD = 'new'
+    IF_KEYWORD = 'if'
+    ELSE_KEYWORD = 'else'
+    WHEN_KEYWORD = 'when'
+    FOR_KEYWORD = 'for'
+    WHILE_KEYWORD = 'while'
+    DO_KEYWORD = 'do'
+    TRY_KEYWORD = 'try'
+    CATCH_KEYWORD = 'catch'
+    FINALLY_KEYWORD = 'finally'
+    RETURN_KEYWORD = 'return'
+    SWITCH_KEYWORD = 'switch'
+    CASE_KEYWORD = 'case'
+    DEFAULT_KEYWORD = 'default'
+    ENUM_KEYWORD = 'enum'
+    BREAK_KEYWORD = 'break'
+    CONTINUE_KEYWORD = 'continue'
+    THROW_KEYWORD = 'throw'
+    THIS_KEYWORD = 'this'
+    SUPER_KEYWORD = 'super'
+    ON_KEYWORD = 'on'
+    OVERRIDE_KEYWORD = 'override'
+    WHITESPACE = 'regexp:\s+'
+    NUMBER = 'regexp:-?[0-9]+(\.?[0-9])*L?'
+    LBRACE = '{'
+    RBRACE = '}'
+    LPAREN = '('
+    RPAREN = ')'
+    LBRACKET = '['
+    RBRACKET = ']'
+    COMMA = ','
+    DOT = '.'
+    COLON = ':'
+    EQUAL = '=='
+    NOT_EQUAL_EQAL = '!=='
+    NOT_EQUAL = '!='
+    GREATER_EQUAL = '>='
+    LESS_EQUAL = '<='
+    INCREMENT = '++'
+    DECREMENT = '--'
+    GREATER = '>'
+    LESS = '<'
+    PLUS = '+'
+    MINUS = '-'
+    MULTIPLY = '*'
+    DIVIDE = '/'
+    AND = '&&'
+    OR = '||'
+    NOT = '!'
+    BITWISE_AND = '&'
+    BITWISE_OR = '|'
+    BITWISE_XOR = '^'
+    ASSIGN = '='
+    SEMICOLON = ';'
+    AT = '@'
+    SOQL = 'regexp:SELECT (.*?)(?=])'
+    SOSL = 'regexp:FIND (.*?)(?=])'
+    IDENTIFIER = 'regexp:[a-zA-Z_][a-zA-Z0-9_$]*'
+    STRING = "regexp:'.*?'"
+    ARRAY_BRACKET = '[]'
+  ]
+}
+
+ApexFile ::=expression| ApexClass | ApexTrigger | ApexInterface | ApexScript | ApexEnum
+
+ApexClass ::= Annotation? ClassAccessModifier Modifiers ClassDefinition
+ClassAccessModifier ::= PUBLIC_KEYWORD | GLOBAL_KEYWORD
+Modifiers ::= Modifier*
+Modifier ::= VIRTUAL_KEYWORD | ABSTRACT_KEYWORD | SharingClause
+SharingClause ::= (WITH_KEYWORD | WITHOUT_KEYWORD | INHERITED_KEYWORD) SHARING_KEYWORD
+
+ClassDefinition ::= CLASS_KEYWORD TypeIdentifier Inheritance ClassBody
+Inheritance ::= (EXTENDS_KEYWORD ParentClass)? ImplementsClause?
+ParentClass ::= QualifiedIdentifier
+
+QualifiedIdentifier ::= IDENTIFIER (DOT IDENTIFIER)?
+ImplementsClause ::= IMPLEMENTS_KEYWORD InterfaceIdentifier (COMMA InterfaceIdentifier)*
+InterfaceIdentifier ::= QualifiedIdentifier
+TypeIdentifier ::= (PrimitiveType | QualifiedIdentifier) (GenericType | ARRAY_BRACKET)*
+PrimitiveType ::= 'Integer' | 'String' | 'Boolean' | 'Double' | 'Long' | 'Date' | 'Datetime' | 'Id' | 'Object' | 'Blob'
+GenericType ::= LESS TypeIdentifier (COMMA TypeIdentifier)* GREATER
+
+
+ClassBody ::= LBRACE (ClassMember | ApexClassOrInterface| ClassBody)* RBRACE
+ClassMember ::= MemberModifier (FieldDefinition | MethodDefinition | ConstructorDefinition)
+MemberModifier ::= Annotation? MemberAccessModifier? (FINAL_KEYWORD | OVERRIDE_KEYWORD)? STATIC_KEYWORD?
+Annotation ::= AT TypeIdentifier argument_group?
+
+/**
+* Field definition handling
+ */
+FieldDefinition ::= TypeIdentifier VariableName SEMICOLON
+VariableName ::= IDENTIFIER (ASSIGN expression)? (COMMA VariableName)?
+MemberAccessModifier ::= PUBLIC_KEYWORD | PRIVATE_KEYWORD | PROTECTED_KEYWORD | GLOBAL_KEYWORD
+
+/**
+    * Method definition handling
+ */
+MethodDefinition ::= TypeIdentifier MethodNameWithParameters MethodBlock
+MethodNameWithParameters ::= IDENTIFIER argument_group
+MethodBlock ::= LBRACE MethodBody RBRACE
+
+MethodBody ::= Statement*
+Statement ::=   DecisionStatement
+                | LoopStatement
+                | AssignmentStatement
+                | LoopControlStatement
+                | MethodCallStatement
+
+AssignmentStatement ::= FieldDefinition
+LoopControlStatement ::= BREAK_KEYWORD SEMICOLON | CONTINUE_KEYWORD SEMICOLON
+MethodCallStatement ::= expression (DOT MethodNameWithParameters)? argument_group? SEMICOLON
+DecisionStatement ::= IfStatement | SwitchStatement
+
+/**
+* If statement handling
+ */
+IfStatement ::= IF_KEYWORD LPAREN expression RPAREN IfBlock IfElseBlock? ElseBlock?
+ElseBlock ::= ELSE_KEYWORD IfBlock
+IfElseBlock ::= ELSE_KEYWORD IfStatement
+IfBlock ::= LBRACE IfBody RBRACE
+IfBody ::= Statement*
+
+/**
+* Switch statement handling
+ */
+SwitchStatement ::= SWITCH_KEYWORD ON_KEYWORD AllowedSwitchType SwitchBlock
+AllowedSwitchType ::= expression
+SwitchBlock ::= LBRACE (WhenStatement | WhenElseStatement)* RBRACE
+WhenStatement ::= WHEN_KEYWORD SwitchWhenValueList SwitchWhenBlock
+SwitchWhenValueList ::= expression (COMMA expression)*
+SwitchWhenBlock ::= LBRACE SwitchBody RBRACE
+SwitchBody ::= Statement*
+WhenElseStatement ::= WHEN_KEYWORD ELSE_KEYWORD SwitchWhenBlock
+
+/**
+* Loop statement handling
+ */
+LoopStatement ::= ForLoop | WhileLoop | DoWhileLoop
+ForLoop ::= EnhancedForLoop
+
+// for loop
+EnhancedForLoop ::= FOR_KEYWORD LPAREN (ForLoopConditionDeclared|ForLoopConditionReference) RPAREN ForBlock
+ForLoopConditionDeclared ::= TypeIdentifier VariableName ConditionTrail
+ForLoopConditionReference ::= VariableName ConditionTrail
+ConditionTrail ::= TraditionalForLoopCondition | IterationForLoop
+TraditionalForLoopCondition ::= SEMICOLON expression SEMICOLON expression
+IterationForLoop ::= COLON expression
+
+WhileLoop ::= WHILE_KEYWORD LPAREN WhileCondition RPAREN WhileBlock
+WhileCondition ::= expression
+WhileBlock ::= LBRACE WhileBody RBRACE
+WhileBody ::= Statement*
+
+//ForLoopCondition ::= VariableDefinition expression SEMICOLON expression
+IterationSyntax ::= IteratorDeclaration COLON expression
+IteratorDeclaration ::= (TypeIdentifier VariableName)|VariableName
+VariableDefinition ::= Statement
+ForBlock ::= LBRACE ForBody RBRACE
+ForBody ::= Statement*
+
+// Iteration for loop
+//IterationForLoop ::= FOR_KEYWORD LPAREN IterationSyntax RPAREN ForBlock
+//IterationSyntax ::= IteratorDeclaration COLON expression
+//IteratorDeclaration ::= (TypeIdentifier VariableName)|VariableName
+/**
+ * Expression grammar using Pratt parsing to handle left recursion
+ * Rules are structured to define operator precedence and collapse into expression
+ */
+expression ::=  ( add_expr
+                | min_expr
+                | mul_expr
+                | div_expr
+                | logical_and_expr
+                | logical_or_expr
+                | logical_greater_expr
+                | logical_less_expr
+                | logical_greater_equal_expr
+                | logical_less_equal_expr
+                | logical_equal_expr
+                | logical_equal_equal_expr
+                | logical_not_equal_expr
+                | logical_not_equal_equal_expr
+                | logical_not_expr
+                | bitwise_and_expr
+                | bitwise_or_expr
+                | bitwise_xor_expr
+                | primary_expr
+                | assignment_expr
+                | array_access_expr
+                | unary_prefix_increment_expr
+                | unary_prefix_decrement_expr
+                | unary_postfix_increment_expr
+                | unary_postfix_decrement_expr
+                | negation_expr)
+
+// Arithmetic expressions (lower precedence)
+
+add_expr ::= expression PLUS expression {extends=expression}
+min_expr ::= expression MINUS expression {extends=expression}
+mul_expr ::= expression MULTIPLY expression {extends=expression}
+div_expr ::= expression DIVIDE expression {extends=expression}
+
+// Logical expressions
+logical_and_expr ::= expression AND expression {extends=expression}
+logical_or_expr ::= expression OR expression {extends=expression}
+logical_greater_expr ::= expression GREATER expression {extends=expression}
+logical_less_expr ::= expression LESS expression {extends=expression}
+logical_greater_equal_expr ::= expression GREATER_EQUAL expression {extends=expression}
+logical_less_equal_expr ::= expression LESS_EQUAL expression {extends=expression}
+logical_equal_expr ::= expression EQUAL expression {extends=expression}
+logical_equal_equal_expr ::= expression NOT_EQUAL_EQAL expression {extends=expression}
+logical_not_equal_expr ::= expression NOT_EQUAL expression {extends=expression}
+logical_not_equal_equal_expr ::= expression NOT_EQUAL_EQAL expression {extends=expression}
+logical_not_expr ::= NOT expression {extends=expression}
+
+// Bitwise expressions
+bitwise_and_expr ::= expression BITWISE_AND expression {extends=expression}
+bitwise_or_expr ::= expression BITWISE_OR expression {extends=expression}
+bitwise_xor_expr ::= expression BITWISE_XOR expression {extends=expression}
+
+assignment_expr ::= expression ASSIGN GREATER? expression {extends=expression}
+
+array_access_expr ::= expression LBRACKET expression RBRACKET {extends=expression}
+
+negation_expr ::= MINUS expression {extends=expression}
+
+/*
+ * Unary expressions
+ */
+unary_prefix_increment_expr ::= INCREMENT expression {extends=expression}
+unary_prefix_decrement_expr ::= DECREMENT expression {extends=expression}
+unary_postfix_increment_expr ::= expression INCREMENT {extends=expression}
+unary_postfix_decrement_expr ::= expression DECREMENT {extends=expression}
+
+// Primary expressions (highest precedence)
+primary_expr ::= literal
+             | variable_reference_expr
+             | paren_expr
+             {extends=expression}
+
+private literal ::= NUMBER | STRING | TRUE_LITERAL | FALSE_LITERAL
+private paren_expr ::= LPAREN expression RPAREN {extends=expression}
+private variable_reference_expr ::= object_creation_expr | IDENTIFIER (LESS type_list GREATER)? (DOT variable_reference_expr)? (argument_group)? (DOT variable_reference_expr)? {extends=expression}
+private object_creation_expr ::= typedef (argument_group)? initializer_expr? (DOT variable_reference_expr)?
+private typedef ::= NEW_KEYWORD IDENTIFIER (LESS type_list GREATER)? ARRAY_BRACKET?
+private initializer_expr ::= LBRACE initialization_unit_list RBRACE
+private initialization_unit_list ::= initialization_unit (COMMA initialization_unit)*
+private initialization_unit ::= (expression EQUAL GREATER?)? expression
+private type_list ::= variable_reference_expr (COMMA variable_reference_expr)*
+private argument_group ::= LPAREN value_expression_list? RPAREN
+private value_expression_list ::= expression (COMMA expression)*
