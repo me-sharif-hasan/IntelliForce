@@ -16,6 +16,9 @@ public interface ApexIfStatement extends PsiElement {
   @Nullable
   ApexIfElseBlock getIfElseBlock();
 
+  @Nullable
+  ApexStatement getStatement();
+
   @NotNull
   ApexExpression getExpression();
 

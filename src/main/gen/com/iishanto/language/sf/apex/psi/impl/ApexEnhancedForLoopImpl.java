@@ -45,4 +45,10 @@ public class ApexEnhancedForLoopImpl extends ASTWrapperPsiElement implements Ape
     return findChildByClass(ApexForLoopConditionReference.class);
   }
 
+  @Override
+  @Nullable
+  public ApexStatement getStatement() {
+    return findChildByClass(ApexStatement.class);
+  }
+
 }

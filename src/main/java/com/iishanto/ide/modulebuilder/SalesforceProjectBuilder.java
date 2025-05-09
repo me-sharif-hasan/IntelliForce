@@ -4,6 +4,7 @@ import com.google.common.base.Charsets;
 import com.iishanto.common.Constants;
 import com.iishanto.ide.modulebuilder.step.SalesforceProjectWizardStep;
 import com.iishanto.ide.utility.IDEUtility;
+import com.iishanto.ide.utility.SalesforceUtility;
 import com.intellij.execution.configurations.GeneralCommandLine;
 import com.intellij.execution.filters.TextConsoleBuilderFactory;
 import com.intellij.execution.process.OSProcessHandler;
@@ -119,6 +120,7 @@ public class SalesforceProjectBuilder extends ModuleBuilder {
                     }
 
                     ApplicationManager.getApplication().invokeLater(() -> {
+                        SalesforceUtility.extractJavaApexTypeToApexClass(project);
                         IDEUtility.forceRefreshAndExpand(projectDir,project,() -> {
                             System.out.println("Project directory refreshed: " + projectDir.getPath());
 

@@ -51,7 +51,7 @@
     <actions>
         <action
                 id="com.example.plugin.CreateApexClassAction"
-                class="com.iishanto.ide.action.CreateNewApexClassAction"
+                class="com.iishanto.ide.ui.action.CreateNewApexClassAction"
                 text="Apex Class"
                 icon="AllIcons.Nodes.Class"
                 description="Create a new Apex class">

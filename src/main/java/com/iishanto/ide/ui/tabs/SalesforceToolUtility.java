@@ -3,6 +3,7 @@ package com.iishanto.ide.ui.tabs;
 import com.google.common.base.Charsets;
 import com.iishanto.ide.config.SalesforceProjectConfig;
 import com.iishanto.ide.modulebuilder.ModuleConfig;
+import com.iishanto.ide.utility.SalesforceUtility;
 import com.iishanto.tooling.sync.ObjectSynchronizer;
 import com.iishanto.language.sf.ApexIcons;
 import com.intellij.execution.ExecutionException;
@@ -105,13 +106,17 @@ public class SalesforceToolUtility implements ToolWindowFactory {
                     aliasButton.setIcon(ApexIcons.APEX_ICON);
                 }
                 aliasButton.addActionListener(e -> {
-                            SalesforceProjectConfig.getInstance(project).setSelectedAlias(alias);
-                            ObjectSynchronizer.getInstance().sync(project);
-                            aliasButton.setIcon(AllIcons.Actions.Checked);
-                            if(currentAliasButton!=null){
-                                currentAliasButton.setIcon(ApexIcons.APEX_ICON);
-                            }
-                            currentAliasButton=aliasButton;
+                ApplicationManager.getApplication().invokeLater(() -> {
+                    SalesforceUtility.extractJavaApexTypeToApexClass(project);
+                });
+
+//                            SalesforceProjectConfig.getInstance(project).setSelectedAlias(alias);
+//                            ObjectSynchronizer.getInstance().sync(project);
+//                            aliasButton.setIcon(AllIcons.Actions.Checked);
+//                            if(currentAliasButton!=null){
+//                                currentAliasButton.setIcon(ApexIcons.APEX_ICON);
+//                            }
+//                            currentAliasButton=aliasButton;
                         });
                 panel.add(aliasButton);
                 aliasButtons.add(aliasButton);

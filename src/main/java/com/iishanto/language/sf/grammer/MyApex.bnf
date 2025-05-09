@@ -215,7 +215,7 @@ ThrowStatement ::= THROW_KEYWORD expression SEMICOLON
 /**
 * If statement handling
  */
-IfStatement ::= IF_KEYWORD LPAREN expression RPAREN (SEMICOLON|IfBlock IfElseBlock? ElseBlock?)
+IfStatement ::= IF_KEYWORD LPAREN expression RPAREN ((Statement|SEMICOLON|IfBlock) IfElseBlock? ElseBlock?)
 ElseBlock ::= ELSE_KEYWORD IfBlock
 IfElseBlock ::= ELSE_KEYWORD IfStatement
 IfBlock ::= LBRACE IfBody RBRACE
@@ -249,13 +249,13 @@ UpsertStatement ::= UPSERT_KEYWORD (argument_group)? expression SEMICOLON
 LoopStatement ::= ForLoop | WhileLoop | DoWhileLoop
 ForLoop ::= EnhancedForLoop
 // for loop
-EnhancedForLoop ::= FOR_KEYWORD LPAREN (ForLoopConditionDeclared|ForLoopConditionReference) RPAREN (SEMICOLON | ForBlock)
+EnhancedForLoop ::= FOR_KEYWORD LPAREN (ForLoopConditionDeclared|ForLoopConditionReference) RPAREN (Statement|SEMICOLON | ForBlock)
 ForLoopConditionDeclared ::= TypeIdentifier VariableName ConditionTrail
 ForLoopConditionReference ::= VariableName? ConditionTrail
 ConditionTrail ::= TraditionalForLoopCondition | IterationForLoop
 TraditionalForLoopCondition ::= SEMICOLON expression? SEMICOLON expression?
 IterationForLoop ::= COLON expression
-WhileLoop ::= WHILE_KEYWORD LPAREN WhileCondition RPAREN (SEMICOLON|WhileBlock)
+WhileLoop ::= WHILE_KEYWORD LPAREN WhileCondition RPAREN (Statement|SEMICOLON|WhileBlock)
 WhileCondition ::= expression
 WhileBlock ::= LBRACE WhileBody? RBRACE
 WhileBody ::= Statement*

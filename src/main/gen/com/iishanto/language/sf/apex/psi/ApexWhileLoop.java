@@ -8,6 +8,9 @@ import com.intellij.psi.PsiElement;
 public interface ApexWhileLoop extends PsiElement {
 
   @Nullable
+  ApexStatement getStatement();
+
+  @Nullable
   ApexWhileBlock getWhileBlock();
 
   @NotNull

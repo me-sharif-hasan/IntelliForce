@@ -46,6 +46,12 @@ public class ApexIfStatementImpl extends ASTWrapperPsiElement implements ApexIfS
   }
 
   @Override
+  @Nullable
+  public ApexStatement getStatement() {
+    return findChildByClass(ApexStatement.class);
+  }
+
+  @Override
   @NotNull
   public ApexExpression getExpression() {
     return findNotNullChildByClass(ApexExpression.class);

@@ -16,4 +16,7 @@ public interface ApexEnhancedForLoop extends PsiElement {
   @Nullable
   ApexForLoopConditionReference getForLoopConditionReference();
 
+  @Nullable
+  ApexStatement getStatement();
+
 }

@@ -506,7 +506,7 @@ public class ApexParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // FOR_KEYWORD LPAREN (ForLoopConditionDeclared|ForLoopConditionReference) RPAREN (SEMICOLON | ForBlock)
+  // FOR_KEYWORD LPAREN (ForLoopConditionDeclared|ForLoopConditionReference) RPAREN (Statement|SEMICOLON | ForBlock)
   public static boolean EnhancedForLoop(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "EnhancedForLoop")) return false;
     if (!nextTokenIs(b, FOR_KEYWORD)) return false;
@@ -529,11 +529,12 @@ public class ApexParser implements PsiParser, LightPsiParser {
     return r;
   }
 
-  // SEMICOLON | ForBlock
+  // Statement|SEMICOLON | ForBlock
   private static boolean EnhancedForLoop_4(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "EnhancedForLoop_4")) return false;
     boolean r;
-    r = consumeToken(b, SEMICOLON);
+    r = Statement(b, l + 1);
+    if (!r) r = consumeToken(b, SEMICOLON);
     if (!r) r = ForBlock(b, l + 1);
     return r;
   }
@@ -906,7 +907,7 @@ public class ApexParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // IF_KEYWORD LPAREN expression RPAREN (SEMICOLON|IfBlock IfElseBlock? ElseBlock?)
+  // IF_KEYWORD LPAREN expression RPAREN ((Statement|SEMICOLON|IfBlock) IfElseBlock? ElseBlock?)
   public static boolean IfStatement(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "IfStatement")) return false;
     if (!nextTokenIs(b, IF_KEYWORD)) return false;
@@ -920,39 +921,38 @@ public class ApexParser implements PsiParser, LightPsiParser {
     return r;
   }
 
-  // SEMICOLON|IfBlock IfElseBlock? ElseBlock?
+  // (Statement|SEMICOLON|IfBlock) IfElseBlock? ElseBlock?
   private static boolean IfStatement_4(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "IfStatement_4")) return false;
     boolean r;
     Marker m = enter_section_(b);
-    r = consumeToken(b, SEMICOLON);
-    if (!r) r = IfStatement_4_1(b, l + 1);
+    r = IfStatement_4_0(b, l + 1);
+    r = r && IfStatement_4_1(b, l + 1);
+    r = r && IfStatement_4_2(b, l + 1);
     exit_section_(b, m, null, r);
     return r;
   }
 
-  // IfBlock IfElseBlock? ElseBlock?
-  private static boolean IfStatement_4_1(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "IfStatement_4_1")) return false;
+  // Statement|SEMICOLON|IfBlock
+  private static boolean IfStatement_4_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "IfStatement_4_0")) return false;
     boolean r;
-    Marker m = enter_section_(b);
-    r = IfBlock(b, l + 1);
-    r = r && IfStatement_4_1_1(b, l + 1);
-    r = r && IfStatement_4_1_2(b, l + 1);
-    exit_section_(b, m, null, r);
+    r = Statement(b, l + 1);
+    if (!r) r = consumeToken(b, SEMICOLON);
+    if (!r) r = IfBlock(b, l + 1);
     return r;
   }
 
   // IfElseBlock?
-  private static boolean IfStatement_4_1_1(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "IfStatement_4_1_1")) return false;
+  private static boolean IfStatement_4_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "IfStatement_4_1")) return false;
     IfElseBlock(b, l + 1);
     return true;
   }
 
   // ElseBlock?
-  private static boolean IfStatement_4_1_2(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "IfStatement_4_1_2")) return false;
+  private static boolean IfStatement_4_2(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "IfStatement_4_2")) return false;
     ElseBlock(b, l + 1);
     return true;
   }
@@ -2035,7 +2035,7 @@ public class ApexParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // WHILE_KEYWORD LPAREN WhileCondition RPAREN (SEMICOLON|WhileBlock)
+  // WHILE_KEYWORD LPAREN WhileCondition RPAREN (Statement|SEMICOLON|WhileBlock)
   public static boolean WhileLoop(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "WhileLoop")) return false;
     if (!nextTokenIs(b, WHILE_KEYWORD)) return false;
@@ -2049,11 +2049,12 @@ public class ApexParser implements PsiParser, LightPsiParser {
     return r;
   }
 
-  // SEMICOLON|WhileBlock
+  // Statement|SEMICOLON|WhileBlock
   private static boolean WhileLoop_4(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "WhileLoop_4")) return false;
     boolean r;
-    r = consumeToken(b, SEMICOLON);
+    r = Statement(b, l + 1);
+    if (!r) r = consumeToken(b, SEMICOLON);
     if (!r) r = WhileBlock(b, l + 1);
     return r;
   }
