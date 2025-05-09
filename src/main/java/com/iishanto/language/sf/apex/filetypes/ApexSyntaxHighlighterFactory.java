@@ -31,8 +31,7 @@ public class ApexSyntaxHighlighterFactory extends SyntaxHighlighterFactory {
     @NotNull
     @Override
     public SyntaxHighlighter getSyntaxHighlighter(@Nullable Project project, @Nullable VirtualFile virtualFile) {
-        System.out.println("getSyntaxHighlighter");
-        return new ApexSyntaxHighlighter();
+        return new MyApexSyntaxHighlighterFactory();
     }
 
 }

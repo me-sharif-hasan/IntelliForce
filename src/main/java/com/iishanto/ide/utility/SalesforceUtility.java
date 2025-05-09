@@ -66,6 +66,36 @@ public class SalesforceUtility {
         }
     }
 
+    public static void deployFile(String fileName, DeploymentType deploymentType, Project project) {
+        // Create the file
+        String sfCliPath = SalesforceProjectConfig.getInstance(project).getSfCliPath();
+        //sf apex generate class --name myClass --output-dir force-app/main/default/classes
+        IDEUtility.SalesforceOutputManager outputManager = IDEUtility.getSalesforceOutputManager(project);
+        GeneralCommandLine commandLine = new GeneralCommandLine(sfCliPath, "project", "deploy","start", "--source-dir", fileName,"--target-org",SalesforceProjectConfig.getInstance(project).getSelectedAlias())
+                .withWorkDirectory(project.getBasePath())
+                .withCharset(Charsets.UTF_8);
+        try {
+            OSProcessHandler processHandler = new OSProcessHandler(commandLine);
+            processHandler.addProcessListener(new ProcessListener() {
+                @Override
+                public void processTerminated(@NotNull ProcessEvent event) {
+                    System.out.println("Apex class created successfully");
+                    showNotification(project, "New apex class created", "Apex class is created in: %s with metadata.".formatted(fileName));
+                }
+
+                @Override
+                public void onTextAvailable(@NotNull ProcessEvent event, @NotNull Key outputType) {
+                    System.out.println(event.getText());
+                    outputManager.log(event.getText());
+                }
+            });
+            processHandler.startNotify();
+            outputManager.attachToProcess(processHandler, "Creating Apex Class");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     public static void showNotification(Project project, String title, String content){
         Notification notification = new Notification(NOTIFICATION_GROUP_ID, title, content, NotificationType.INFORMATION);
         notification.setIcon(ApexIcons.APEX_ICON);
@@ -81,5 +111,10 @@ public class SalesforceUtility {
             LocalFileSystem.getInstance().refreshAndFindFileByIoFile(new File(file.getPath()));
             project.getBaseDir().refresh(false,true);
         });
+    }
+
+    public static enum DeploymentType{
+        ApexClass,
+        CustomObject,
     }
 }
